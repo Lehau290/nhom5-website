@@ -35,3 +35,4 @@ Mỗi thành viên có trang **Hồ Sơ Cá Nhân (`profile.html`)** với giao 
 - **Trang Nhóm 5 (`team.html`):** Danh sách thành viên, phân công công việc và liên kết đến từng hồ sơ cá nhân.
 - **Đăng nhập (`login.html`):** Hỗ trợ đăng nhập nhanh bằng 1 cú nhấp chuột cho tất cả 5 thành viên + Admin.
 - **Quản trị (`admin/slides.html`):** Upload tài liệu slide và word lên Firebase Storage với dung lượng tệp cho phép lên tới **40MB**.
+
