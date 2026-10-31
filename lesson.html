@@ -486,7 +486,7 @@ function renderFallbackLesson(num) {
     // Tài liệu mẫu ban đầu
     const isL5 = (num === 5);
     const docxUrl = isL5 ? 'uploads/lessons/Giao_an_Bai_5_Tep_va_thu_muc.docx' : 'uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
-    const pptxUrl = isL5 ? 'uploads/lessons/Bai_giang_dien_tu_Bai_5.pptx' : 'uploads/lessons/Bai_giang_dien_tu_Bai_4.pptx';
+    const pptxUrl = isL5 ? 'uploads/lessons/Bài 5_Thám hiểm tệp và thư mục.pptx' : 'uploads/lessons/Bài 4_Tìm kiếm Internet.pptx';
     const docxTitle = isL5 ? 'Giáo án điện tử Bài 5 - Thao tác với tệp và thư mục' : 'Kế hoạch bài dạy (Giáo án) Bài 4 - Tìm kiếm thông tin';
     const pptxTitle = isL5 ? 'Bản trình chiếu minh họa Bài 5' : 'Bài giảng điện tử PowerPoint Bài 4';
 
@@ -596,7 +596,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const isDocx = (d.file_type === 'docx');
                 const isL5 = (lessonNum === 5);
                 const defaultDocx = isL5 ? 'uploads/lessons/Giao_an_Bai_5_Tep_va_thu_muc.docx' : 'uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
-                const defaultPptx = isL5 ? 'uploads/lessons/Bai_giang_dien_tu_Bai_5.pptx' : 'uploads/lessons/Bai_giang_dien_tu_Bai_4.pptx';
+                const defaultPptx = isL5 ? 'uploads/lessons/Bài 5_Thám hiểm tệp và thư mục.pptx' : 'uploads/lessons/Bài 4_Tìm kiếm Internet.pptx';
                 const fileUrl = d.file_url || (isDocx ? defaultDocx : defaultPptx);
 
                 html += `
