@@ -224,7 +224,7 @@
                     <i class="fas fa-file-powerpoint text-3xl text-orange-500 mb-1.5 mr-2"></i>
                     <i class="fas fa-file-word text-3xl text-blue-500 mb-1.5"></i>
                     <div class="text-sm font-semibold text-slate-700 mt-2" id="file_name_display">Kéo thả tệp vào đây hoặc nhấn để duyệt file</div>
-                    <div class="text-xs text-slate-400 mt-1">Định dạng hỗ trợ: PowerPoint (.pptx) và Word (.docx) • Tối đa 20MB</div>
+                    <div class="text-xs text-slate-400 mt-1">Định dạng hỗ trợ: PowerPoint (.pptx) và Word (.docx) • Tối đa 40MB</div>
                     <input type="file" id="file_input" accept=".pptx, .docx" class="hidden" onchange="handleFileSelected(this)">
                 </div>
             </div>
@@ -447,9 +447,9 @@ function handleFileSelected(input) {
             return;
         }
 
-        // Kiểm tra dung lượng tối đa 20MB
-        if (selectedFile.size > 20 * 1024 * 1024) {
-            alert('Lỗi dung lượng: Tệp tin vượt quá giới hạn 20MB cho phép!');
+        // Kiểm tra dung lượng tối đa 40MB
+        if (selectedFile.size > 40 * 1024 * 1024) {
+            alert('Lỗi dung lượng: Tệp tin vượt quá giới hạn 40MB cho phép!');
             input.value = '';
             selectedFile = null;
             return;

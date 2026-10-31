@@ -146,7 +146,7 @@
 
             <!-- Upload Dropzone -->
             <div>
-                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Chọn tệp (.docx hoặc .pptx - Tối đa 20MB)</label>
+                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Chọn tệp (.docx hoặc .pptx - Tối đa 40MB)</label>
                 <div class="upload-dropzone" onclick="document.getElementById('file_input').click()">
                     <i class="fas fa-cloud-upload-alt text-3xl text-indigo-500 mb-2"></i>
                     <div class="text-sm font-semibold text-slate-700" id="file_name_display">Kéo thả tệp vào đây hoặc nhấn để chọn</div>
@@ -229,9 +229,9 @@ function handleFileSelected(input) {
             return;
         }
 
-        // Kiểm tra dung lượng tối đa 20MB
-        if (selectedFile.size > 20 * 1024 * 1024) {
-            alert('Lỗi dung lượng: Tệp tin vượt quá giới hạn 20MB cho phép!');
+        // Kiểm tra dung lượng tối đa 40MB
+        if (selectedFile.size > 40 * 1024 * 1024) {
+            alert('Lỗi dung lượng: Tệp tin vượt quá giới hạn 40MB cho phép!');
             input.value = '';
             selectedFile = null;
             return;

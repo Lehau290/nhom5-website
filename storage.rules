@@ -14,12 +14,12 @@ service firebase.storage {
       allow read: if true;
       
       // Chỉ Admin được tải lên, thay thế và xóa tài liệu
-      // Ràng buộc định dạng (.docx hoặc .pptx) và dung lượng tối đa 20MB
+      // Ràng buộc định dạng (.docx hoặc .pptx) và dung lượng tối đa 40MB
       allow write: if isAdmin()
                    && (request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
                        || request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.presentationml.presentation')
                        || request.resource.contentType.matches('application/octet-stream'))
-                   && request.resource.size < 20 * 1024 * 1024;
+                   && request.resource.size < 40 * 1024 * 1024;
       
       allow delete: if isAdmin();
     }
