@@ -7,13 +7,47 @@ function isAdminArea() {
     return window.location.pathname.includes('/admin/') || window.location.pathname.endsWith('admin') || window.location.pathname.endsWith('admin/');
 }
 
+// Khởi tạo kiểm tra người dùng (hỗ trợ cả Firebase Auth và Session cục bộ)
+async function initAuthCheck() {
+    const localUserJson = localStorage.getItem('edu_current_user');
+    if (localUserJson) {
+        try {
+            currentProfile = JSON.parse(localUserJson);
+        } catch (e) {}
+    }
+
+    // Nếu ở trang Admin
+    if (isAdminArea()) {
+        if (!currentProfile || currentProfile.role !== 'admin') {
+            alert('Truy cập bị từ chối! Bạn cần đăng nhập bằng tài khoản Quản trị viên để vào khu vực này.');
+            window.location.href = '../login.html';
+            return;
+        }
+        if (currentProfile.status === 0) {
+            alert('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.');
+            handleSignOut();
+            return;
+        }
+
+        // Cập nhật tên Admin trên header nếu có
+        const adminNameEl = document.getElementById('admin-name');
+        if (adminNameEl && currentProfile.fullname) {
+            adminNameEl.textContent = currentProfile.fullname;
+        }
+    }
+
+    updateNavUserUI(currentProfile);
+}
+
 // Lắng nghe thay đổi trạng thái xác thực từ Firebase Authentication
 auth.onAuthStateChanged(async (user) => {
     if (user) {
-        // Lấy thông tin vai trò từ Firestore
-        currentProfile = await getUserProfile(user.uid);
+        const profile = await getUserProfile(user.uid);
+        if (profile) {
+            currentProfile = profile;
+            localStorage.setItem('edu_current_user', JSON.stringify(profile));
+        }
 
-        // Nếu là trang Admin nhưng tài khoản không phải Admin hoặc bị khóa
         if (isAdminArea()) {
             if (!currentProfile || currentProfile.role !== 'admin') {
                 alert('Truy cập bị từ chối! Bạn cần đăng nhập bằng tài khoản Quản trị viên để vào khu vực này.');
@@ -22,26 +56,36 @@ auth.onAuthStateChanged(async (user) => {
             }
             if (currentProfile.status === 0) {
                 alert('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.');
-                await auth.signOut();
-                window.location.href = '../login.html';
+                handleSignOut();
                 return;
             }
         }
 
-        // Cập nhật giao diện người dùng
         updateNavUserUI(currentProfile);
     } else {
-        currentProfile = null;
+        // Kiểm tra xem có session cục bộ không trước khi đá ra
+        const localUserJson = localStorage.getItem('edu_current_user');
+        if (localUserJson) {
+            try {
+                currentProfile = JSON.parse(localUserJson);
+            } catch (e) {
+                currentProfile = null;
+            }
+        } else {
+            currentProfile = null;
+        }
 
-        // Nếu ở trang Admin mà chưa đăng nhập -> chuyển về login
-        if (isAdminArea()) {
+        if (isAdminArea() && (!currentProfile || currentProfile.role !== 'admin')) {
             window.location.href = '../login.html';
             return;
         }
 
-        updateNavUserUI(null);
+        updateNavUserUI(currentProfile);
     }
 });
+
+// Chạy kiểm tra ngay khi nạp file
+document.addEventListener('DOMContentLoaded', initAuthCheck);
 
 // Cập nhật thanh điều hướng theo trạng thái đăng nhập
 function updateNavUserUI(profile) {
@@ -119,7 +163,8 @@ function updateNavUserUI(profile) {
 async function handleSignOut() {
     if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?')) {
         try {
-            await auth.signOut();
+            await auth.signOut().catch(() => {});
+            localStorage.removeItem('edu_current_user');
             showToast('Bạn đã đăng xuất an toàn.', 'info');
             setTimeout(() => {
                 if (isAdminArea()) {
@@ -129,18 +174,8 @@ async function handleSignOut() {
                 }
             }, 500);
         } catch (e) {
-            showToast('Lỗi đăng xuất: ' + e.message, 'danger');
+            localStorage.removeItem('edu_current_user');
+            window.location.href = 'index.html';
         }
     }
 }
-
-function escapeHtml(text) {
-    if (!text) return '';
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-

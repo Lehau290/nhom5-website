@@ -1,5 +1,16 @@
 // MAIN.JS - CÁC TIỆN ÍCH CHUNG & HIỆU ỨNG TƯƠNG TÁC
 
+// Hàm escape HTML an toàn toàn cục
+window.escapeHtml = function(text) {
+    if (text === null || text === undefined) return '';
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
+
 // Toast notifications
 function showToast(message, type = 'info') {
     let container = document.getElementById('toast-container');
@@ -19,7 +30,7 @@ function showToast(message, type = 'info') {
 
     toast.innerHTML = `
         <i class="fas ${iconClass} text-xl"></i>
-        <div class="flex-1 text-sm font-medium text-gray-800">${message}</div>
+        <div class="flex-1 text-sm font-medium text-gray-800">${escapeHtml(message)}</div>
         <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
             <i class="fas fa-times"></i>
         </button>
@@ -66,4 +77,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-

@@ -4,6 +4,17 @@ async function previewDocument(title, fileType, fileUrl) {
     const modal = document.getElementById('previewModal');
     if (!modal) return;
 
+    // Chuẩn hóa đường dẫn tương đối tùy theo thư mục admin hay trang gốc
+    if (window.location.pathname.includes('/admin/')) {
+        if (!fileUrl.startsWith('http') && !fileUrl.startsWith('../') && !fileUrl.startsWith('/')) {
+            fileUrl = '../' + fileUrl;
+        }
+    } else {
+        if (fileUrl.startsWith('../')) {
+            fileUrl = fileUrl.replace(/^\.\.\//, '');
+        }
+    }
+
     document.getElementById('preview-file-title').textContent = title;
     document.getElementById('preview-file-badge').textContent = (fileType === 'docx' ? 'Microsoft Word (.docx)' : 'Microsoft PowerPoint (.pptx)');
     document.getElementById('preview-file-icon').innerHTML = (fileType === 'docx' ? '<i class="fas fa-file-word text-blue-600"></i>' : '<i class="fas fa-file-powerpoint text-orange-600"></i>');
@@ -19,8 +30,10 @@ async function previewDocument(title, fileType, fileUrl) {
 
     modal.classList.add('open');
 
+    const ft = (fileType || '').toLowerCase();
+
     // 1. Nếu là file Word (.docx) -> dùng Mammoth.js chuyển đổi thành HTML
-    if (fileType.toLowerCase() === 'docx') {
+    if (ft === 'docx') {
         try {
             const response = await fetch(fileUrl);
             if (!response.ok) throw new Error('Không thể tải tệp tin');
@@ -51,8 +64,7 @@ async function previewDocument(title, fileType, fileUrl) {
         }
     } 
     // 2. Nếu là file PowerPoint (.pptx)
-    else if (fileType.toLowerCase() === 'pptx') {
-        // Kiểm tra xem URL có phải là URL online công khai không (http/https từ Firebase Storage)
+    else if (ft === 'pptx') {
         if (fileUrl.startsWith('http')) {
             const encodedUrl = encodeURIComponent(fileUrl);
             contentArea.innerHTML = `
@@ -80,4 +92,3 @@ function closePreviewModal() {
     const modal = document.getElementById('previewModal');
     if (modal) modal.classList.remove('open');
 }
-

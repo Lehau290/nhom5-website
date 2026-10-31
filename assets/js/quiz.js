@@ -190,12 +190,28 @@ class QuizEngine {
 
         // Lưu kết quả trực tuyến vào Cloud Firestore
         try {
-            const user = auth.currentUser;
-            const userName = user ? (user.displayName || user.email.split('@')[0]) : 'Học sinh khách';
-            const userEmail = user ? user.email : 'guest@edumail.vn';
+            let userId = 'guest';
+            let userName = 'Học sinh khách';
+            let userEmail = 'guest@edumail.vn';
+
+            if (auth.currentUser) {
+                userId = auth.currentUser.uid;
+                userName = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
+                userEmail = auth.currentUser.email;
+            } else {
+                const localUser = localStorage.getItem('edu_current_user');
+                if (localUser) {
+                    try {
+                        const parsed = JSON.parse(localUser);
+                        userId = parsed.uid || 'demo_student_uid';
+                        userName = parsed.fullname || parsed.username || 'Học sinh';
+                        userEmail = parsed.email || 'hocsinh1@student.vn';
+                    } catch(e) {}
+                }
+            }
 
             await db.collection('results').add({
-                user_id: user ? user.uid : 'guest',
+                user_id: userId,
                 user_name: userName,
                 user_email: userEmail,
                 lesson_id: this.lessonId,
@@ -205,7 +221,7 @@ class QuizEngine {
                 completed_at: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            if (user) {
+            if (userId !== 'guest') {
                 showToast(`Tuyệt vời! Kết quả (${score}/10 điểm) đã được đồng bộ vào hồ sơ Cloud Firestore của bạn.`, 'success');
                 logActivity('Làm bài tập', `Học sinh ${userName} hoàn thành bài kiểm tra đạt ${score}/10 điểm`);
             } else {

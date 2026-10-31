@@ -522,16 +522,24 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         db.collection('lessons').onSnapshot(snap => {
-            document.getElementById('stat-lessons').textContent = snap.size + ' Bài';
+            if (snap && snap.size > 0) {
+                document.getElementById('stat-lessons').textContent = snap.size + ' Bài';
+            }
         });
         db.collection('questions').onSnapshot(snap => {
-            document.getElementById('stat-questions').textContent = snap.size + ' Câu';
+            if (snap && snap.size > 0) {
+                document.getElementById('stat-questions').textContent = snap.size + ' Câu';
+            }
         });
         db.collection('documents').onSnapshot(snap => {
-            document.getElementById('stat-documents').textContent = snap.size + ' File';
+            if (snap && snap.size > 0) {
+                document.getElementById('stat-documents').textContent = snap.size + ' File';
+            }
         });
         db.collection('users').where('role', '==', 'student').onSnapshot(snap => {
-            document.getElementById('stat-users').textContent = snap.size + ' Học sinh';
+            if (snap && snap.size > 0) {
+                document.getElementById('stat-users').textContent = snap.size + ' Học sinh';
+            }
         });
     } catch (e) {
         console.warn('Lỗi lắng nghe Firestore:', e);

@@ -272,7 +272,10 @@ function renderDocuments() {
 
     filtered.forEach(d => {
         const isDocx = (d.file_type === 'docx');
-        const fileUrl = d.file_url || (isDocx ? `../uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx` : `../uploads/lessons/Bai_giang_dien_tu_Bai_4.pptx`);
+        const isL5 = (d.lesson_id === 'lesson_5' || d.lesson_id == 5);
+        const defaultDocx = isL5 ? '../uploads/lessons/Giao_an_Bai_5_Tep_va_thu_muc.docx' : '../uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
+        const defaultPptx = isL5 ? '../uploads/lessons/Bai_giang_dien_tu_Bai_5.pptx' : '../uploads/lessons/Bai_giang_dien_tu_Bai_4.pptx';
+        const fileUrl = d.file_url || (isDocx ? defaultDocx : defaultPptx);
 
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50 transition';

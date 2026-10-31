@@ -287,9 +287,10 @@
 <script src="assets/js/doc-preview.js"></script>
 
 <script>
-// Lấy ID bài học từ URL (mặc định Bài 4)
+// Lấy ID bài học từ URL (mặc định Bài 4, hỗ trợ cả ?id=4 hoặc ?id=lesson_4)
 const urlParams = new URLSearchParams(window.location.search);
-const lessonNum = parseInt(urlParams.get('id')) || 4;
+const rawParam = urlParams.get('id') || '4';
+const lessonNum = parseInt(rawParam.toString().replace('lesson_', '')) || 4;
 const lessonDocId = `lesson_${lessonNum}`;
 
 // Đánh dấu active nav
@@ -302,6 +303,242 @@ if (lessonNum === 4) {
     document.getElementById('switch-lesson-btn').href = 'lesson.html?id=4';
     document.getElementById('switch-lesson-btn').innerHTML = 'Học Bài 4: Tìm kiếm Internet <i class="fas fa-chevron-right ml-1"></i>';
 }
+
+// DỮ LIỆU DỰ PHÒNG TỨC THÌ (Render tức thì không để trang bị chờ)
+function renderFallbackLesson(num) {
+    if (num === 4) {
+        document.title = 'Bài 4: Tìm kiếm thông tin trên Internet - Tin Học Nhóm 5';
+        document.getElementById('lesson-title').textContent = 'Bài 4: Tìm kiếm thông tin trên Internet';
+        document.getElementById('lesson-desc').textContent = 'Học sinh nắm vững khái niệm máy tìm kiếm, cách lựa chọn từ khóa thông minh, sử dụng các toán tử tìm kiếm nâng cao và đánh giá tính chính xác của thông tin trên mạng.';
+        document.getElementById('lesson-duration').textContent = '45 phút';
+        document.getElementById('lesson-views').textContent = '156';
+
+        document.getElementById('warmup-container').innerHTML = `
+            <div class="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                <h4 class="font-bold text-amber-800 text-lg mb-2"><i class="fas fa-lightbulb text-amber-500 mr-2"></i>Tình huống thực tế:</h4>
+                <p class="text-gray-700 leading-relaxed mb-3">Bạn Nam muốn tìm tài liệu về <strong>"Địa đạo Củ Chi"</strong> để làm bài thuyết trình Lịch sử, nhưng khi gõ từ khóa trên Google thì xuất hiện hàng triệu kết quả lẫn lộn các bài viết quảng cáo tour du lịch. Làm thế nào để Nam có thể tìm được chính xác bài viết học thuật hoặc tài liệu định dạng PDF/Word trong vòng chưa đầy 1 phút?</p>
+                <p class="text-gray-600 italic"><i class="fas fa-question-circle mr-1"></i>Hãy cùng bước vào bài học hôm nay để khám phá những bí kíp tìm kiếm đỉnh cao nhé!</p>
+            </div>
+        `;
+
+        document.getElementById('application-container').innerHTML = `
+            <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                <h4 class="font-bold text-emerald-800 text-lg mb-2"><i class="fas fa-tasks mr-2 text-emerald-600"></i>Nhiệm vụ thực hành tại nhà:</h4>
+                <ol class="list-decimal pl-5 space-y-2 text-gray-700">
+                    <li>Sử dụng toán tử <code>filetype:pdf</code> để tìm và tải 1 cuốn cẩm nang an toàn trên không gian mạng.</li>
+                    <li>Sử dụng toán tử <code>site:edu.vn</code> để tìm thông tin tuyển sinh hoặc tài liệu học tập của một trường Đại học.</li>
+                    <li>Sử dụng dấu ngoặc kép <code>"..."</code> để tìm nguồn gốc xuất xứ của một câu danh ngôn em yêu thích.</li>
+                    <li>Chụp lại màn hình kết quả và ghi chép vào vở bài tập Tin học.</li>
+                </ol>
+            </div>
+        `;
+
+        new SlideViewer('slide-viewer-container', [
+            { slide_number: 1, title: '1. Máy tìm kiếm là gì?', content: 'Máy tìm kiếm (Search Engine) là một hệ thống phần mềm được thiết kế để tìm kiếm thông tin trên World Wide Web dựa trên các truy vấn của người dùng. Một số máy tìm kiếm phổ biến gồm Google, Bing, Yahoo, Cốc Cốc, DuckDuckGo.', bullet_points: 'Google: Máy tìm kiếm phổ biến nhất thế giới\nBing: Phát triển bởi tập đoàn Microsoft\nCốc Cốc: Tối ưu cho người dùng Việt Nam\nDuckDuckGo: Chú trọng tính bảo mật và quyền riêng tư', teacher_note: 'Giáo viên nhấn mạnh: Máy tìm kiếm không trực tiếp sở hữu thông tin mà lập chỉ mục (index) các trang web.' },
+            { slide_number: 2, title: '2. Từ khóa tìm kiếm (Keywords)', content: 'Từ khóa là từ hoặc cụm từ ngắn gọn phản ánh chính xác nhất nội dung thông tin em cần tìm. Lựa chọn từ khóa tốt giúp tiết kiệm 90% thời gian tìm kiếm.', bullet_points: 'Chọn từ khóa mang tính then chốt, cô đọng\nTránh gõ cả câu hỏi dài dòng như văn nói\nCó thể sử dụng tiếng Việt có dấu hoặc không dấu\nKết hợp danh từ riêng để khoanh vùng kết quả', teacher_note: 'Hướng dẫn học sinh phân biệt từ khóa chung chung và từ khóa tối ưu.' },
+            { slide_number: 3, title: '3. Các toán tử tìm kiếm nâng cao', content: 'Các ký hiệu và toán tử đặc biệt giúp thu hẹp phạm vi tìm kiếm một cách chính xác tuyệt đối:', bullet_points: 'Dấu ngoặc kép "từ khóa": Tìm kiếm chính xác cụm từ theo đúng thứ tự\nDấu trừ (-): Loại trừ các kết quả chứa từ khóa phía sau\nToán tử site:domain: Chỉ tìm kiếm trên một trang web cụ thể (VD: site:moet.gov.vn)\nToán tử filetype:pdf/docx: Chỉ tìm các tài liệu có đuôi tệp xác định', teacher_note: 'Thực hành thị phạm ngay trên trình duyệt chiếu cho cả lớp xem.' },
+            { slide_number: 4, title: '4. Đánh giá độ tin cậy của thông tin', content: 'Không phải mọi thông tin trên Internet đều đúng sự thật. Học sinh cần rèn luyện kỹ năng tư duy phản biện khi đọc tin tức trực tuyến.', bullet_points: 'Kiểm tra tác giả và cơ quan xuất bản có uy tín không\nTên miền uy tín: .gov.vn (Chính phủ), .edu.vn (Giáo dục)\nKiểm tra ngày tháng cập nhật của bài viết\nĐối chiếu chéo với các cơ quan báo chí chính thống', teacher_note: 'Rèn luyện cho học sinh tránh bị lừa đảo bởi các trang tin giả mạo.' }
+        ]);
+
+        new QuizEngine('quiz-viewer-container', 'lesson_4', [
+            {
+                question_text: 'Máy tìm kiếm (Search Engine) hoạt động chủ yếu dựa vào thành phần nào sau đây?',
+                explanation: 'Máy tìm kiếm dựa vào từ khóa do người dùng cung cấp để tra cứu trong kho chỉ mục dữ liệu khổng lồ của nó.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'Địa chỉ thư điện tử cá nhân', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'Từ khóa tìm kiếm (Keywords)', is_correct: 1 },
+                    { choice_label: 'C', answer_text: 'Cấu hình phần cứng của máy tính', is_correct: 0 },
+                    { choice_label: 'D', answer_text: 'Tên nhà cung cấp dịch vụ mạng Internet', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Để tìm kiếm chính xác một cụm từ theo đúng thứ tự các từ, ta đặt cụm từ đó vào giữa cặp ký hiệu nào?',
+                explanation: 'Cặp dấu ngoặc kép "..." dùng để yêu cầu máy tìm kiếm trả về các trang chứa chính xác cụm từ nguyên văn.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'Dấu ngoặc đơn ( )', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'Dấu ngoặc nhọn { }', is_correct: 0 },
+                    { choice_label: 'C', answer_text: 'Dấu ngoặc kép " "', is_correct: 1 },
+                    { choice_label: 'D', answer_text: 'Dấu ngoặc vuông [ ]', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Cú pháp tìm kiếm nào sau đây giúp giới hạn kết quả chỉ nằm trong các trang giáo dục của Việt Nam?',
+                explanation: 'Toán tử site:domain cho phép chỉ tìm kiếm nội dung bên trong tên miền được chỉ định.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'site:edu.vn tin học 6', is_correct: 1 },
+                    { choice_label: 'B', answer_text: 'file:edu.vn tin học 6', is_correct: 0 },
+                    { choice_label: 'C', answer_text: 'domain:edu.vn tin học 6', is_correct: 0 },
+                    { choice_label: 'D', answer_text: 'link:edu.vn tin học 6', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Khi muốn tìm các tài liệu định dạng văn bản Word (.docx), em kết hợp từ khóa với toán tử nào?',
+                explanation: 'Toán tử filetype:docx chỉ định máy tìm kiếm lọc chính xác các tệp tin Word.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'type:word', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'filetype:docx', is_correct: 1 },
+                    { choice_label: 'C', answer_text: 'format:docx', is_correct: 0 },
+                    { choice_label: 'D', answer_text: 'ext:word', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Đặc điểm nào sau đây KHÔNG PHẢI là dấu hiệu nhận biết thông tin đáng tin cậy trên Internet?',
+                explanation: 'Nội dung giật gân, thiếu căn cứ và không có thông tin tác giả rõ ràng thường là tin giả, không đáng tin.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'Có tên tác giả và tổ chức xuất bản uy tín', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'Có trích dẫn nguồn gốc số liệu minh bạch', is_correct: 0 },
+                    { choice_label: 'C', answer_text: 'Tiêu đề giật gân câu view và không có tên tác giả', is_correct: 1 },
+                    { choice_label: 'D', answer_text: 'Nội dung phù hợp với các tài liệu khoa học chính thống', is_correct: 0 }
+                ]
+            }
+        ]);
+    } else {
+        document.title = 'Bài 5: Thao tác với tệp và thư mục - Tin Học Nhóm 5';
+        document.getElementById('lesson-title').textContent = 'Bài 5: Thao tác với tệp và thư mục';
+        document.getElementById('lesson-desc').textContent = 'Hiểu rõ cấu trúc tệp (tên và phần mở rộng), cấu trúc cây thư mục. Thành thạo các thao tác: tạo mới, đổi tên, sao chép, di chuyển và xóa tệp/thư mục an toàn.';
+        document.getElementById('lesson-duration').textContent = '45 phút';
+        document.getElementById('lesson-views').textContent = '112';
+
+        document.getElementById('warmup-container').innerHTML = `
+            <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                <h4 class="font-bold text-blue-800 text-lg mb-2"><i class="fas fa-folder-open text-blue-500 mr-2"></i>Câu hỏi kích thích tư duy:</h4>
+                <p class="text-gray-700 leading-relaxed mb-3">Hãy tưởng tượng bàn học của em có hàng trăm cuốn sách, vở, giấy vẽ nằm chồng chất không phân loại. Khi cần tìm cuốn vở bài tập Tin học, em sẽ mất bao lâu? Tương tự, nếu ổ đĩa máy tính chứa hàng nghìn tệp ảnh, video, tài liệu để lung tung tại màn hình Desktop thì chuyện gì sẽ xảy ra?</p>
+                <p class="text-gray-600 italic"><i class="fas fa-arrow-right mr-1"></i>Hệ thống tệp và thư mục chính là những ngăn tủ thần kỳ giúp máy tính của em luôn ngăn nắp và truy xuất nhanh chóng!</p>
+            </div>
+        `;
+
+        document.getElementById('application-container').innerHTML = `
+            <div class="p-4 bg-purple-50 rounded-xl border border-purple-200">
+                <h4 class="font-bold text-purple-800 text-lg mb-2"><i class="fas fa-sitemap mr-2 text-purple-600"></i>Bài tập thực hành trên máy tính:</h4>
+                <p class="text-gray-700 mb-2">Trên ổ đĩa <code>D:</code> hoặc thư mục <code>Documents</code> của máy tính, hãy xây dựng cây thư mục như sau:</p>
+                <pre class="bg-gray-800 text-green-400 p-3 rounded-lg text-sm font-mono leading-relaxed">D:\\HOC_TAP_2026\\
+  ├── Toan\\
+  ├── Ngu_Van\\
+  └── Tin_Hoc\\
+        ├── Bai_Tap\\
+        ├── Tai_Lieu\\
+        └── Hinh_Anh\\</pre>
+                <p class="text-gray-700 mt-2">Sau đó tạo một tệp Word có tên <code>Gioi_thieu_ban_than.docx</code> lưu vào thư mục <code>Tin_Hoc\\Bai_Tap</code>.</p>
+            </div>
+        `;
+
+        new SlideViewer('slide-viewer-container', [
+            { slide_number: 1, title: '1. Khái niệm Tệp (File)', content: 'Tệp là tập hợp các thông tin ghi trên bộ nhớ ngoài, được đặt tên và tạo thành một đơn vị lưu trữ. Tên tệp gồm 2 phần được ngăn cách nhau bởi dấu chấm (.): [Phần tên].[Phần mở rộng].', bullet_points: 'Phần tên: Do người dùng đặt để dễ nhận biết (tối đa 255 ký tự)\nPhần mở rộng (Đuôi tệp): Thường gồm 3-4 ký tự do phần mềm quy định\n.docx: Văn bản Microsoft Word\n.pptx: Bản trình chiếu PowerPoint\n.xlsx: Bảng tính Excel\n.mp4, .mp3: Tệp âm thanh, video đa phương tiện', teacher_note: 'Lưu ý: Không được sử dụng các ký tự đặc biệt như: / \\ : * ? " < > | trong tên tệp.' },
+            { slide_number: 2, title: '2. Thư mục và Cây thư mục', content: 'Thư mục (Folder) giống như một ngăn kéo dùng để chứa các tệp và các thư mục con khác. Việc tổ chức thư mục dạng hình cây giúp quản lý dữ liệu khoa học.', bullet_points: 'Thư mục gốc: Thư mục mức cao nhất của ổ đĩa (VD: C:\\, D:\\)\nThư mục con (Subfolder): Nằm bên trong một thư mục khác\nCây thư mục: Phân cấp theo sơ đồ cành cây từ trên xuống dưới\nĐường dẫn (Path): Chỉ dẫn đến vị trí chính xác của tệp/thư mục', teacher_note: 'Minh họa bằng hình ảnh sơ đồ phân cấp thư mục trường học.' },
+            { slide_number: 3, title: '3. Các thao tác cơ bản với Tệp & Thư mục', content: 'Hệ điều hành Windows cung cấp ứng dụng File Explorer (phím tắt Win + E) để thực hiện các thao tác quản lý dữ liệu:', bullet_points: 'Tạo mới (New Folder): Phím tắt Ctrl + Shift + N\nĐổi tên (Rename): Nhấn phím F2 hoặc click chuột phải chọn Rename\nSao chép (Copy): Phím tắt Ctrl + C, sau đó dán Ctrl + V\nDi chuyển (Cut): Phím tắt Ctrl + X, sau đó dán Ctrl + V\nXóa (Delete): Nhấn phím Delete (vào thùng rác) hoặc Shift + Delete (xóa vĩnh viễn)', teacher_note: 'Nhắc nhở học sinh cẩn thận khi sử dụng Shift+Delete vì không khôi phục lại được.' },
+            { slide_number: 4, title: '4. Quy tắc tổ chức dữ liệu an toàn', content: 'Để tránh mất mát dữ liệu và giữ máy tính hoạt động ổn định, hãy tuân thủ các nguyên tắc sau:', bullet_points: 'Đặt tên tệp và thư mục ngắn gọn, rõ nghĩa, không dấu hoặc có gạch dưới\nKhông lưu quá nhiều tài liệu nặng ngoài màn hình Desktop\nSao lưu dữ liệu định kỳ lên đám mây (Google Drive, OneDrive)\nKhông tự ý đổi tên hoặc xóa các tệp hệ thống trong ổ đĩa C:\\Windows', teacher_note: 'Tạo thói quen tốt cho học sinh ngay từ những bài học đầu tiên.' }
+        ]);
+
+        new QuizEngine('quiz-viewer-container', 'lesson_5', [
+            {
+                question_text: 'Tên tệp trong hệ điều hành Windows bao gồm những thành phần nào sau đây?',
+                explanation: 'Tên tệp gồm 2 phần: Phần tên và phần mở rộng (đuôi tệp), ngăn cách nhau bởi dấu chấm.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'Chỉ có phần tên', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'Phần tên và phần mở rộng (đuôi tệp), ngăn cách bởi dấu chấm', is_correct: 1 },
+                    { choice_label: 'C', answer_text: 'Phần tên và dung lượng tệp', is_correct: 0 },
+                    { choice_label: 'D', answer_text: 'Phần tên và ngày giờ tạo tệp', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Tệp có phần mở rộng là ".pptx" thường được mở bằng phần mềm nào?',
+                explanation: 'Đuôi .pptx là định dạng chuẩn của phần mềm trình chiếu Microsoft PowerPoint.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'Microsoft Word', is_correct: 0 },
+                    { choice_label: 'B', answer_label: 'B', answer_text: 'Microsoft PowerPoint', is_correct: 1 },
+                    { choice_label: 'C', answer_text: 'Microsoft Excel', is_correct: 0 },
+                    { choice_label: 'D', answer_text: 'Notepad', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Tổ hợp phím tắt nhanh nào trên bàn phím dùng để tạo một Thư mục mới (New Folder) trong File Explorer?',
+                explanation: 'Ctrl + Shift + N là phím tắt tạo nhanh thư mục mới trên Windows.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'Ctrl + N', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'Ctrl + Shift + N', is_correct: 1 },
+                    { choice_label: 'C', answer_text: 'Alt + N', is_correct: 0 },
+                    { choice_label: 'D', answer_text: 'Shift + N', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Để đổi tên một tệp hoặc thư mục đã chọn, phím chức năng nào thường được sử dụng?',
+                explanation: 'Nhấn phím F2 trên bàn phím để đổi tên tệp/thư mục đang được chọn một cách nhanh chóng.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'F1', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'F2', is_correct: 1 },
+                    { choice_label: 'C', answer_text: 'F5', is_correct: 0 },
+                    { choice_label: 'D', answer_text: 'F12', is_correct: 0 }
+                ]
+            },
+            {
+                question_text: 'Thao tác nào sau đây sẽ xóa tệp vĩnh viễn khỏi máy tính mà không đưa vào Recycle Bin (Thùng rác)?',
+                explanation: 'Tổ hợp phím Shift + Delete sẽ xóa vĩnh viễn tệp tin khỏi đĩa mà không chuyển vào thùng rác.',
+                answers: [
+                    { choice_label: 'A', answer_text: 'Nhấn phím Delete', is_correct: 0 },
+                    { choice_label: 'B', answer_text: 'Kéo thả tệp vào Recycle Bin', is_correct: 0 },
+                    { choice_label: 'C', answer_text: 'Nhấn tổ hợp phím Shift + Delete', is_correct: 1 },
+                    { choice_label: 'D', answer_text: 'Nhấn tổ hợp phím Ctrl + Delete', is_correct: 0 }
+                ]
+            }
+        ]);
+    }
+
+    // Tài liệu mẫu ban đầu
+    const isL5 = (num === 5);
+    const docxUrl = isL5 ? 'uploads/lessons/Giao_an_Bai_5_Tep_va_thu_muc.docx' : 'uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
+    const pptxUrl = isL5 ? 'uploads/lessons/Bai_giang_dien_tu_Bai_5.pptx' : 'uploads/lessons/Bai_giang_dien_tu_Bai_4.pptx';
+    const docxTitle = isL5 ? 'Giáo án điện tử Bài 5 - Thao tác với tệp và thư mục' : 'Kế hoạch bài dạy (Giáo án) Bài 4 - Tìm kiếm thông tin';
+    const pptxTitle = isL5 ? 'Bản trình chiếu minh họa Bài 5' : 'Bài giảng điện tử PowerPoint Bài 4';
+
+    document.getElementById('documents-container').innerHTML = `
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-start gap-4 card-hover">
+            <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl bg-blue-50 text-blue-600">
+                <i class="fas fa-file-word"></i>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800">DOCX</span>
+                    <span class="text-xs text-slate-400">• Tài liệu chính thức</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-base mb-1 leading-snug">${escapeHtml(docxTitle)}</h3>
+                <p class="text-xs text-slate-500 mb-3">Giáo án định dạng Word chuẩn phương pháp dạy học tích cực</p>
+                <div class="flex items-center gap-3 mt-3">
+                    <button onclick="previewDocument('${escapeHtml(docxTitle)}', 'docx', '${docxUrl}')" class="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 text-xs font-bold text-slate-600 transition flex items-center gap-1.5">
+                        <i class="fas fa-eye text-slate-400"></i> Xem trước
+                    </button>
+                    <a href="${docxUrl}" download class="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fas fa-download"></i> Tải về máy
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-start gap-4 card-hover">
+            <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl bg-orange-50 text-orange-600">
+                <i class="fas fa-file-powerpoint"></i>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-orange-100 text-orange-800">PPTX</span>
+                    <span class="text-xs text-slate-400">• Bản trình chiếu chuẩn</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-base mb-1 leading-snug">${escapeHtml(pptxTitle)}</h3>
+                <p class="text-xs text-slate-500 mb-3">Slide PowerPoint trực quan kèm sơ đồ minh họa</p>
+                <div class="flex items-center gap-3 mt-3">
+                    <button onclick="previewDocument('${escapeHtml(pptxTitle)}', 'pptx', '${pptxUrl}')" class="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 text-xs font-bold text-slate-600 transition flex items-center gap-1.5">
+                        <i class="fas fa-eye text-slate-400"></i> Xem trước
+                    </button>
+                    <a href="${pptxUrl}" download class="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fas fa-download"></i> Tải về máy
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Render dữ liệu nền tảng ngay lập tức
+renderFallbackLesson(lessonNum);
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -321,6 +558,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 2. Tải 4 Hoạt động (Sections)
         db.collection('lesson_sections').where('lesson_id', '==', lessonDocId).onSnapshot(snap => {
+            if (snap.empty) return;
             snap.forEach(doc => {
                 const sec = doc.data();
                 if (sec.section_type === 'warmup') {
@@ -333,6 +571,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 3. Tải Slides
         db.collection('slides').where('lesson_id', '==', lessonDocId).orderBy('slide_number', 'asc').onSnapshot(snap => {
+            if (snap.empty) return;
             const slidesData = [];
             snap.forEach(doc => slidesData.push({ id: doc.id, ...doc.data() }));
             new SlideViewer('slide-viewer-container', slidesData);
@@ -340,6 +579,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 4. Tải Câu hỏi luyện tập (Questions)
         db.collection('questions').where('lesson_id', '==', lessonDocId).orderBy('order_num', 'asc').onSnapshot(snap => {
+            if (snap.empty) return;
             const questionsData = [];
             snap.forEach(doc => questionsData.push({ id: doc.id, ...doc.data() }));
             new QuizEngine('quiz-viewer-container', lessonDocId, questionsData);
@@ -347,17 +587,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 5. Tải Tài liệu Word & PowerPoint
         db.collection('documents').where('lesson_id', '==', lessonDocId).where('is_public', '==', true).onSnapshot(snap => {
+            if (snap.empty) return;
             const docContainer = document.getElementById('documents-container');
-            if (snap.empty) {
-                docContainer.innerHTML = '<div class="col-span-2 p-8 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">Chưa có tài liệu nào được công khai cho bài học này.</div>';
-                return;
-            }
 
             let html = '';
             snap.forEach(doc => {
                 const d = doc.data();
                 const isDocx = (d.file_type === 'docx');
-                const fileUrl = d.file_url || (isDocx ? `uploads/lessons/Giao_an_Bai_${lessonNum}_Tim_kiem_thong_tin.docx` : `uploads/lessons/Bai_giang_dien_tu_Bai_${lessonNum}.pptx`);
+                const isL5 = (lessonNum === 5);
+                const defaultDocx = isL5 ? 'uploads/lessons/Giao_an_Bai_5_Tep_va_thu_muc.docx' : 'uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
+                const defaultPptx = isL5 ? 'uploads/lessons/Bai_giang_dien_tu_Bai_5.pptx' : 'uploads/lessons/Bai_giang_dien_tu_Bai_4.pptx';
+                const fileUrl = d.file_url || (isDocx ? defaultDocx : defaultPptx);
 
                 html += `
                     <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-start gap-4 card-hover">

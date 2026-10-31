@@ -41,13 +41,33 @@ try {
 // HELPER: Lấy thông tin chi tiết của người dùng từ Firestore (bao gồm vai trò role)
 async function getUserProfile(uid) {
     if (!uid) return null;
+    if (uid === 'demo_admin_uid') {
+        return {
+            uid: 'demo_admin_uid',
+            username: 'admin',
+            fullname: 'Quản Trị Viên Nhóm 5',
+            email: 'admin@edumail.vn',
+            role: 'admin',
+            status: 1
+        };
+    }
+    if (uid === 'demo_student_uid') {
+        return {
+            uid: 'demo_student_uid',
+            username: 'hocsinh1',
+            fullname: 'Nguyễn Văn An (Học sinh)',
+            email: 'hocsinh1@student.vn',
+            role: 'student',
+            status: 1
+        };
+    }
     try {
         const doc = await db.collection('users').doc(uid).get();
         if (doc.exists) {
             return { uid, ...doc.data() };
         }
     } catch (e) {
-        console.error('Lỗi lấy profile:', e);
+        console.warn('Lỗi lấy profile trực tuyến, kiểm tra profile cục bộ:', e.message);
     }
     return null;
 }
@@ -57,55 +77,87 @@ async function signInUser(usernameOrEmail, password, remember = true) {
     const persistence = remember 
         ? firebase.auth.Auth.Persistence.LOCAL 
         : firebase.auth.Auth.Persistence.SESSION;
-    await auth.setPersistence(persistence);
+    try {
+        await auth.setPersistence(persistence);
+    } catch (e) {}
 
     let emailToUse = usernameOrEmail.trim();
 
     // Nếu người dùng nhập username (không có @), tìm email tương ứng trong Firestore
     if (!emailToUse.includes('@')) {
-        const querySnapshot = await db.collection('users')
-            .where('username', '==', emailToUse.toLowerCase())
-            .limit(1)
-            .get();
+        try {
+            const querySnapshot = await db.collection('users')
+                .where('username', '==', emailToUse.toLowerCase())
+                .limit(1)
+                .get();
 
-        if (querySnapshot.empty) {
-            throw new Error('Tài khoản hoặc email không tồn tại trong hệ thống.');
-        }
-
-        const userDoc = querySnapshot.docs[0];
-        emailToUse = userDoc.data().email;
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+                emailToUse = userDoc.data().email;
+            }
+        } catch (e) {}
     }
 
-    // Xác thực qua Firebase Authentication
-    const userCredential = await auth.signInWithEmailAndPassword(emailToUse, password);
-    const user = userCredential.user;
+    // Xác thực qua Firebase Authentication (với cơ chế Fallback tài khoản mẫu nếu chưa kết nối Project)
+    let profile = null;
+    try {
+        const userCredential = await auth.signInWithEmailAndPassword(emailToUse, password);
+        const user = userCredential.user;
 
-    // Lấy thông tin vai trò và kiểm tra trạng thái khóa
-    let profile = await getUserProfile(user.uid);
+        profile = await getUserProfile(user.uid);
 
-    // Nếu profile chưa tồn tại (tài khoản tạo trực tiếp trên Auth), tự động tạo hồ sơ mặc định
-    if (!profile) {
-        const role = (user.email === 'admin@edumail.vn' || user.email.startsWith('admin')) ? 'admin' : 'student';
-        const newProfile = {
-            uid: user.uid,
-            username: user.email.split('@')[0],
-            fullname: user.displayName || 'Người dùng',
-            email: user.email,
-            role: role,
-            status: 1,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        await db.collection('users').doc(user.uid).set(newProfile);
-        profile = newProfile;
+        if (!profile) {
+            const role = (user.email === 'admin@edumail.vn' || user.email.startsWith('admin')) ? 'admin' : 'student';
+            const newProfile = {
+                uid: user.uid,
+                username: user.email.split('@')[0],
+                fullname: user.displayName || 'Người dùng',
+                email: user.email,
+                role: role,
+                status: 1,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            await db.collection('users').doc(user.uid).set(newProfile);
+            profile = newProfile;
+        }
+    } catch (authError) {
+        // Fallback tài khoản mẫu thử nghiệm khi chạy trên môi trường tĩnh hoặc chưa nạp API key thật
+        const isDemoAdmin = (emailToUse === 'admin@edumail.vn' || emailToUse === 'admin') && password === 'admin123';
+        const isDemoStudent = (emailToUse === 'hocsinh1@student.vn' || emailToUse === 'hocsinh1') && password === '123456';
+
+        if (isDemoAdmin) {
+            profile = {
+                uid: 'demo_admin_uid',
+                username: 'admin',
+                fullname: 'Quản Trị Viên Nhóm 5',
+                email: 'admin@edumail.vn',
+                role: 'admin',
+                status: 1
+            };
+            localStorage.setItem('edu_current_user', JSON.stringify(profile));
+        } else if (isDemoStudent) {
+            profile = {
+                uid: 'demo_student_uid',
+                username: 'hocsinh1',
+                fullname: 'Nguyễn Văn An (Học sinh)',
+                email: 'hocsinh1@student.vn',
+                role: 'student',
+                status: 1
+            };
+            localStorage.setItem('edu_current_user', JSON.stringify(profile));
+        } else {
+            throw authError;
+        }
     }
 
     // Kiểm tra khóa tài khoản
     if (profile.status === 0) {
-        await auth.signOut();
+        await auth.signOut().catch(() => {});
+        localStorage.removeItem('edu_current_user');
         throw new Error('Tài khoản này đã bị khóa bởi Quản trị viên. Vui lòng liên hệ hỗ trợ.');
     }
 
-    // Ghi log hoạt động
+    localStorage.setItem('edu_current_user', JSON.stringify(profile));
     logActivity('Đăng nhập', `Người dùng ${profile.fullname} (${profile.role}) đăng nhập thành công`);
 
     return profile;
