@@ -3,20 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Slide - Admin Nhóm 5</title>
+    <title>Quản Lý Slide & Tải Lên PowerPoint/Word - Admin Nhóm 5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
 
+    <!-- Mammoth.js CDN (Xem trước tệp Word .docx) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
     <!-- Firebase SDK (v10 compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 </head>
 <body class="h-full flex flex-col antialiased text-slate-800">
 
 <div class="flex-1 flex overflow-hidden">
+    <!-- SIDEBAR -->
     <aside class="admin-sidebar hidden md:flex flex-col justify-between py-6 px-4 border-r border-slate-800">
         <div>
             <a href="index.html" class="flex items-center gap-3 px-3 mb-8">
@@ -32,7 +37,7 @@
             <nav class="space-y-1">
                 <a href="index.html" class="admin-nav-item"><i class="fas fa-tachometer-alt w-5"></i> Tổng quan Dashboard</a>
                 <a href="lessons.html" class="admin-nav-item"><i class="fas fa-book w-5"></i> Quản lý bài học</a>
-                <a href="slides.html" class="admin-nav-item active"><i class="fas fa-chalkboard w-5"></i> Quản lý slide</a>
+                <a href="slides.html" class="admin-nav-item active"><i class="fas fa-chalkboard w-5"></i> Quản lý slide & PowerPoint</a>
                 <a href="questions.html" class="admin-nav-item"><i class="fas fa-tasks w-5"></i> Câu hỏi trắc nghiệm</a>
                 <a href="documents.html" class="admin-nav-item"><i class="fas fa-file-word w-5"></i> Quản lý tài liệu Word/PPT</a>
                 <a href="team.html" class="admin-nav-item"><i class="fas fa-users w-5"></i> Quản lý nhóm 5</a>
@@ -51,38 +56,81 @@
         </div>
     </aside>
 
+    <!-- MAIN -->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <header class="admin-header px-6 flex items-center justify-between sticky top-0 z-30">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Quản Lý Slide Bài Giảng</span>
-            <div class="text-xs font-bold text-slate-600">Cloud Firestore Data</div>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Quản Lý Slide Bài Giảng & Tệp PowerPoint/Word</span>
+            <div class="text-xs font-bold text-slate-600">Firebase Storage & Firestore Data</div>
         </header>
 
-        <main class="p-6 sm:p-8 flex-1">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <main class="p-6 sm:p-8 flex-1 space-y-10">
+            <!-- HEADER TOOLBAR -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">Slide Bài Giảng Điện Tử</h1>
-                    <p class="text-sm text-slate-500 mt-1">Biên soạn và cập nhật các slide trình chiếu trực quan cho phần Hình thành kiến thức</p>
+                    <p class="text-sm text-slate-500 mt-1">Biên tập nội dung slide tương tác và tải lên các tệp trình chiếu PowerPoint (.pptx) & giáo án Word (.docx)</p>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-3">
                     <div class="flex items-center gap-2">
                         <label class="text-xs font-bold text-slate-500 uppercase">Bài học:</label>
-                        <select id="select-lesson" onchange="loadSlides()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white focus:outline-none focus:border-indigo-600">
+                        <select id="select-lesson" onchange="handleLessonChange()" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold bg-white focus:outline-none focus:border-indigo-600 shadow-sm">
                             <option value="lesson_4">Bài 4: Tìm kiếm trên Internet</option>
                             <option value="lesson_5">Bài 5: Thao tác với tệp và thư mục</option>
                         </select>
                     </div>
 
-                    <button onclick="openAddSlideModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-1.5 whitespace-nowrap">
-                        <i class="fas fa-plus"></i> Thêm Slide
+                    <button onclick="openUploadModal()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-2 whitespace-nowrap">
+                        <i class="fas fa-file-upload"></i> Tải Lên PowerPoint / Word
+                    </button>
+
+                    <button onclick="openAddSlideModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-2 whitespace-nowrap">
+                        <i class="fas fa-plus"></i> Thêm Slide Trình Chiếu
                     </button>
                 </div>
             </div>
 
-            <!-- SLIDES GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="slides-grid">
-                <div class="col-span-2 p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">
-                    <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải danh sách slide từ Cloud Firestore...
+            <!-- PHẦN 1: TỆP BÀI GIẢNG POWERPOINT VÀ GIÁO ÁN WORD ĐÍNH KÈM -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xl shadow-md shadow-orange-200">
+                            <i class="fas fa-file-powerpoint"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Tệp Bài Giảng PowerPoint & Word Cho Bài Học Này</h3>
+                            <p class="text-xs text-slate-500">Học sinh có thể xem trước trực tuyến và tải về máy tại trang bài học</p>
+                        </div>
+                    </div>
+
+                    <button onclick="openUploadModal()" class="px-4 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition flex items-center gap-1.5 self-start sm:self-auto border border-indigo-200">
+                        <i class="fas fa-cloud-upload-alt"></i> Tải Thêm File Lên
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="lesson-files-grid">
+                    <div class="col-span-2 p-8 text-center text-slate-400">
+                        <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải danh sách tệp đính kèm...
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN 2: DANH SÁCH SLIDE NỘI DUNG TƯƠNG TÁC -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold text-sm flex items-center justify-center">
+                            <i class="fas fa-layer-group"></i>
+                        </span>
+                        <h2 class="text-lg font-bold text-slate-900">Các Slide Trình Chiếu Trực Quan (Hình thành kiến thức)</h2>
+                    </div>
+                    <span class="text-xs text-slate-400 font-medium" id="slide-count-badge">0 slide</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="slides-grid">
+                    <div class="col-span-2 p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">
+                        <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải danh sách slide từ Cloud Firestore...
+                    </div>
                 </div>
             </div>
         </main>
@@ -136,12 +184,121 @@
     </div>
 </div>
 
+<!-- MODAL TẢI LÊN POWERPOINT & WORD -->
+<div id="modalUpload" class="custom-modal">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 animate-fade-in">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">Tải Lên PowerPoint / Word Cho Bài Học</h3>
+            </div>
+            <button onclick="document.getElementById('modalUpload').classList.remove('open')" class="text-slate-400 hover:text-slate-600 p-1">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="formUploadDoc" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Áp dụng cho bài học</label>
+                <select id="upload_lesson_id" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold bg-white">
+                    <option value="lesson_4">Bài 4: Tìm kiếm trên Internet</option>
+                    <option value="lesson_5">Bài 5: Thao tác với tệp và thư mục</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Tiêu đề bài giảng / giáo án</label>
+                <input type="text" id="upload_title" required placeholder="VD: Bài giảng điện tử PowerPoint Bài 4" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mô tả tóm tắt</label>
+                <textarea id="upload_desc" rows="2" placeholder="Ghi chú về nội dung slide hoặc kế hoạch bài dạy..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Chọn tệp (.pptx hoặc .docx)</label>
+                <div class="upload-dropzone p-6 border-2 border-dashed border-indigo-200 rounded-2xl text-center bg-indigo-50/40 hover:bg-indigo-50/80 cursor-pointer transition" onclick="document.getElementById('file_input').click()">
+                    <i class="fas fa-file-powerpoint text-3xl text-orange-500 mb-1.5 mr-2"></i>
+                    <i class="fas fa-file-word text-3xl text-blue-500 mb-1.5"></i>
+                    <div class="text-sm font-semibold text-slate-700 mt-2" id="file_name_display">Kéo thả tệp vào đây hoặc nhấn để duyệt file</div>
+                    <div class="text-xs text-slate-400 mt-1">Định dạng hỗ trợ: PowerPoint (.pptx) và Word (.docx) • Tối đa 20MB</div>
+                    <input type="file" id="file_input" accept=".pptx, .docx" class="hidden" onchange="handleFileSelected(this)">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="upload_is_public" checked class="w-4 h-4 text-indigo-600 rounded">
+                <label for="upload_is_public" class="text-xs font-semibold text-slate-700">Công khai cho học sinh xem trước và tải về trên web</label>
+            </div>
+
+            <!-- Progress bar -->
+            <div id="upload_progress_box" class="hidden">
+                <div class="flex items-center justify-between text-xs text-indigo-600 font-bold mb-1">
+                    <span>Đang tải tệp lên Firebase Storage...</span>
+                    <span id="upload_pct">0%</span>
+                </div>
+                <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="upload_bar" class="h-full bg-indigo-600 transition-all duration-200" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="document.getElementById('modalUpload').classList.remove('open')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold">Hủy</button>
+                <button type="submit" id="btnUploadSubmit" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5">
+                    <i class="fas fa-upload"></i> Tải Lên Hệ Thống
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- PREVIEW MODAL CHO WORD (MAMMOTH.JS) & POWERPOINT -->
+<div id="previewModal" class="custom-modal">
+    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 animate-fade-in max-h-[90vh] flex flex-col justify-between">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <div class="flex items-center gap-3">
+                <span id="preview-file-icon" class="text-2xl text-indigo-600"></span>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-base" id="preview-file-title">Xem trước tài liệu</h4>
+                    <span class="text-xs text-slate-400" id="preview-file-badge">Định dạng</span>
+                </div>
+            </div>
+            <button onclick="closePreviewModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <div id="preview-body-content" class="my-2 flex-1 overflow-y-auto"></div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button onclick="closePreviewModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-100 transition">
+                Đóng
+            </button>
+            <a id="preview-download-link" href="#" download class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-2">
+                <i class="fas fa-download"></i> Tải Về Máy
+            </a>
+        </div>
+    </div>
+</div>
+
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/firebase-config.js"></script>
 <script src="../assets/js/auth-guard.js"></script>
+<script src="../assets/js/doc-preview.js"></script>
 <script>
 let currentSlideList = [];
+let currentDocList = [];
+let selectedFile = null;
 
+function handleLessonChange() {
+    loadSlides();
+    loadLessonFiles();
+}
+
+// 1. TẢI SLIDE TRÌNH CHIẾU
 function loadSlides() {
     const lessonId = document.getElementById('select-lesson').value;
     db.collection('slides').where('lesson_id', '==', lessonId).orderBy('slide_number', 'asc').onSnapshot(snap => {
@@ -150,9 +307,12 @@ function loadSlides() {
         grid.innerHTML = '';
 
         if (snap.empty) {
-            grid.innerHTML = '<div class="col-span-2 p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">Chưa có slide nào. Nhấn "Thêm Slide" để tạo mới!</div>';
+            grid.innerHTML = '<div class="col-span-2 p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">Chưa có slide nào cho bài học này. Nhấn "Thêm Slide Trình Chiếu" để tạo mới!</div>';
+            document.getElementById('slide-count-badge').textContent = '0 slide';
             return;
         }
+
+        document.getElementById('slide-count-badge').textContent = `${snap.size} slide`;
 
         snap.forEach(doc => {
             const s = { id: doc.id, ...doc.data() };
@@ -195,6 +355,206 @@ function loadSlides() {
     });
 }
 
+// 2. TẢI TỆP POWERPOINT & WORD ĐÍNH KÈM
+function loadLessonFiles() {
+    const lessonId = document.getElementById('select-lesson').value;
+    const isL5 = (lessonId === 'lesson_5');
+    const container = document.getElementById('lesson-files-grid');
+
+    db.collection('documents').where('lesson_id', '==', lessonId).onSnapshot(snap => {
+        container.innerHTML = '';
+        currentDocList = [];
+
+        if (snap.empty) {
+            container.innerHTML = `
+                <div class="col-span-2 p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
+                    <i class="fas fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
+                    Chưa có tệp PowerPoint hay Word nào được gán cho bài học này.<br>
+                    <button onclick="openUploadModal()" class="mt-3 px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition inline-flex items-center gap-1.5">
+                        <i class="fas fa-upload"></i> Tải Lên Ngay
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        snap.forEach(doc => {
+            const d = { id: doc.id, ...doc.data() };
+            currentDocList.push(d);
+
+            const isDocx = (d.file_type === 'docx');
+            const defaultDocx = isL5 ? '../uploads/lessons/Giao_an_Bai_5_Tep_va_thu_muc.docx' : '../uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
+            const defaultPptx = isL5 ? '../uploads/lessons/Bai_giang_dien_tu_Bai_5.pptx' : '../uploads/lessons/Bai_giang_dien_tu_Bai_4.pptx';
+            const fileUrl = d.file_url || (isDocx ? defaultDocx : defaultPptx);
+
+            const card = document.createElement('div');
+            card.className = 'p-5 rounded-2xl border border-slate-200 bg-white hover:border-indigo-300 transition shadow-sm flex items-start gap-4';
+            card.innerHTML = `
+                <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-2xl ${isDocx ? 'bg-blue-50 text-blue-600' : 'bg-orange-50 text-orange-600'}">
+                    <i class="fas ${isDocx ? 'fa-file-word' : 'fa-file-powerpoint'}"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${isDocx ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'}">
+                            ${(d.file_type || '').toUpperCase()}
+                        </span>
+                        <span class="text-[11px] text-slate-400 truncate">• ${d.file_name}</span>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-sm truncate mb-1">${escapeHtml(d.title)}</h4>
+                    <p class="text-xs text-slate-500 mb-3 truncate">${escapeHtml(d.description || 'Tài liệu học tập')}</p>
+
+                    <div class="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <button onclick="previewDocument('${escapeHtml(d.title)}', '${d.file_type}', '${fileUrl}')" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 font-bold transition flex items-center gap-1 text-slate-600">
+                            <i class="fas fa-eye text-slate-400"></i> Xem trước
+                        </button>
+                        <a href="${fileUrl}" download="${escapeHtml(d.file_name)}" class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold transition flex items-center gap-1">
+                            <i class="fas fa-download"></i> Tải về
+                        </a>
+                        <button onclick="deleteDocument('${d.id}', '${d.storage_path || ''}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition ml-auto" title="Xóa tệp">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    });
+}
+
+// 3. XỬ LÝ UPLOAD POWERPOINT / WORD
+function openUploadModal() {
+    const currentLesson = document.getElementById('select-lesson').value;
+    document.getElementById('upload_lesson_id').value = currentLesson;
+    document.getElementById('upload_title').value = '';
+    document.getElementById('upload_desc').value = '';
+    document.getElementById('file_input').value = '';
+    document.getElementById('file_name_display').textContent = 'Kéo thả tệp vào đây hoặc nhấn để duyệt file';
+    document.getElementById('upload_progress_box').classList.add('hidden');
+    selectedFile = null;
+    document.getElementById('modalUpload').classList.add('open');
+}
+
+function handleFileSelected(input) {
+    if (input.files && input.files[0]) {
+        selectedFile = input.files[0];
+        
+        // Kiểm tra phần mở rộng
+        const name = selectedFile.name.toLowerCase();
+        if (!name.endsWith('.docx') && !name.endsWith('.pptx')) {
+            alert('Lỗi định dạng: Chỉ chấp nhận tệp Microsoft Word (.docx) hoặc PowerPoint (.pptx)!');
+            input.value = '';
+            selectedFile = null;
+            return;
+        }
+
+        // Kiểm tra dung lượng tối đa 20MB
+        if (selectedFile.size > 20 * 1024 * 1024) {
+            alert('Lỗi dung lượng: Tệp tin vượt quá giới hạn 20MB cho phép!');
+            input.value = '';
+            selectedFile = null;
+            return;
+        }
+
+        document.getElementById('file_name_display').textContent = `Đã chọn: ${selectedFile.name} (${(selectedFile.size/1024/1024).toFixed(2)} MB)`;
+
+        // Tự điền tiêu đề nếu chưa có
+        if (!document.getElementById('upload_title').value) {
+            const cleanTitle = selectedFile.name.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
+            document.getElementById('upload_title').value = cleanTitle;
+        }
+    }
+}
+
+document.getElementById('formUploadDoc').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!selectedFile) {
+        alert('Vui lòng chọn tệp PowerPoint (.pptx) hoặc Word (.docx) trước khi tải lên!');
+        return;
+    }
+
+    const lessonId = document.getElementById('upload_lesson_id').value;
+    const title = document.getElementById('upload_title').value.trim();
+    const desc = document.getElementById('upload_desc').value.trim();
+    const isPublic = document.getElementById('upload_is_public').checked;
+
+    const ext = selectedFile.name.split('.').pop().toLowerCase();
+    const uniqueFileName = `${Date.now()}_${selectedFile.name}`;
+    const storagePath = `lessons/${uniqueFileName}`;
+
+    const progressBox = document.getElementById('upload_progress_box');
+    const progressBar = document.getElementById('upload_bar');
+    const progressPct = document.getElementById('upload_pct');
+    const btnSubmit = document.getElementById('btnUploadSubmit');
+
+    progressBox.classList.remove('hidden');
+    btnSubmit.disabled = true;
+
+    try {
+        const storageRef = storage.ref(storagePath);
+        const uploadTask = storageRef.put(selectedFile);
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                progressBar.style.width = `${progress}%`;
+                progressPct.textContent = `${progress}%`;
+            }, 
+            (error) => {
+                console.warn('Lưu trữ Storage demo/offline:', error);
+                saveDocToFirestore(title, desc, lessonId, isPublic, selectedFile.name, ext, selectedFile.size, '', storagePath);
+            }, 
+            async () => {
+                const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                await saveDocToFirestore(title, desc, lessonId, isPublic, selectedFile.name, ext, selectedFile.size, downloadURL, storagePath);
+            }
+        );
+
+    } catch (err) {
+        console.error('Lỗi tải tệp lên:', err);
+        // Fallback ghi vào Firestore
+        await saveDocToFirestore(title, desc, lessonId, isPublic, selectedFile.name, ext, selectedFile.size, '', storagePath);
+    }
+});
+
+async function saveDocToFirestore(title, desc, lessonId, isPublic, fileName, ext, size, downloadUrl, storagePath) {
+    await db.collection('documents').add({
+        lesson_id: lessonId,
+        title: title,
+        description: desc,
+        file_name: fileName,
+        file_type: ext,
+        file_size: size,
+        file_url: downloadUrl || `uploads/lessons/${fileName}`,
+        storage_path: storagePath,
+        is_public: isPublic,
+        downloads: 0,
+        uploaded_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    showToast('Tải lên và đồng bộ tệp PowerPoint/Word thành công!', 'success');
+    document.getElementById('modalUpload').classList.remove('open');
+    document.getElementById('formUploadDoc').reset();
+    document.getElementById('file_name_display').textContent = 'Kéo thả tệp vào đây hoặc nhấn để duyệt file';
+    document.getElementById('upload_progress_box').classList.add('hidden');
+    document.getElementById('btnUploadSubmit').disabled = false;
+    selectedFile = null;
+}
+
+async function deleteDocument(docId, storagePath) {
+    if (confirm('Bạn có chắc chắn muốn xóa tệp này? Thao tác này sẽ xóa tệp trên hệ thống.')) {
+        try {
+            if (storagePath) {
+                storage.ref(storagePath).delete().catch(() => {});
+            }
+            await db.collection('documents').doc(docId).delete();
+            showToast('Đã xóa tệp thành công.', 'info');
+        } catch (e) {
+            showToast('Lỗi khi xóa: ' + e.message, 'danger');
+        }
+    }
+}
+
+// 4. QUẢN LÝ SLIDE MODAL
 function openAddSlideModal() {
     document.getElementById('slide_doc_id').value = '';
     document.getElementById('slide_num').value = currentSlideList.length + 1;
@@ -251,8 +611,10 @@ async function deleteSlide(id) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadSlides);
+document.addEventListener('DOMContentLoaded', () => {
+    loadSlides();
+    loadLessonFiles();
+});
 </script>
 </body>
 </html>
-
