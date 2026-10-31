@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
-        <rect width="120" height="120" rx="60" fill="#4f46e5"/>
-        <text x="50%" y="54%" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="#ffffff" dominant-baseline="middle" text-anchor="middle">NH</text>
-    </svg>
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="30" fill="url(#g1)"/>
+  <text x="50%" y="54%" font-family="system-ui, sans-serif" font-size="38" font-weight="800" fill="#ffffff" dominant-baseline="middle" text-anchor="middle">NL</text>
+</svg>

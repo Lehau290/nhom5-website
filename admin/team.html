@@ -138,51 +138,65 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = '';
 
         if (snap.empty) {
-            grid.innerHTML = '<div class="col-span-3 text-center py-8 text-slate-400">Chưa có thành viên nào.</div>';
+            // Danh sách mặc định 5 thành viên
+            const defaultMembers = [
+                { id: 'm1', fullname: 'Đặng Phạm Ngọc Lan', student_id: '21050001', role_name: 'Trưởng nhóm & Quản lý dự án', avatar: 'assets/img/avatars/member1.svg', bio: 'Phụ trách định hướng kiến trúc hệ thống, phân công nhiệm vụ và tổng hợp báo cáo dự án Tin học.', email: 'ngoclan.dp@eduteam5.vn', order_num: 1 },
+                { id: 'm2', fullname: 'Nguyễn Thị Kim Hân', student_id: '21050002', role_name: 'Thiết kế UI/UX & Frontend', avatar: 'assets/img/avatars/member2.svg', bio: 'Thiết kế giao diện hiện đại, tối ưu trải nghiệm học sinh và hiệu ứng trình chiếu slide tương tác.', email: 'kimhan.nt@eduteam5.vn', order_num: 2 },
+                { id: 'm3', fullname: 'Nguyễn Thị Quỳnh', student_id: '21050003', role_name: 'Nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', bio: 'Nghiên cứu và biên soạn nội dung chuyên sâu Bài 4: Tìm kiếm thông tin trên Internet, xây dựng bộ câu hỏi củng cố.', email: 'quynh.nt@eduteam5.vn', order_num: 3 },
+                { id: 'm4', fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role_name: 'Nội dung Bài 5 & Thiết kế Slide', avatar: 'assets/img/avatars/member4.svg', bio: 'Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, thiết kế sơ đồ cây thư mục và ngân hàng trắc nghiệm.', email: 'khanhlinh.dh@eduteam5.vn', order_num: 4 },
+                { id: 'm5', fullname: 'Đặng Nguyễn Thuỳ Linh', student_id: '21050005', role_name: 'Quản lý tài liệu & Đa phương tiện', avatar: 'assets/img/avatars/member5.svg', bio: 'Phụ trách biên soạn tài liệu Word (.docx), bài trình chiếu PowerPoint (.pptx) và tài nguyên học liệu số.', email: 'thuylinh.dn@eduteam5.vn', order_num: 5 }
+            ];
+            currentMemberList = defaultMembers;
+            defaultMembers.forEach(m => renderMemberCard(m, grid));
             return;
         }
 
         snap.forEach(doc => {
             const m = { id: doc.id, ...doc.data() };
             currentMemberList.push(m);
-
-            const card = document.createElement('div');
-            card.className = 'bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between card-hover';
-            card.innerHTML = `
-                <div>
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                        <span class="text-xs font-mono text-slate-400">#${m.order_num || 1} • MSSV: ${escapeHtml(m.student_id || '---')}</span>
-                        <div class="flex items-center gap-1">
-                            <button onclick="openEditMember('${m.id}')" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition" title="Sửa thông tin">
-                                <i class="fas fa-edit text-sm"></i>
-                            </button>
-                            <button onclick="deleteMember('${m.id}')" class="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition" title="Xóa thành viên">
-                                <i class="fas fa-trash-alt text-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
-                            <img src="../${m.avatar || 'assets/img/avatars/member1.svg'}" class="w-full h-full object-cover" onerror="this.src='../assets/img/avatars/member1.svg'">
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base leading-snug">${escapeHtml(m.fullname)}</h3>
-                            <span class="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700">
-                                ${escapeHtml(m.role_name)}
-                            </span>
-                        </div>
-                    </div>
-
-                    <p class="text-xs text-slate-600 leading-relaxed mb-4">${escapeHtml(m.bio || 'Thành viên nhóm 5.')}</p>
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 text-xs text-slate-400 flex items-center gap-1.5 truncate">
-                    <i class="far fa-envelope text-indigo-500"></i> ${escapeHtml(m.email || 'nhom5@edumail.vn')}
-                </div>
-            `;
-            grid.appendChild(card);
+            renderMemberCard(m, grid);
         });
+    });
+});
+
+function renderMemberCard(m, grid) {
+    const card = document.createElement('div');
+    card.className = 'bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between card-hover';
+    card.innerHTML = `
+        <div>
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <span class="text-xs font-mono text-slate-400">#${m.order_num || 1} • MSSV: ${escapeHtml(m.student_id || '---')}</span>
+                <div class="flex items-center gap-1">
+                    <button onclick="openEditMember('${m.id}')" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition" title="Sửa thông tin">
+                        <i class="fas fa-edit text-sm"></i>
+                    </button>
+                    <button onclick="deleteMember('${m.id}')" class="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition" title="Xóa thành viên">
+                        <i class="fas fa-trash-alt text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+                    <img src="../${m.avatar || 'assets/img/avatars/member1.svg'}" class="w-full h-full object-cover" onerror="this.src='../assets/img/avatars/member1.svg'">
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-800 text-base leading-snug">${escapeHtml(m.fullname)}</h3>
+                    <span class="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700">
+                        ${escapeHtml(m.role_name)}
+                    </span>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">${escapeHtml(m.bio || 'Thành viên nhóm 5.')}</p>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 text-xs text-slate-400 flex items-center gap-1.5 truncate">
+            <i class="far fa-envelope text-indigo-500"></i> ${escapeHtml(m.email || 'nhom5@edumail.vn')}
+        </div>
+    `;
+    grid.appendChild(card);
+}
     });
 });
 

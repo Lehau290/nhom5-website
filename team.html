@@ -46,9 +46,7 @@
                 </a>
             </nav>
 
-            <div id="nav-user-area" class="hidden md:flex items-center gap-3">
-                <!-- Dynamic user auth status -->
-            </div>
+            <div id="nav-user-area" class="hidden md:flex items-center gap-3"></div>
 
             <div class="md:hidden flex items-center">
                 <button id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 focus:outline-none">
@@ -81,7 +79,7 @@
             <p class="text-slate-300 text-base max-w-2xl mx-auto leading-relaxed">
                 Dự án xây dựng nền tảng bài giảng số và quản lý học tập trực tuyến cho 
                 <strong>Bài 4 (Tìm kiếm thông tin trên Internet)</strong> và 
-                <strong>Bài 5 (Thao tác với tệp và thư mục)</strong>. Dữ liệu thời gian thực được đồng bộ trên Cloud Firestore.
+                <strong>Bài 5 (Thao tác với tệp và thư mục)</strong>.
             </p>
         </div>
     </div>
@@ -89,12 +87,148 @@
     <!-- MEMBERS GRID -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20 pb-20">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="team-members-container">
-            <div class="col-span-3 py-16 text-center text-slate-400">
-                <i class="fas fa-spinner fa-spin text-3xl text-indigo-600 mb-3"></i>
-                <p class="text-sm">Đang tải danh sách thành viên từ Cloud Firestore...</p>
+            <!-- 1. Đặng Phạm Ngọc Lan -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 border border-slate-200">
+                            <img src="assets/img/avatars/member1.svg" alt="Đặng Phạm Ngọc Lan" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 leading-snug">Đặng Phạm Ngọc Lan</h3>
+                            <div class="text-xs font-mono text-slate-500 mt-0.5">MSSV: 21050001</div>
+                            <div class="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-rose-50 text-rose-700 text-xs font-bold border border-rose-100">
+                                Trưởng nhóm & Quản lý dự án
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Phụ trách định hướng kiến trúc hệ thống, phân công nhiệm vụ và tổng hợp báo cáo dự án dạy học Tin học.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span class="flex items-center gap-1.5 truncate">
+                        <i class="far fa-envelope text-indigo-500"></i>
+                        <span class="truncate">ngoclan.dp@eduteam5.vn</span>
+                    </span>
+                    <span class="text-slate-400 font-mono">#1</span>
+                </div>
+            </div>
+
+            <!-- 2. Nguyễn Thị Kim Hân -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 border border-slate-200">
+                            <img src="assets/img/avatars/member2.svg" alt="Nguyễn Thị Kim Hân" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 leading-snug">Nguyễn Thị Kim Hân</h3>
+                            <div class="text-xs font-mono text-slate-500 mt-0.5">MSSV: 21050002</div>
+                            <div class="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-700 text-xs font-bold border border-purple-100">
+                                Thiết kế UI/UX & Frontend
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Thiết kế giao diện người dùng hiện đại, tối ưu trải nghiệm học sinh và hiệu ứng trình chiếu slide tương tác.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span class="flex items-center gap-1.5 truncate">
+                        <i class="far fa-envelope text-indigo-500"></i>
+                        <span class="truncate">kimhan.nt@eduteam5.vn</span>
+                    </span>
+                    <span class="text-slate-400 font-mono">#2</span>
+                </div>
+            </div>
+
+            <!-- 3. Nguyễn Thị Quỳnh -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 border border-slate-200">
+                            <img src="assets/img/avatars/member3.svg" alt="Nguyễn Thị Quỳnh" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 leading-snug">Nguyễn Thị Quỳnh</h3>
+                            <div class="text-xs font-mono text-slate-500 mt-0.5">MSSV: 21050003</div>
+                            <div class="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-cyan-50 text-cyan-700 text-xs font-bold border border-cyan-100">
+                                Nội dung Bài 4 & Kiểm thử
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Nghiên cứu và biên soạn nội dung chuyên sâu Bài 4: Tìm kiếm thông tin trên Internet, xây dựng bộ câu hỏi củng cố.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span class="flex items-center gap-1.5 truncate">
+                        <i class="far fa-envelope text-indigo-500"></i>
+                        <span class="truncate">quynh.nt@eduteam5.vn</span>
+                    </span>
+                    <span class="text-slate-400 font-mono">#3</span>
+                </div>
+            </div>
+
+            <!-- 4. Dương Huỳnh Khánh Linh -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 border border-slate-200">
+                            <img src="assets/img/avatars/member4.svg" alt="Dương Huỳnh Khánh Linh" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 leading-snug">Dương Huỳnh Khánh Linh</h3>
+                            <div class="text-xs font-mono text-slate-500 mt-0.5">MSSV: 21050004</div>
+                            <div class="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100">
+                                Nội dung Bài 5 & Thiết kế Slide
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, thiết kế sơ đồ cây thư mục và ngân hàng trắc nghiệm.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span class="flex items-center gap-1.5 truncate">
+                        <i class="far fa-envelope text-indigo-500"></i>
+                        <span class="truncate">khanhlinh.dh@eduteam5.vn</span>
+                    </span>
+                    <span class="text-slate-400 font-mono">#4</span>
+                </div>
+            </div>
+
+            <!-- 5. Đặng Nguyễn Thuỳ Linh -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 border border-slate-200">
+                            <img src="assets/img/avatars/member5.svg" alt="Đặng Nguyễn Thuỳ Linh" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 leading-snug">Đặng Nguyễn Thuỳ Linh</h3>
+                            <div class="text-xs font-mono text-slate-500 mt-0.5">MSSV: 21050005</div>
+                            <div class="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-700 text-xs font-bold border border-amber-100">
+                                Quản lý tài liệu & Đa phương tiện
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Phụ trách biên soạn tài liệu Word (.docx), bài trình chiếu PowerPoint (.pptx) và tài nguyên học liệu số.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span class="flex items-center gap-1.5 truncate">
+                        <i class="far fa-envelope text-indigo-500"></i>
+                        <span class="truncate">thuylinh.dn@eduteam5.vn</span>
+                    </span>
+                    <span class="text-slate-400 font-mono">#5</span>
+                </div>
             </div>
         </div>
 
+        <!-- Goals / Commitments -->
         <div class="mt-16 bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
                 <div>
@@ -141,16 +275,12 @@
 <script src="assets/js/firebase-config.js"></script>
 <script src="assets/js/auth-guard.js"></script>
 <script>
-// Tải danh sách thành viên từ Cloud Firestore
+// Lắng nghe cập nhật Firestore (nếu có cập nhật thêm từ trang Admin)
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         db.collection('team_members').orderBy('order_num', 'asc').onSnapshot(snap => {
+            if (snap.empty) return;
             const container = document.getElementById('team-members-container');
-            if (snap.empty) {
-                container.innerHTML = '<div class="col-span-3 text-center py-8 text-slate-400">Chưa có thành viên nào.</div>';
-                return;
-            }
-
             let html = '';
             snap.forEach(doc => {
                 const m = doc.data();
@@ -172,7 +302,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 </div>
                             </div>
                             <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                                ${escapeHtml(m.bio || 'Thành viên nòng cốt nhóm 5.')}
+                                ${escapeHtml(m.bio || 'Thành viên nhóm 5.')}
                             </p>
                         </div>
                         <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -188,10 +318,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             container.innerHTML = html;
         });
     } catch (e) {
-        console.error('Lỗi lấy team members:', e);
+        console.warn('Lưu ý kết nối Firestore:', e);
     }
 });
 </script>
 </body>
 </html>
-

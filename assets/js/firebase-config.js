@@ -423,11 +423,11 @@ async function seedInitialFirestoreData() {
     if (teamSnap.empty) {
         console.log('Đang tạo collection: team_members...');
         const members = [
-            { fullname: 'Đặng Hoàng Nam', student_id: '21050001', role_name: 'Trưởng nhóm & Fullstack Developer', avatar: 'assets/img/avatars/member1.svg', bio: 'Chịu trách nhiệm thiết kế kiến trúc hệ thống, tích hợp Firebase Auth, Firestore và Storage.', email: 'nam.dh@eduteam5.vn', order_num: 1 },
-            { fullname: 'Lê Thị Phương Thảo', student_id: '21050002', role_name: 'UI/UX & Frontend Developer', avatar: 'assets/img/avatars/member2.svg', bio: 'Thiết kế giao diện hiện đại, tối ưu trải nghiệm học sinh và hiệu ứng trình chiếu slide tương tác.', email: 'thao.ltp@eduteam5.vn', order_num: 2 },
-            { fullname: 'Nguyễn Minh Tuấn', student_id: '21050003', role_name: 'Biên tập nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', bio: 'Soạn thảo nội dung chuyên sâu Bài 4: Tìm kiếm thông tin trên Internet và kiểm thử câu hỏi.', email: 'tuan.nm@eduteam5.vn', order_num: 3 },
-            { fullname: 'Phạm Quỳnh Chi', student_id: '21050004', role_name: 'Biên tập nội dung Bài 5 & Slide', avatar: 'assets/img/avatars/member4.svg', bio: 'Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, xây dựng ngân hàng trắc nghiệm.', email: 'chi.pq@eduteam5.vn', order_num: 4 },
-            { fullname: 'Vũ Đức Thịnh', student_id: '21050005', role_name: 'Quản lý tài liệu & Bảo mật', avatar: 'assets/img/avatars/member5.svg', bio: 'Xây dựng mô-đun upload tài liệu Word/PowerPoint và kiểm tra phân quyền bảo mật Firebase Rules.', email: 'thinh.vd@eduteam5.vn', order_num: 5 }
+            { fullname: 'Đặng Phạm Ngọc Lan', student_id: '21050001', role_name: 'Trưởng nhóm & Quản lý dự án', avatar: 'assets/img/avatars/member1.svg', bio: 'Phụ trách định hướng kiến trúc hệ thống, phân công nhiệm vụ và tổng hợp báo cáo dự án Tin học.', email: 'ngoclan.dp@eduteam5.vn', order_num: 1 },
+            { fullname: 'Nguyễn Thị Kim Hân', student_id: '21050002', role_name: 'Thiết kế UI/UX & Lập trình Frontend', avatar: 'assets/img/avatars/member2.svg', bio: 'Thiết kế giao diện hiện đại, tối ưu trải nghiệm học sinh và hiệu ứng trình chiếu slide tương tác.', email: 'kimhan.nt@eduteam5.vn', order_num: 2 },
+            { fullname: 'Nguyễn Thị Quỳnh', student_id: '21050003', role_name: 'Biên tập nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', bio: 'Nghiên cứu và biên soạn nội dung chuyên sâu Bài 4: Tìm kiếm thông tin trên Internet, xây dựng bộ câu hỏi củng cố.', email: 'quynh.nt@eduteam5.vn', order_num: 3 },
+            { fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role_name: 'Biên tập nội dung Bài 5 & Thiết kế Slide', avatar: 'assets/img/avatars/member4.svg', bio: 'Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, thiết kế sơ đồ cây thư mục và ngân hàng trắc nghiệm.', email: 'khanhlinh.dh@eduteam5.vn', order_num: 4 },
+            { fullname: 'Đặng Nguyễn Thuỳ Linh', student_id: '21050005', role_name: 'Quản lý tài liệu & Đa phương tiện', avatar: 'assets/img/avatars/member5.svg', bio: 'Phụ trách biên soạn tài liệu Word (.docx), bài trình chiếu PowerPoint (.pptx) và tài nguyên học liệu số.', email: 'thuylinh.dn@eduteam5.vn', order_num: 5 }
         ];
 
         for (const m of members) {
