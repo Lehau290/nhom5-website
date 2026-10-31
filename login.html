@@ -110,16 +110,37 @@
         <!-- Quick Demo Accounts Box -->
         <div class="mt-8 pt-6 border-t border-slate-100">
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 text-center mb-3">
-                Tài Khoản Mẫu Thử Nghiệm
+                Tài Khoản Thành Viên Nhóm 5 & Thử Nghiệm
             </h4>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <button type="button" onclick="fillDemo('admin@edumail.vn', 'admin123')" class="p-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 font-medium text-left transition">
-                    <div class="font-bold flex items-center gap-1"><i class="fas fa-shield-alt text-purple-600"></i> Admin</div>
-                    <div class="text-[11px] text-purple-700">admin@edumail.vn</div>
+            <div class="grid grid-cols-2 gap-2 text-xs mb-3">
+                <button type="button" onclick="fillDemo('ngoclan', '123456')" class="p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-900 font-medium text-left transition">
+                    <div class="font-bold flex items-center gap-1"><i class="fas fa-crown text-rose-600"></i> Ngọc Lan</div>
+                    <div class="text-[11px] text-rose-700">Trưởng nhóm • ngoclan</div>
                 </button>
-                <button type="button" onclick="fillDemo('hocsinh1@student.vn', '123456')" class="p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-900 font-medium text-left transition">
+                <button type="button" onclick="fillDemo('kimhan', '123456')" class="p-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 font-medium text-left transition">
+                    <div class="font-bold flex items-center gap-1"><i class="fas fa-paint-brush text-purple-600"></i> Kim Hân</div>
+                    <div class="text-[11px] text-purple-700">UI/UX • kimhan</div>
+                </button>
+                <button type="button" onclick="fillDemo('quynh', '123456')" class="p-2.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 border border-cyan-200 text-cyan-900 font-medium text-left transition">
+                    <div class="font-bold flex items-center gap-1"><i class="fas fa-search text-cyan-600"></i> Quỳnh</div>
+                    <div class="text-[11px] text-cyan-700">Bài 4 & QA • quynh</div>
+                </button>
+                <button type="button" onclick="fillDemo('khanhlinh', '123456')" class="p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 font-medium text-left transition">
+                    <div class="font-bold flex items-center gap-1"><i class="fas fa-folder-tree text-emerald-600"></i> Khánh Linh</div>
+                    <div class="text-[11px] text-emerald-700">Bài 5 & Slide • khanhlinh</div>
+                </button>
+                <button type="button" onclick="fillDemo('thuylinh', '123456')" class="p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-medium text-left transition">
+                    <div class="font-bold flex items-center gap-1"><i class="fas fa-file-alt text-amber-600"></i> Thuỳ Linh</div>
+                    <div class="text-[11px] text-amber-700">Tài liệu • thuylinh</div>
+                </button>
+                <button type="button" onclick="fillDemo('hocsinh1', '123456')" class="p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-900 font-medium text-left transition">
                     <div class="font-bold flex items-center gap-1"><i class="fas fa-user-graduate text-blue-600"></i> Học sinh</div>
-                    <div class="text-[11px] text-blue-700">hocsinh1@student.vn</div>
+                    <div class="text-[11px] text-blue-700">Mẫu: hocsinh1 / 123456</div>
+                </button>
+            </div>
+            <div class="text-center">
+                <button type="button" onclick="fillDemo('admin@edumail.vn', 'admin123')" class="w-full p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-1.5">
+                    <i class="fas fa-shield-alt text-purple-600"></i> Tài khoản Admin tổng (admin@edumail.vn / admin123)
                 </button>
             </div>
         </div>
@@ -166,7 +187,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         successAlert.classList.remove('hidden');
 
         setTimeout(() => {
-            if (profile.role === 'admin') {
+            if (profile.member_key) {
+                window.location.href = 'profile.html';
+            } else if (profile.role === 'admin') {
                 window.location.href = 'admin/index.html';
             } else {
                 window.location.href = 'index.html';

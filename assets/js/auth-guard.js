@@ -98,22 +98,27 @@ function updateNavUserUI(profile) {
         const isAdmin = (profile.role === 'admin');
         const roleName = isAdmin ? 'Quản trị viên' : 'Học sinh';
         const initial = profile.fullname ? profile.fullname.charAt(0).toUpperCase() : 'U';
+        const profileUrl = window.location.pathname.includes('/admin/') ? '../profile.html' : 'profile.html';
+        const adminUrl = window.location.pathname.includes('/admin/') ? 'index.html' : 'admin/index.html';
 
         // Desktop
         userContainer.innerHTML = `
             <div class="flex items-center gap-3">
+                <a href="${profileUrl}" class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition flex items-center gap-1.5" title="Xem trang hồ sơ cá nhân">
+                    <i class="fas fa-id-card"></i> Hồ Sơ
+                </a>
                 ${isAdmin ? `
-                    <a href="admin/index.html" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-1.5">
+                    <a href="${adminUrl}" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-1.5">
                         <i class="fas fa-shield-alt"></i> Trang Admin
                     </a>
                 ` : ''}
                 <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
-                    <div class="w-9 h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center font-bold text-indigo-700 text-sm">
-                        ${initial}
+                    <div class="w-9 h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center font-bold text-indigo-700 text-sm overflow-hidden">
+                        ${profile.avatar ? `<img src="${profile.avatar}" class="w-full h-full object-cover">` : initial}
                     </div>
                     <div class="text-left hidden sm:block">
                         <div class="text-xs font-bold text-slate-800 leading-tight">${escapeHtml(profile.fullname)}</div>
-                        <div class="text-[11px] text-slate-500 capitalize">${roleName}</div>
+                        <div class="text-[11px] text-slate-500 capitalize">${escapeHtml(profile.role_title || roleName)}</div>
                     </div>
                     <button onclick="handleSignOut()" class="p-2 text-slate-400 hover:text-red-600 rounded-lg transition" title="Đăng xuất">
                         <i class="fas fa-sign-out-alt text-base"></i>
@@ -128,13 +133,16 @@ function updateNavUserUI(profile) {
                 <div class="py-2 border-t border-slate-100 flex items-center justify-between">
                     <div>
                         <div class="text-xs font-bold text-slate-800">${escapeHtml(profile.fullname)}</div>
-                        <div class="text-[11px] text-slate-500 capitalize">${roleName}</div>
+                        <div class="text-[11px] text-slate-500 capitalize">${escapeHtml(profile.role_title || roleName)}</div>
                     </div>
                     <button onclick="handleSignOut()" class="text-xs text-red-600 font-bold">Đăng xuất</button>
                 </div>
-                ${isAdmin ? `
-                    <a href="admin/index.html" class="block text-center mt-2 py-2 bg-purple-600 text-white rounded-xl font-bold text-xs">Vào Trang Quản Trị Admin</a>
-                ` : ''}
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                    <a href="${profileUrl}" class="block text-center py-2 bg-indigo-50 text-indigo-700 rounded-xl font-bold text-xs">Xem Hồ Sơ</a>
+                    ${isAdmin ? `
+                        <a href="${adminUrl}" class="block text-center py-2 bg-purple-600 text-white rounded-xl font-bold text-xs">Vào Admin</a>
+                    ` : ''}
+                </div>
             `;
         }
     } else {

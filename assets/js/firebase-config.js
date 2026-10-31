@@ -122,8 +122,16 @@ async function signInUser(usernameOrEmail, password, remember = true) {
         }
     } catch (authError) {
         // Fallback tài khoản mẫu thử nghiệm khi chạy trên môi trường tĩnh hoặc chưa nạp API key thật
-        const isDemoAdmin = (emailToUse === 'admin@edumail.vn' || emailToUse === 'admin') && password === 'admin123';
-        const isDemoStudent = (emailToUse === 'hocsinh1@student.vn' || emailToUse === 'hocsinh1') && password === '123456';
+        const lowerIdent = emailToUse.toLowerCase();
+        const isDemoAdmin = (lowerIdent === 'admin@edumail.vn' || lowerIdent === 'admin') && password === 'admin123';
+        const isDemoStudent = (lowerIdent === 'hocsinh1@student.vn' || lowerIdent === 'hocsinh1') && password === '123456';
+        
+        // 5 Tài khoản thành viên Nhóm 5
+        const isNgocLan = (lowerIdent === 'ngoclan.dp@eduteam5.vn' || lowerIdent === 'ngoclan') && (password === '123456' || password === 'admin123');
+        const isKimHan = (lowerIdent === 'kimhan.nt@eduteam5.vn' || lowerIdent === 'kimhan') && (password === '123456' || password === 'admin123');
+        const isQuynh = (lowerIdent === 'quynh.nt@eduteam5.vn' || lowerIdent === 'quynh') && (password === '123456' || password === 'admin123');
+        const isKhanhLinh = (lowerIdent === 'khanhlinh.dh@eduteam5.vn' || lowerIdent === 'khanhlinh') && (password === '123456' || password === 'admin123');
+        const isThuyLinh = (lowerIdent === 'thuylinh.dn@eduteam5.vn' || lowerIdent === 'thuylinh') && (password === '123456' || password === 'admin123');
 
         if (isDemoAdmin) {
             profile = {
@@ -134,7 +142,71 @@ async function signInUser(usernameOrEmail, password, remember = true) {
                 role: 'admin',
                 status: 1
             };
-            localStorage.setItem('edu_current_user', JSON.stringify(profile));
+        } else if (isNgocLan) {
+            profile = {
+                uid: 'member_ngoclan_uid',
+                username: 'ngoclan',
+                fullname: 'Đặng Phạm Ngọc Lan',
+                student_id: '21050001',
+                email: 'ngoclan.dp@eduteam5.vn',
+                role: 'admin',
+                member_key: 'ngoclan',
+                role_title: 'Trưởng nhóm & Quản lý dự án',
+                avatar: 'assets/img/avatars/member1.svg',
+                status: 1
+            };
+        } else if (isKimHan) {
+            profile = {
+                uid: 'member_kimhan_uid',
+                username: 'kimhan',
+                fullname: 'Nguyễn Thị Kim Hân',
+                student_id: '21050002',
+                email: 'kimhan.nt@eduteam5.vn',
+                role: 'admin',
+                member_key: 'kimhan',
+                role_title: 'Thiết kế UI/UX & Frontend',
+                avatar: 'assets/img/avatars/member2.svg',
+                status: 1
+            };
+        } else if (isQuynh) {
+            profile = {
+                uid: 'member_quynh_uid',
+                username: 'quynh',
+                fullname: 'Nguyễn Thị Quỳnh',
+                student_id: '21050003',
+                email: 'quynh.nt@eduteam5.vn',
+                role: 'admin',
+                member_key: 'quynh',
+                role_title: 'Nội dung Bài 4 & Kiểm thử',
+                avatar: 'assets/img/avatars/member3.svg',
+                status: 1
+            };
+        } else if (isKhanhLinh) {
+            profile = {
+                uid: 'member_khanhlinh_uid',
+                username: 'khanhlinh',
+                fullname: 'Dương Huỳnh Khánh Linh',
+                student_id: '21050004',
+                email: 'khanhlinh.dh@eduteam5.vn',
+                role: 'admin',
+                member_key: 'khanhlinh',
+                role_title: 'Nội dung Bài 5 & Slide',
+                avatar: 'assets/img/avatars/member4.svg',
+                status: 1
+            };
+        } else if (isThuyLinh) {
+            profile = {
+                uid: 'member_thuylinh_uid',
+                username: 'thuylinh',
+                fullname: 'Đặng Nguyễn Thuỳ Linh',
+                student_id: '21050005',
+                email: 'thuylinh.dn@eduteam5.vn',
+                role: 'admin',
+                member_key: 'thuylinh',
+                role_title: 'Quản lý tài liệu & Đa phương tiện',
+                avatar: 'assets/img/avatars/member5.svg',
+                status: 1
+            };
         } else if (isDemoStudent) {
             profile = {
                 uid: 'demo_student_uid',
@@ -144,10 +216,11 @@ async function signInUser(usernameOrEmail, password, remember = true) {
                 role: 'student',
                 status: 1
             };
-            localStorage.setItem('edu_current_user', JSON.stringify(profile));
         } else {
             throw authError;
         }
+
+        localStorage.setItem('edu_current_user', JSON.stringify(profile));
     }
 
     // Kiểm tra khóa tài khoản
@@ -500,6 +573,27 @@ async function seedInitialFirestoreData() {
 
         for (const d of sampleDocs) {
             await db.collection('documents').add(d);
+        }
+    }
+
+    // 7. Users tài khoản thành viên nhóm 5 & học sinh mẫu
+    const usersSnap = await db.collection('users').get();
+    if (usersSnap.empty) {
+        console.log('Đang tạo collection: users...');
+        const initialUsers = [
+            { uid: 'member_ngoclan_uid', username: 'ngoclan', fullname: 'Đặng Phạm Ngọc Lan', student_id: '21050001', role: 'admin', member_key: 'ngoclan', role_title: 'Trưởng nhóm & Quản lý dự án', avatar: 'assets/img/avatars/member1.svg', email: 'ngoclan.dp@eduteam5.vn', status: 1 },
+            { uid: 'member_kimhan_uid', username: 'kimhan', fullname: 'Nguyễn Thị Kim Hân', student_id: '21050002', role: 'admin', member_key: 'kimhan', role_title: 'Thiết kế UI/UX & Frontend', avatar: 'assets/img/avatars/member2.svg', email: 'kimhan.nt@eduteam5.vn', status: 1 },
+            { uid: 'member_quynh_uid', username: 'quynh', fullname: 'Nguyễn Thị Quỳnh', student_id: '21050003', role: 'admin', member_key: 'quynh', role_title: 'Nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', email: 'quynh.nt@eduteam5.vn', status: 1 },
+            { uid: 'member_khanhlinh_uid', username: 'khanhlinh', fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role: 'admin', member_key: 'khanhlinh', role_title: 'Nội dung Bài 5 & Slide', avatar: 'assets/img/avatars/member4.svg', email: 'khanhlinh.dh@eduteam5.vn', status: 1 },
+            { uid: 'member_thuylinh_uid', username: 'thuylinh', fullname: 'Đặng Nguyễn Thuỳ Linh', student_id: '21050005', role: 'admin', member_key: 'thuylinh', role_title: 'Quản lý tài liệu & Đa phương tiện', avatar: 'assets/img/avatars/member5.svg', email: 'thuylinh.dn@eduteam5.vn', status: 1 },
+            { uid: 'demo_student_uid', username: 'hocsinh1', fullname: 'Nguyễn Văn An (Học sinh)', student_id: '21050006', role: 'student', email: 'hocsinh1@student.vn', status: 1 }
+        ];
+
+        for (const u of initialUsers) {
+            await db.collection('users').doc(u.uid).set({
+                ...u,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
         }
     }
 

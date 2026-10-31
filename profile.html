@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Cá Nhân - Nền Tảng Tin Học Nhóm 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#0ea5e9'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Firebase SDK (v10 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-slate-50 text-slate-800 antialiased">
+
+<!-- Header / Navigation -->
+<header class="glass-nav sticky top-0 z-40 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition-transform">
+                    <i class="fas fa-laptop-code text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold font-heading text-slate-900 group-hover:text-indigo-600 transition tracking-tight">
+                        TIN HỌC <span class="gradient-text">NHÓM 5</span>
+                    </span>
+                    <span class="block text-xs text-slate-500 font-medium tracking-wide">Nền Tảng Dạy Học Trực Tuyến</span>
+                </div>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-1 font-medium text-sm">
+                <a href="index.html" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-home mr-1.5 opacity-70"></i>Trang Chủ
+                </a>
+                <a href="lesson.html?id=4" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-search mr-1.5 opacity-70"></i>Bài 4: Tìm Kiếm Internet
+                </a>
+                <a href="lesson.html?id=5" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-folder-tree mr-1.5 opacity-70"></i>Bài 5: Tệp & Thư Mục
+                </a>
+                <a href="team.html" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-users mr-1.5 opacity-70"></i>Nhóm 5
+                </a>
+                <a href="profile.html" class="px-4 py-2 rounded-xl bg-indigo-50 text-indigo-600 font-bold transition">
+                    <i class="fas fa-id-card mr-1.5"></i>Hồ Sơ
+                </a>
+            </nav>
+
+            <div id="nav-user-area" class="hidden md:flex items-center gap-3"></div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-5 space-y-2">
+        <a href="index.html" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Trang Chủ</a>
+        <a href="lesson.html?id=4" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Bài 4: Tìm Kiếm Internet</a>
+        <a href="lesson.html?id=5" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Bài 5: Tệp & Thư Mục</a>
+        <a href="team.html" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Nhóm 5</a>
+        <a href="profile.html" class="block px-3 py-2 rounded-lg text-base font-semibold bg-indigo-50 text-indigo-600">Hồ Sơ Cá Nhân</a>
+        <div id="mobile-nav-user-area" class="pt-2"></div>
+    </div>
+</header>
+
+<main class="flex-grow pb-24">
+    <!-- TOP MEMBER SWITCHER BAR -->
+    <section class="bg-white border-b border-slate-200 py-4 shadow-sm sticky top-20 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
+                <div class="flex items-center gap-2 whitespace-nowrap">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mr-1">
+                        <i class="fas fa-user-circle text-indigo-600 text-sm"></i> Chuyển Hồ Sơ:
+                    </span>
+                    
+                    <button onclick="renderMemberProfile('ngoclan')" id="tab-btn-ngoclan" class="member-tab-btn px-3.5 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-2 bg-rose-50 text-rose-700 border border-rose-200 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-rose-500"></span> Đặng Phạm Ngọc Lan
+                    </button>
+                    
+                    <button onclick="renderMemberProfile('kimhan')" id="tab-btn-kimhan" class="member-tab-btn px-3.5 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                        <span class="w-2 h-2 rounded-full bg-purple-500"></span> Nguyễn Thị Kim Hân
+                    </button>
+                    
+                    <button onclick="renderMemberProfile('quynh')" id="tab-btn-quynh" class="member-tab-btn px-3.5 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                        <span class="w-2 h-2 rounded-full bg-cyan-500"></span> Nguyễn Thị Quỳnh
+                    </button>
+                    
+                    <button onclick="renderMemberProfile('khanhlinh')" id="tab-btn-khanhlinh" class="member-tab-btn px-3.5 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Dương Huỳnh Khánh Linh
+                    </button>
+                    
+                    <button onclick="renderMemberProfile('thuylinh')" id="tab-btn-thuylinh" class="member-tab-btn px-3.5 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Đặng Nguyễn Thuỳ Linh
+                    </button>
+                </div>
+
+                <div class="hidden sm:flex items-center gap-2">
+                    <span id="current-logged-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                        Chế độ xem tương tác
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DYNAMIC PROFILE CONTAINER (Thay đổi toàn bộ layout & màu sắc theo thành viên) -->
+    <div id="dynamic-profile-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <!-- Rendered by JavaScript -->
+    </div>
+</main>
+
+<footer class="bg-slate-900 text-slate-300 pt-12 pb-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
+        © 2026 Dự án Tin Học - Nhóm 5. Giao diện hồ sơ được tùy biến chuyên biệt cho từng thành viên.
+    </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/firebase-config.js"></script>
+<script src="assets/js/auth-guard.js"></script>
+
+<script>
+// Dữ liệu và cấu hình giao diện chuyên biệt cho từng thành viên
+const memberProfiles = {
+    ngoclan: {
+        fullname: 'Đặng Phạm Ngọc Lan',
+        studentId: '21050001',
+        roleTitle: 'Trưởng Nhóm & Tổng Công Trình Sư Dự Án',
+        email: 'ngoclan.dp@eduteam5.vn',
+        avatar: 'assets/img/avatars/member1.svg',
+        quote: '“Một hệ thống giáo dục thành công bắt đầu từ sự gắn kết của cả tập thể và trách nhiệm dẫn dắt không ngừng nghỉ.”',
+        theme: {
+            bannerGrad: 'from-rose-900 via-pink-900 to-rose-950',
+            badgeBg: 'bg-rose-50 text-rose-700 border-rose-200',
+            accentColor: 'rose',
+            buttonBg: 'bg-rose-600 hover:bg-rose-700',
+            cardBorder: 'border-rose-100'
+        },
+        renderCustomWidgets: () => `
+            <!-- 1. BẢNG ĐIỀU HÀNH TIẾN ĐỘ DỰ ÁN 4 GIAI ĐOẠN -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fas fa-tasks-alt"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Tiến Độ Dự Án Dạy Học Tin Học Nhóm 5</h3>
+                            <p class="text-xs text-slate-500">Giám sát lộ trình hoàn thành các hạng mục theo kế hoạch ban đầu</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-xs border border-emerald-200">
+                        <i class="fas fa-check-circle mr-1"></i> Hoàn thành 100%
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase text-slate-500">Giai đoạn 1</span>
+                            <span class="text-xs font-black text-rose-600">100%</span>
+                        </div>
+                        <div class="font-bold text-slate-800 text-sm mb-2">Khảo sát & Lập kế hoạch</div>
+                        <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-rose-600 h-full w-full"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Phân chia mục tiêu Bài 4 và Bài 5.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase text-slate-500">Giai đoạn 2</span>
+                            <span class="text-xs font-black text-rose-600">100%</span>
+                        </div>
+                        <div class="font-bold text-slate-800 text-sm mb-2">Thiết kế UI/UX & Slide</div>
+                        <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-rose-600 h-full w-full"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Dựng hệ thống trình chiếu 16:9.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase text-slate-500">Giai đoạn 3</span>
+                            <span class="text-xs font-black text-rose-600">100%</span>
+                        </div>
+                        <div class="font-bold text-slate-800 text-sm mb-2">Biên tập nội dung & Quiz</div>
+                        <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-rose-600 h-full w-full"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Ngân hàng 10 câu trắc nghiệm chuẩn.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase text-slate-500">Giai đoạn 4</span>
+                            <span class="text-xs font-black text-rose-600">100%</span>
+                        </div>
+                        <div class="font-bold text-slate-800 text-sm mb-2">Kiểm thử & Triển khai</div>
+                        <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-rose-600 h-full w-full"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">GitHub Pages & Firebase live.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. MA TRẬN PHÂN CÔNG NHIỆM VỤ THÀNH VIÊN (RACI MATRIX) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-sitemap text-rose-600"></i> Bảng Phân Công Công Việc Các Thành Viên
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                                <tr>
+                                    <th class="py-3 px-4">Thành viên</th>
+                                    <th class="py-3 px-4">Trách nhiệm chính</th>
+                                    <th class="py-3 px-4">Sản phẩm đầu ra</th>
+                                    <th class="py-3 px-4">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-medium">
+                                <tr>
+                                    <td class="py-3.5 px-4 font-bold text-rose-700">Đặng Phạm Ngọc Lan</td>
+                                    <td class="py-3.5 px-4">Quản lý chung, định hướng & tổng hợp</td>
+                                    <td class="py-3.5 px-4">Kiến trúc hệ thống, báo cáo</td>
+                                    <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Hoàn tất</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4 font-bold text-purple-700">Nguyễn Thị Kim Hân</td>
+                                    <td class="py-3.5 px-4">Thiết kế UI/UX & lập trình Frontend</td>
+                                    <td class="py-3.5 px-4">Giao diện responsive, slide player</td>
+                                    <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Hoàn tất</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4 font-bold text-cyan-700">Nguyễn Thị Quỳnh</td>
+                                    <td class="py-3.5 px-4">Biên soạn Bài 4 & kiểm thử QA</td>
+                                    <td class="py-3.5 px-4">Nội dung Bài 4, test case</td>
+                                    <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Hoàn tất</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4 font-bold text-emerald-700">Dương Huỳnh Khánh Linh</td>
+                                    <td class="py-3.5 px-4">Biên soạn Bài 5 & thiết kế Slide</td>
+                                    <td class="py-3.5 px-4">Nội dung Bài 5, bộ slide PowerPoint</td>
+                                    <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Hoàn tất</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4 font-bold text-amber-700">Đặng Nguyễn Thuỳ Linh</td>
+                                    <td class="py-3.5 px-4">Quản lý học liệu & tài liệu số</td>
+                                    <td class="py-3.5 px-4">Kho tài liệu Word, PPTX 40MB</td>
+                                    <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Hoàn tất</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-rose-50/60 rounded-3xl p-6 sm:p-8 border border-rose-200/80 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-rose-700">Thao Tác Quản Trị Nhóm</span>
+                        <h4 class="text-lg font-bold text-slate-900 mt-2 mb-3">Quyền Hạn Trưởng Nhóm</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            Là trưởng nhóm, bạn có toàn quyền quản lý hệ thống, phê duyệt ngân hàng câu hỏi và điều phối các tệp bài giảng.
+                        </p>
+                        <div class="space-y-2.5">
+                            <a href="admin/index.html" class="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm">
+                                <i class="fas fa-tachometer-alt"></i> Mở Bảng Quản Trị Admin
+                            </a>
+                            <a href="admin/team.html" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs transition flex items-center justify-center gap-2">
+                                <i class="fas fa-users-cog"></i> Cập Nhật Thông Tin Thành Viên
+                            </a>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-rose-200 text-[11px] text-rose-600 font-medium">
+                        <i class="fas fa-shield-alt mr-1"></i> Tài khoản có quyền Quản trị cao nhất (Admin).
+                    </div>
+                </div>
+            </div>
+        `
+    },
+
+    kimhan: {
+        fullname: 'Nguyễn Thị Kim Hân',
+        studentId: '21050002',
+        roleTitle: 'Kiến Trúc Sư Giao Diện (UI/UX Lead & Frontend Developer)',
+        email: 'kimhan.nt@eduteam5.vn',
+        avatar: 'assets/img/avatars/member2.svg',
+        quote: '“Giao diện học tập không chỉ cần đẹp mắt, mà phải khơi gợi cảm hứng và loại bỏ mọi rào cản thao tác cho học sinh.”',
+        theme: {
+            bannerGrad: 'from-purple-900 via-indigo-950 to-slate-900',
+            badgeBg: 'bg-purple-50 text-purple-700 border-purple-200',
+            accentColor: 'purple',
+            buttonBg: 'bg-purple-600 hover:bg-purple-700',
+            cardBorder: 'border-purple-100'
+        },
+        renderCustomWidgets: () => `
+            <!-- 1. BẢNG MÃ MÀU & DESIGN SYSTEM CỦA DỰ ÁN -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Design System & Bảng Mã Màu Web Tin Học</h3>
+                            <p class="text-xs text-slate-500">Hệ quy chuẩn thiết kế màu sắc, kiểu chữ và thành phần giao diện</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-purple-50 text-purple-700 font-extrabold text-xs border border-purple-200">
+                        Tailwind CSS v3.4
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-indigo-50 border border-indigo-100 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-600 mx-auto mb-2 shadow-md shadow-indigo-300"></div>
+                        <div class="font-bold text-slate-800 text-xs">Primary Indigo</div>
+                        <div class="text-[11px] font-mono text-slate-500">#4f46e5</div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-cyan-50 border border-cyan-100 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500 mx-auto mb-2 shadow-md shadow-cyan-300"></div>
+                        <div class="font-bold text-slate-800 text-xs">Secondary Cyan</div>
+                        <div class="text-[11px] font-mono text-slate-500">#0ea5e9</div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500 mx-auto mb-2 shadow-md shadow-emerald-300"></div>
+                        <div class="font-bold text-slate-800 text-xs">Success Emerald</div>
+                        <div class="text-[11px] font-mono text-slate-500">#10b981</div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-100 border border-slate-200 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-slate-900 mx-auto mb-2 shadow-md shadow-slate-400"></div>
+                        <div class="font-bold text-slate-800 text-xs">Slate Dark</div>
+                        <div class="text-[11px] font-mono text-slate-500">#0f172a</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ĐO LƯỜNG HIỆU NĂNG GIAO DIỆN & TỐI ƯU UX -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-black">
+                        0.8s
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-400 uppercase">Tốc độ hiển thị (LCP)</div>
+                        <div class="font-bold text-slate-800 text-sm">Cực kỳ tối ưu (&lt; 2.5s)</div>
+                        <span class="text-[11px] text-emerald-600 font-semibold"><i class="fas fa-check"></i> Đạt chuẩn Google CWV</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-black">
+                        100%
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-400 uppercase">Độ tương thích di động</div>
+                        <div class="font-bold text-slate-800 text-sm">Responsive Mobile & PC</div>
+                        <span class="text-[11px] text-blue-600 font-semibold"><i class="fas fa-mobile-alt"></i> Tương thích mọi màn hình</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-black">
+                        16:9
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-400 uppercase">Tỷ lệ Slide điện tử</div>
+                        <div class="font-bold text-slate-800 text-sm">Chuẩn widescreen hiện đại</div>
+                        <span class="text-[11px] text-purple-600 font-semibold"><i class="fas fa-tv"></i> Trình chiếu trực quan</span>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+
+    quynh: {
+        fullname: 'Nguyễn Thị Quỳnh',
+        studentId: '21050003',
+        roleTitle: 'Chuyên Gia Nội Dung Bài 4 & Trưởng Ban Kiểm Thử (QA/QC)',
+        email: 'quynh.nt@eduteam5.vn',
+        avatar: 'assets/img/avatars/member3.svg',
+        quote: '“Chính xác trong từng từ khóa, chuẩn mực trong từng câu hỏi trắc nghiệm là thước đo chất lượng của bài học số.”',
+        theme: {
+            bannerGrad: 'from-cyan-900 via-sky-950 to-slate-900',
+            badgeBg: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+            accentColor: 'cyan',
+            buttonBg: 'bg-cyan-600 hover:bg-cyan-700',
+            cardBorder: 'border-cyan-100'
+        },
+        renderCustomWidgets: () => `
+            <!-- 1. BẢNG TOÁN TỬ VÀ BỘ TỪ KHÓA BÀI 4 -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Nội Dung Trọng Tâm Bài 4: Tìm Kiếm Thông Tin Trên Internet</h3>
+                            <p class="text-xs text-slate-500">Hệ thống hóa các toán tử tra cứu chuyên sâu phục vụ giảng dạy</p>
+                        </div>
+                    </div>
+                    <a href="lesson.html?id=4" class="px-3.5 py-1.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-xs border border-cyan-200 hover:bg-cyan-100 transition">
+                        <i class="fas fa-external-link-alt mr-1"></i> Xem Bài 4
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-cyan-100 text-cyan-700 font-mono font-bold flex items-center justify-center flex-shrink-0">""</span>
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">Dấu ngoặc kép <code>"từ khóa"</code></div>
+                            <p class="text-xs text-slate-600 mt-1">Tìm kiếm chính xác cụm từ nguyên văn theo đúng thứ tự ký tự.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-cyan-100 text-cyan-700 font-mono font-bold flex items-center justify-center flex-shrink-0">-</span>
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">Dấu trừ loại trừ <code>-từ_khóa</code></div>
+                            <p class="text-xs text-slate-600 mt-1">Loại bỏ các trang web chứa từ khóa không mong muốn phía sau.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-cyan-100 text-cyan-700 font-mono font-bold flex items-center justify-center flex-shrink-0">site:</span>
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">Toán tử miền <code>site:domain</code></div>
+                            <p class="text-xs text-slate-600 mt-1">Khoanh vùng kết quả tìm kiếm chỉ xuất hiện trong website được chỉ định.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-cyan-100 text-cyan-700 font-mono font-bold flex items-center justify-center flex-shrink-0">file:</span>
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">Toán tử định dạng <code>filetype:ext</code></div>
+                            <p class="text-xs text-slate-600 mt-1">Lọc chính xác các tệp tài liệu: .pdf, .docx, .pptx chuyên ngành.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. BÁO CÁO KIỂM THỬ HỆ THỐNG (QA REPORT) -->
+            <div class="bg-cyan-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="flex items-center justify-between border-b border-cyan-800/80 pb-4 mb-5">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-cyan-300">Báo Cáo Đảm Bảo Chất Lượng (QA)</span>
+                        <h4 class="text-xl font-bold mt-1">Tình Trạng Vận Hành Toàn Bộ Tính Năng</h4>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold">
+                        52/52 Pass
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="p-3 rounded-2xl bg-cyan-950/60 border border-cyan-800/50">
+                        <div class="text-2xl font-black text-cyan-300">100%</div>
+                        <div class="text-xs text-slate-300 mt-1">Xác thực tài khoản</div>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-cyan-950/60 border border-cyan-800/50">
+                        <div class="text-2xl font-black text-emerald-300">0 Lỗi</div>
+                        <div class="text-xs text-slate-300 mt-1">Tải & Xem slide PPTX</div>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-cyan-950/60 border border-cyan-800/50">
+                        <div class="text-2xl font-black text-amber-300">40 MB</div>
+                        <div class="text-xs text-slate-300 mt-1">Hạn mức upload file</div>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-cyan-950/60 border border-cyan-800/50">
+                        <div class="text-2xl font-black text-purple-300">Realtime</div>
+                        <div class="text-xs text-slate-300 mt-1">Đồng bộ Cloud Firestore</div>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+
+    khanhlinh: {
+        fullname: 'Dương Huỳnh Khánh Linh',
+        studentId: '21050004',
+        roleTitle: 'Chuyên Gia Nội Dung Bài 5 & Thiết Kế Slide Trình Chiếu',
+        email: 'khanhlinh.dh@eduteam5.vn',
+        avatar: 'assets/img/avatars/member4.svg',
+        quote: '“Một cây thư mục ngăn nắp chính là nền tảng cho một tư duy khoa học và an toàn dữ liệu suốt đời.”',
+        theme: {
+            bannerGrad: 'from-emerald-900 via-teal-950 to-slate-900',
+            badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+            accentColor: 'emerald',
+            buttonBg: 'bg-emerald-600 hover:bg-emerald-700',
+            cardBorder: 'border-emerald-100'
+        },
+        renderCustomWidgets: () => `
+            <!-- 1. MÔ PHỎNG CÂY THƯ MỤC TƯƠNG TÁC (INTERACTIVE TREE EXPLORER) -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fas fa-folder-tree"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Mô Phỏng Cây Thư Mục Học Tập (Bài 5)</h3>
+                            <p class="text-xs text-slate-500">Cấu trúc thư mục chuẩn thực hành trên ổ đĩa máy tính</p>
+                        </div>
+                    </div>
+                    <a href="lesson.html?id=5" class="px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-xs border border-emerald-200 hover:bg-emerald-100 transition">
+                        <i class="fas fa-external-link-alt mr-1"></i> Xem Bài 5
+                    </a>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-slate-900 text-slate-200 font-mono text-sm leading-relaxed shadow-inner">
+                    <div class="flex items-center gap-2 text-amber-400 font-bold mb-3">
+                        <i class="fas fa-hdd"></i> Ổ đĩa D: \\ HOC_TAP_2026 \\
+                    </div>
+                    <div class="pl-6 space-y-2 text-xs sm:text-sm">
+                        <div class="flex items-center gap-2 text-indigo-300">
+                            <i class="fas fa-folder-open text-amber-400"></i> ├── Toan\\
+                        </div>
+                        <div class="flex items-center gap-2 text-indigo-300">
+                            <i class="fas fa-folder-open text-amber-400"></i> ├── Ngu_Van\\
+                        </div>
+                        <div class="flex items-center gap-2 text-indigo-300">
+                            <i class="fas fa-folder-open text-amber-400"></i> └── Tin_Hoc\\
+                        </div>
+                        <div class="pl-8 space-y-2">
+                            <div class="flex items-center gap-2 text-emerald-300">
+                                <i class="fas fa-folder text-amber-300"></i> ├── Bai_Tap\\
+                            </div>
+                            <div class="pl-8 flex items-center gap-2 text-blue-300">
+                                <i class="fas fa-file-word text-blue-400"></i> └── Gioi_thieu_ban_than.docx (Tệp văn bản)
+                            </div>
+                            <div class="flex items-center gap-2 text-emerald-300">
+                                <i class="fas fa-folder text-amber-300"></i> ├── Tai_Lieu\\
+                            </div>
+                            <div class="flex items-center gap-2 text-emerald-300">
+                                <i class="fas fa-folder text-amber-300"></i> └── Hinh_Anh\\
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. BẢNG PHẦN MỞ RỘNG TỆP TIN THÔNG DỤNG -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+                    <h4 class="font-bold text-slate-800 text-base mb-3 flex items-center gap-2">
+                        <i class="fas fa-file-code text-emerald-600"></i> Các Phím Tắt Windows Cốt Lõi
+                    </h4>
+                    <div class="space-y-2.5 text-xs text-slate-600">
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50">
+                            <span>Tạo thư mục mới</span>
+                            <kbd class="px-2 py-1 bg-white border border-slate-300 rounded font-mono font-bold text-slate-800">Ctrl + Shift + N</kbd>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50">
+                            <span>Đổi tên tệp / thư mục</span>
+                            <kbd class="px-2 py-1 bg-white border border-slate-300 rounded font-mono font-bold text-slate-800">F2</kbd>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50">
+                            <span>Xóa vĩnh viễn (không vào thùng rác)</span>
+                            <kbd class="px-2 py-1 bg-white border border-slate-300 rounded font-mono font-bold text-red-600">Shift + Delete</kbd>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+                    <h4 class="font-bold text-slate-800 text-base mb-3 flex items-center gap-2">
+                        <i class="fas fa-file-powerpoint text-orange-500"></i> Bài Giảng PowerPoint Bài 5
+                    </h4>
+                    <p class="text-xs text-slate-500 mb-4">Tệp trình chiếu sinh động kèm hiệu ứng sơ đồ cây thư mục và cấu trúc ổ đĩa.</p>
+                    <div class="flex items-center gap-2">
+                        <a href="uploads/lessons/Bài 5_Thám hiểm tệp và thư mục.pptx" download class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs transition flex items-center gap-1.5">
+                            <i class="fas fa-download"></i> Tải Slide Bài 5 (~21.6MB)
+                        </a>
+                        <a href="admin/slides.html" class="px-3.5 py-2 border border-slate-200 hover:border-emerald-600 text-slate-700 hover:text-emerald-600 rounded-xl font-bold text-xs transition">
+                            Quản lý slide
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+
+    thuylinh: {
+        fullname: 'Đặng Nguyễn Thuỳ Linh',
+        studentId: '21050005',
+        roleTitle: 'Quản Lý Học Liệu & Đa Phương Tiện (Digital Asset Lead)',
+        email: 'thuylinh.dn@eduteam5.vn',
+        avatar: 'assets/img/avatars/member5.svg',
+        quote: '“Một bài học đổi mới phải được đồng hành bởi những tài liệu số trực quan, chuẩn xác và sẵn sàng trên mọi thiết bị.”',
+        theme: {
+            bannerGrad: 'from-amber-900 via-orange-950 to-slate-900',
+            badgeBg: 'bg-amber-50 text-amber-700 border-amber-200',
+            accentColor: 'amber',
+            buttonBg: 'bg-amber-600 hover:bg-amber-700',
+            cardBorder: 'border-amber-100'
+        },
+        renderCustomWidgets: () => `
+            <!-- 1. KHO HỌC LIỆU SỐ & QUẢN LÝ DUNG LƯỢNG 40MB -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fas fa-archive"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Kho Học Liệu & Tài Liệu Bài Dạy</h3>
+                            <p class="text-xs text-slate-500">Giám sát các tệp giáo án Word (.docx) và bài giảng PowerPoint (.pptx)</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-extrabold text-xs border border-amber-200">
+                        <i class="fas fa-cloud-upload-alt mr-1"></i> Giới hạn 40MB
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl flex-shrink-0">
+                            <i class="fas fa-file-powerpoint"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-orange-100 text-orange-800">PPTX</span>
+                                <span class="text-xs text-slate-400">34.5 MB</span>
+                            </div>
+                            <div class="font-bold text-slate-800 text-sm truncate">Bài 4_Tìm kiếm Internet.pptx</div>
+                            <p class="text-xs text-slate-500 mt-0.5">Bản trình chiếu chính thức Bài 4</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl flex-shrink-0">
+                            <i class="fas fa-file-powerpoint"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-orange-100 text-orange-800">PPTX</span>
+                                <span class="text-xs text-slate-400">21.6 MB</span>
+                            </div>
+                            <div class="font-bold text-slate-800 text-sm truncate">Bài 5_Thám hiểm tệp và thư mục.pptx</div>
+                            <p class="text-xs text-slate-500 mt-0.5">Bản trình chiếu chính thức Bài 5</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
+                            <i class="fas fa-file-word"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-blue-100 text-blue-800">DOCX</span>
+                                <span class="text-xs text-slate-400">1.2 MB</span>
+                            </div>
+                            <div class="font-bold text-slate-800 text-sm truncate">Giao_an_Bai_4_Tim_kiem_thong_tin.docx</div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kế hoạch bài dạy chuẩn Bài 4</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
+                            <i class="fas fa-file-word"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-blue-100 text-blue-800">DOCX</span>
+                                <span class="text-xs text-slate-400">0.9 MB</span>
+                            </div>
+                            <div class="font-bold text-slate-800 text-sm truncate">Giao_an_Bai_5_Tep_va_thu_muc.docx</div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kế hoạch bài dạy chuẩn Bài 5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. BỘ ĐẾM LƯỢT TẢI VỀ THỜI GIAN THỰC -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
+                    <div class="text-3xl font-black text-amber-600">92</div>
+                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Slide Bài 4</div>
+                </div>
+                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
+                    <div class="text-3xl font-black text-amber-600">75</div>
+                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Slide Bài 5</div>
+                </div>
+                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
+                    <div class="text-3xl font-black text-blue-600">48</div>
+                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Word Bài 4</div>
+                </div>
+                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
+                    <div class="text-3xl font-black text-blue-600">41</div>
+                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Word Bài 5</div>
+                </div>
+            </div>
+        `
+    }
+};
+
+// Render giao diện theo thành viên
+function renderMemberProfile(memberKey) {
+    const data = memberProfiles[memberKey] || memberProfiles.ngoclan;
+
+    // Cập nhật trạng thái các nút tab phía trên
+    document.querySelectorAll('.member-tab-btn').forEach(btn => {
+        btn.className = 'member-tab-btn px-3.5 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-2 text-slate-600 hover:bg-slate-100';
+    });
+    const activeBtn = document.getElementById(`tab-btn-${memberKey}`);
+    if (activeBtn) {
+        activeBtn.className = `member-tab-btn px-3.5 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-2 ${data.theme.badgeBg} shadow-sm`;
+    }
+
+    const container = document.getElementById('dynamic-profile-content');
+    container.innerHTML = `
+        <!-- HERO BANNER TÙY BIẾN THEO THÀNH VIÊN -->
+        <div class="rounded-3xl bg-gradient-to-r ${data.theme.bannerGrad} text-white p-8 sm:p-12 shadow-xl relative overflow-hidden mb-8 animate-fade-in">
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 bg-white/10 flex-shrink-0">
+                    <img src="${data.avatar}" alt="${data.fullname}" class="w-full h-full object-cover">
+                </div>
+
+                <div class="flex-1 text-center md:text-left space-y-3">
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                        <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+                            ${data.roleTitle}
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-black/20 text-slate-300 text-xs font-mono">
+                            MSSV: ${data.studentId}
+                        </span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl font-black font-heading tracking-tight">
+                        ${data.fullname}
+                    </h1>
+
+                    <p class="text-sm text-slate-300 max-w-2xl italic leading-relaxed">
+                        ${data.quote}
+                    </p>
+
+                    <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-slate-300 font-medium">
+                        <span class="flex items-center gap-1.5">
+                            <i class="far fa-envelope text-indigo-300"></i> ${data.email}
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <i class="fas fa-users text-indigo-300"></i> Nhóm 5 • Môn Tin Học
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <i class="fas fa-shield-alt text-emerald-400"></i> Quản Trị Hệ Thống
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CÁC WIDGET & CÔNG CỤ CHUYÊN BIỆT TÙY BIẾN CHO THÀNH VIÊN -->
+        <div class="space-y-8 animate-fade-in">
+            ${data.renderCustomWidgets()}
+        </div>
+    `;
+}
+
+// Tự động nhận diện tài khoản đang đăng nhập
+document.addEventListener('DOMContentLoaded', () => {
+    let targetMember = 'ngoclan';
+
+    // Đọc thông tin từ auth session hoặc localStorage
+    const localUser = localStorage.getItem('edu_current_user');
+    if (localUser) {
+        try {
+            const user = JSON.parse(localUser);
+            if (user.member_key && memberProfiles[user.member_key]) {
+                targetMember = user.member_key;
+                const badge = document.getElementById('current-logged-badge');
+                if (badge) badge.textContent = `Hồ sơ đăng nhập: ${user.fullname}`;
+            }
+        } catch(e) {}
+    }
+
+    // Kiểm tra tham số ?member= trên URL nếu có
+    const params = new URLSearchParams(window.location.search);
+    const memberParam = params.get('member');
+    if (memberParam && memberProfiles[memberParam]) {
+        targetMember = memberParam;
+    }
+
+    renderMemberProfile(targetMember);
+});
+</script>
+</body>
+</html>
