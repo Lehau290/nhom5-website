@@ -166,20 +166,38 @@
 
         <!-- 2. HÌNH THÀNH KIẾN THỨC (SLIDE TRÌNH CHIẾU) -->
         <section id="section-knowledge" class="scroll-mt-36">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-indigo-300">
-                    2
-                </span>
-                <div>
-                    <h2 class="text-xl sm:text-2xl font-black text-slate-800 font-heading">
-                        Hoạt Động Hình Thành Kiến Thức
-                    </h2>
-                    <p class="text-xs text-slate-500 font-medium">Trình chiếu slide tương tác trực quan (hỗ trợ toàn màn hình, phím mũi tên và ghi chú giáo viên)</p>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-indigo-300">
+                        2
+                    </span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800 font-heading">
+                            Hoạt Động Hình Thành Kiến Thức
+                        </h2>
+                        <p class="text-xs text-slate-500 font-medium">Trình chiếu slide tương tác trực quan & Bản trình chiếu PowerPoint chính thức</p>
+                    </div>
+                </div>
+
+                <!-- Chuyển đổi linh hoạt giữa Slide Tương Tác và Bản PowerPoint PPTX -->
+                <div class="flex items-center gap-2 self-start sm:self-auto">
+                    <button id="btn-mode-interactive" onclick="switchKnowledgeSlideView('interactive')" class="px-3.5 py-2 rounded-xl font-bold text-xs bg-indigo-600 text-white shadow-sm transition flex items-center gap-1.5">
+                        <i class="fas fa-chalkboard"></i> Slide Tương Tác Số
+                    </button>
+                    <button id="btn-mode-pptx" onclick="switchKnowledgeSlideView('pptx')" class="px-3.5 py-2 rounded-xl font-bold text-xs bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fas fa-file-powerpoint text-orange-500"></i> Xem Slide PowerPoint (.pptx)
+                    </button>
                 </div>
             </div>
 
+            <!-- Khung 1: Trình chiếu Slide tương tác trực tiếp -->
             <div id="slide-viewer-container" class="rounded-3xl shadow-lg overflow-hidden">
                 <!-- Rendered by SlideViewer JS -->
+            </div>
+
+            <!-- Khung 2: Nhúng Bản Trình Chiếu PowerPoint Chính Thức -->
+            <div id="slide-pptx-embed-container" class="hidden rounded-3xl shadow-lg overflow-hidden border border-slate-200 bg-slate-900">
+                <!-- Rendered dynamically -->
             </div>
         </section>
 
@@ -334,10 +352,16 @@ function renderFallbackLesson(num) {
         `;
 
         new SlideViewer('slide-viewer-container', [
-            { slide_number: 1, title: '1. Máy tìm kiếm là gì?', content: 'Máy tìm kiếm (Search Engine) là một hệ thống phần mềm được thiết kế để tìm kiếm thông tin trên World Wide Web dựa trên các truy vấn của người dùng. Một số máy tìm kiếm phổ biến gồm Google, Bing, Yahoo, Cốc Cốc, DuckDuckGo.', bullet_points: 'Google: Máy tìm kiếm phổ biến nhất thế giới\nBing: Phát triển bởi tập đoàn Microsoft\nCốc Cốc: Tối ưu cho người dùng Việt Nam\nDuckDuckGo: Chú trọng tính bảo mật và quyền riêng tư', teacher_note: 'Giáo viên nhấn mạnh: Máy tìm kiếm không trực tiếp sở hữu thông tin mà lập chỉ mục (index) các trang web.' },
-            { slide_number: 2, title: '2. Từ khóa tìm kiếm (Keywords)', content: 'Từ khóa là từ hoặc cụm từ ngắn gọn phản ánh chính xác nhất nội dung thông tin em cần tìm. Lựa chọn từ khóa tốt giúp tiết kiệm 90% thời gian tìm kiếm.', bullet_points: 'Chọn từ khóa mang tính then chốt, cô đọng\nTránh gõ cả câu hỏi dài dòng như văn nói\nCó thể sử dụng tiếng Việt có dấu hoặc không dấu\nKết hợp danh từ riêng để khoanh vùng kết quả', teacher_note: 'Hướng dẫn học sinh phân biệt từ khóa chung chung và từ khóa tối ưu.' },
-            { slide_number: 3, title: '3. Các toán tử tìm kiếm nâng cao', content: 'Các ký hiệu và toán tử đặc biệt giúp thu hẹp phạm vi tìm kiếm một cách chính xác tuyệt đối:', bullet_points: 'Dấu ngoặc kép "từ khóa": Tìm kiếm chính xác cụm từ theo đúng thứ tự\nDấu trừ (-): Loại trừ các kết quả chứa từ khóa phía sau\nToán tử site:domain: Chỉ tìm kiếm trên một trang web cụ thể (VD: site:moet.gov.vn)\nToán tử filetype:pdf/docx: Chỉ tìm các tài liệu có đuôi tệp xác định', teacher_note: 'Thực hành thị phạm ngay trên trình duyệt chiếu cho cả lớp xem.' },
-            { slide_number: 4, title: '4. Đánh giá độ tin cậy của thông tin', content: 'Không phải mọi thông tin trên Internet đều đúng sự thật. Học sinh cần rèn luyện kỹ năng tư duy phản biện khi đọc tin tức trực tuyến.', bullet_points: 'Kiểm tra tác giả và cơ quan xuất bản có uy tín không\nTên miền uy tín: .gov.vn (Chính phủ), .edu.vn (Giáo dục)\nKiểm tra ngày tháng cập nhật của bài viết\nĐối chiếu chéo với các cơ quan báo chí chính thống', teacher_note: 'Rèn luyện cho học sinh tránh bị lừa đảo bởi các trang tin giả mạo.' }
+            { slide_number: 1, title: 'BÀI 4: TÌM KIẾM THÔNG TIN TRÊN INTERNET', content: 'Chào mừng các nhà thám hiểm nhí! Hôm nay chúng ta sẽ cùng bước vào thế giới Internet để khám phá kho tàng tri thức khổng lồ và học cách tìm kiếm thông tin nhanh chóng, chính xác.', bullet_points: 'Hiểu từ khóa là gì và cách chọn từ khóa thông minh\nNắm vững quy trình các bước tìm kiếm bằng máy tìm kiếm\nBiết mở và chọn lọc kết quả tìm kiếm đáng tin cậy\nThực hành an toàn trên không gian mạng', teacher_note: 'Giáo viên dẫn nhập tạo hứng thú học tập và nêu rõ mục tiêu bài học.' },
+            { slide_number: 2, title: '1. Khởi động: Tình huống tìm hiểu về các Vua Hùng', content: 'Em muốn tìm hiểu thông tin về các vị Vua Hùng – những người đầu tiên có công dựng nên đất nước ta. Trong các cách sau, em sẽ chọn cách nào?', bullet_points: 'Cách 1: Hỏi ông bà, cha mẹ hoặc thầy cô giáo\nCách 2: Tìm đọc trong sách giáo khoa, thư viện trường\nCách 3: Sử dụng máy tính kết nối Internet để tra cứu\n=> Internet giúp em tìm thấy hình ảnh, video và tư liệu lịch sử chỉ sau vài giây!', teacher_note: 'Gợi mở cho học sinh thảo luận ưu điểm nổi bật của Internet.' },
+            { slide_number: 3, title: '2. Từ khóa là gì? Khái niệm then chốt', content: 'Từ khóa (Keyword) là từ hoặc cụm từ ngắn gọn, cô đọng nhất thể hiện nội dung thông tin mà em đang muốn tìm kiếm trên Internet.', bullet_points: 'Từ khóa là "chìa khóa" giúp máy tìm kiếm mở đúng kho dữ liệu\nTừ khóa càng rõ ràng, kết quả trả về càng nhanh và chuẩn xác\nCó thể gõ tiếng Việt có dấu hoặc không dấu\nNên chọn các danh từ chính, tránh gõ câu hỏi dài dòng như văn nói', teacher_note: 'So sánh cho học sinh: Từ khóa giống như mục lục của cuốn sách.' },
+            { slide_number: 4, title: '3. Chọn từ khóa thông minh', content: 'Cùng so sánh hai cách chọn từ khóa khi muốn tìm hiểu về các vị Vua Hùng:', bullet_points: 'Từ khóa quá chung: "Lịch sử" => Trả về hàng triệu trang không liên quan\nTừ khóa quá dài: "Hãy cho tôi biết những thông tin về các đời vua Hùng dựng nước"\nTừ khóa thông minh tối ưu: "Các đời vua Hùng" hoặc "Vua Hùng dựng nước"\n=> Ngắn gọn, súc tích và trúng đích!', teacher_note: 'Cho học sinh thực hành đặt từ khóa với chủ đề yêu thích.' },
+            { slide_number: 5, title: '4. Máy tìm kiếm & Giao diện tra cứu Google', content: 'Máy tìm kiếm (Search Engine) là hệ thống phần mềm thu thập và lập chỉ mục các trang web. Google là công cụ tìm kiếm phổ biến nhất hiện nay.', bullet_points: 'Thanh địa chỉ: Nhập google.com để mở trang tìm kiếm\nÔ tìm kiếm: Nơi em gõ từ khóa cần tra cứu\nBiểu tượng kính lúp / Phím Enter: Bắt đầu lệnh tìm kiếm\nTrang kết quả: Danh sách các bài viết, hình ảnh, tài liệu liên quan', teacher_note: 'Thị phạm các thành phần trên màn hình máy tính của giáo viên.' },
+            { slide_number: 6, title: '5. Quy trình 5 bước tìm kiếm thông tin chuẩn', content: 'Hãy ghi nhớ 5 bước tiêu chuẩn để trở thành chuyên gia tìm kiếm thông tin:', bullet_points: 'Bước 1: Mở trình duyệt web (Google Chrome, Cốc Cốc, Edge)\nBước 2: Truy cập trang công cụ tìm kiếm google.com\nBước 3: Nhập từ khóa ngắn gọn vào ô tìm kiếm\nBước 4: Nhấn phím Enter để máy tính lọc kết quả\nBước 5: Đọc tóm tắt và nhấp chuột vào tiêu đề phù hợp', teacher_note: 'Yêu cầu cả lớp đọc đồng thanh 5 bước để ghi nhớ.' },
+            { slide_number: 7, title: '6. Các toán tử tìm kiếm nâng cao', content: 'Sử dụng các ký hiệu đặc biệt giúp lọc bỏ rác và thu hẹp kết quả cực kỳ hiệu quả:', bullet_points: 'Dấu ngoặc kép "cụm từ": Tìm chính xác nguyên văn theo đúng thứ tự từ\nDấu trừ (-): Loại trừ từ khóa không mong muốn (VD: Vua Hùng -tour)\nToán tử site:domain: Giới hạn tìm trên trang web uy tín (VD: site:moet.gov.vn)\nToán tử filetype:pdf/docx: Chỉ tìm tệp tài liệu sách điện tử hoặc bài giảng', teacher_note: 'Minh họa tìm kiếm tài liệu chuẩn phương pháp mới.' },
+            { slide_number: 8, title: '7. Chọn lọc kết quả đáng tin cậy', content: 'Không phải mọi thông tin trên Internet đều đúng. Học sinh cần rèn luyện kỹ năng kiểm chứng để không bị dẫn dắt bởi tin giả (Fake News):', bullet_points: 'Kiểm tra tên miền uy tín: .gov (Chính phủ), .edu (Giáo dục)\nXem rõ tên tác giả và cơ quan xuất bản bài viết\nKiểm tra ngày đăng tải xem thông tin còn mới không\nĐối chiếu chéo với sách giáo khoa và các báo chính thống', teacher_note: 'Nhấn mạnh nguyên tắc an toàn: Không tin ngay tin tức giật gân trên mạng xã hội.' },
+            { slide_number: 9, title: '8. Thực hành: Tra cứu thông tin "Hồ Gươm"', content: 'Nhiệm vụ thực hành trên máy tính dành cho các nhóm học sinh:', bullet_points: 'Nhập từ khóa: "Hồ Gươm Hà Nội" vào ô tìm kiếm\nQuan sát kết quả: Số lượng bài viết, hình ảnh và bản đồ xuất hiện\nNhấp vào một liên kết bài báo uy tín để đọc nguồn gốc tên gọi Hồ Hoàn Kiếm\nGhi chép 3 thông tin thú vị em tìm được vào phiếu học tập', teacher_note: 'Giáo viên xuống từng bàn hướng dẫn học sinh thao tác chuột và bàn phím.' },
+            { slide_number: 10, title: '9. Tổng kết & Dặn dò bài học', content: 'Chúc mừng các em đã hoàn thành xuất sắc Bài học số 4!', bullet_points: 'Nhớ 5 bước tìm kiếm thông tin cơ bản\nLuôn chọn từ khóa ngắn gọn, đúng trọng tâm\nSử dụng Internet văn minh, an toàn và có sự hướng dẫn của người lớn\nVề nhà hoàn thành bài tập trắc nghiệm và vận dụng trên website', teacher_note: 'Tuyên dương tinh thần học tập tích cực của cả lớp.' }
         ]);
 
         new QuizEngine('quiz-viewer-container', 'lesson_4', [
@@ -628,6 +652,38 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 `;
             });
+
+            // Đảm bảo Slide PowerPoint luôn luôn có mặt đầy đủ trong danh sách tài liệu
+            const hasPptx = snap.docs.some(d => (d.data().file_type || '').toLowerCase() === 'pptx');
+            if (!hasPptx) {
+                const isL5 = (lessonNum === 5);
+                const defaultPptx = isL5 ? 'uploads/lessons/Bài 5_Thám hiểm tệp và thư mục.pptx' : 'uploads/lessons/Bài 4_Tìm kiếm Internet.pptx';
+                const pptxTitle = isL5 ? 'Bản trình chiếu minh họa Bài 5' : 'Bài giảng điện tử PowerPoint Bài 4';
+                html += `
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-start gap-4 card-hover">
+                        <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl bg-orange-50 text-orange-600">
+                            <i class="fas fa-file-powerpoint"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-orange-100 text-orange-800">PPTX</span>
+                                <span class="text-xs text-slate-400">• Bản trình chiếu chuẩn</span>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-base mb-1 leading-snug">${escapeHtml(pptxTitle)}</h3>
+                            <p class="text-xs text-slate-500 mb-3">Slide PowerPoint trực quan kèm sơ đồ minh họa</p>
+                            <div class="flex items-center gap-3 mt-3">
+                                <button onclick="previewDocument('${escapeHtml(pptxTitle)}', 'pptx', '${defaultPptx}')" class="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 text-xs font-bold text-slate-600 transition flex items-center gap-1.5">
+                                    <i class="fas fa-eye text-slate-400"></i> Xem trước
+                                </button>
+                                <a href="${defaultPptx}" download class="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fas fa-download"></i> Tải về máy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
             docContainer.innerHTML = html;
         });
 
@@ -640,6 +696,58 @@ function incrementDocDownload(docId) {
     db.collection('documents').doc(docId).update({
         downloads: firebase.firestore.FieldValue.increment(1)
     }).catch(() => {});
+}
+
+// Chuyển đổi giữa Slide tương tác và Bản PowerPoint nhúng
+function switchKnowledgeSlideView(mode) {
+    const interactiveBox = document.getElementById('slide-viewer-container');
+    const pptxBox = document.getElementById('slide-pptx-embed-container');
+    const btnInteractive = document.getElementById('btn-mode-interactive');
+    const btnPptx = document.getElementById('btn-mode-pptx');
+
+    const isL5 = (lessonNum === 5);
+    const pptxUrl = isL5 ? 'uploads/lessons/Bài 5_Thám hiểm tệp và thư mục.pptx' : 'uploads/lessons/Bài 4_Tìm kiếm Internet.pptx';
+    const pptxTitle = isL5 ? 'Bản trình chiếu minh họa Bài 5' : 'Bài giảng điện tử PowerPoint Bài 4';
+    let absoluteUrl = pptxUrl;
+    try {
+        absoluteUrl = new URL(pptxUrl, window.location.href).href;
+    } catch(e) {}
+    const encodedUrl = encodeURIComponent(absoluteUrl);
+
+    if (mode === 'pptx') {
+        interactiveBox.classList.add('hidden');
+        pptxBox.classList.remove('hidden');
+
+        btnPptx.className = 'px-3.5 py-2 rounded-xl font-bold text-xs bg-orange-600 text-white shadow-sm transition flex items-center gap-1.5';
+        btnInteractive.className = 'px-3.5 py-2 rounded-xl font-bold text-xs bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 transition flex items-center gap-1.5 shadow-sm';
+
+        pptxBox.innerHTML = `
+            <div class="p-4 bg-slate-800 text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-700">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-file-powerpoint text-orange-400 text-lg"></i>
+                    <span class="font-bold text-sm text-slate-100">${escapeHtml(pptxTitle)}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-orange-500/20 text-orange-300">PPTX</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="previewDocument('${escapeHtml(pptxTitle)}', 'pptx', '${pptxUrl}')" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                        <i class="fas fa-expand"></i> Mở Rộng Xem Chi Tiết
+                    </button>
+                    <a href="${pptxUrl}" download class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                        <i class="fas fa-download"></i> Tải File (.pptx)
+                    </a>
+                </div>
+            </div>
+            <div class="relative w-full bg-slate-950" style="height: 540px;">
+                <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}" class="w-full h-full border-0" allowfullscreen="true"></iframe>
+            </div>
+        `;
+    } else {
+        interactiveBox.classList.remove('hidden');
+        pptxBox.classList.add('hidden');
+
+        btnInteractive.className = 'px-3.5 py-2 rounded-xl font-bold text-xs bg-indigo-600 text-white shadow-sm transition flex items-center gap-1.5';
+        btnPptx.className = 'px-3.5 py-2 rounded-xl font-bold text-xs bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 transition flex items-center gap-1.5 shadow-sm';
+    }
 }
 </script>
 </body>

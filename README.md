@@ -12,11 +12,10 @@ Mỗi thành viên có trang **Hồ Sơ Cá Nhân (`profile.html`)** với giao 
 
 | STT | Họ và Tên | Vai trò chuyên trách | Tài khoản / Email | Mật khẩu mặc định | Giao diện chủ đạo |
 |:---:|:---|:---|:---|:---:|:---|
-| 1 | **Đặng Phạm Ngọc Lan** | Trưởng nhóm - Điều phối & Quản lý tiến độ | `ngoclan` hoặc `ngoclan@nhom5.edu.vn` | `123456` | Hồng / Rose (Project Management & RACI Matrix) |
-| 2 | **Nguyễn Thị Kim Hân** | UI/UX Designer & Frontend Lead | `kimhan` hoặc `kimhan@nhom5.edu.vn` | `123456` | Tím / Purple (Design System & Web Vitals) |
-| 3 | **Nguyễn Thị Quỳnh** | Phụ trách nội dung Bài 4 & Kiểm thử QA | `quynh` hoặc `quynh@nhom5.edu.vn` | `123456` | Xanh dương / Cyan (Search Cheatsheet & QA Testing) |
-| 4 | **Dương Huỳnh Khánh Linh** | Phụ trách nội dung Bài 5 & Cây thư mục | `khanhlinh` hoặc `khanhlinh@nhom5.edu.vn` | `123456` | Xanh lá / Emerald (Directory Tree & File System) |
-| 5 | **Đặng Nguyễn Thuỳ Linh** | Quản lý Tài nguyên số & Giới hạn tệp 40MB | `thuylinh` hoặc `thuylinh@nhom5.edu.vn` | `123456` | Hổ phách / Amber (Digital Asset Hub & Download Stats) |
+| 1 | **Đặng Phạm Ngọc Lan** | Trưởng nhóm - Điều phối & Quản lý tiến độ | `ngoclan` hoặc `ngoclan.dp@eduteam5.vn` | `123456` | Hồng / Rose (Project Management & RACI Matrix) |
+| 2 | **Nguyễn Thị Kim Hân** | UI/UX Designer & Frontend Lead | `kimhan` hoặc `kimhan.nt@eduteam5.vn` | `123456` | Tím / Purple (Design System & Web Vitals) |
+| 3 | **Nguyễn Thị Quỳnh** | Phụ trách nội dung Bài 4 & Kiểm thử QA | `quynh` hoặc `quynh.nt@eduteam5.vn` | `123456` | Xanh dương / Cyan (Search Cheatsheet & QA Testing) |
+| 4 | **Dương Huỳnh Khánh Linh** | Phụ trách nội dung Bài 5, Slide & Học liệu | `khanhlinh` hoặc `khanhlinh.dh@eduteam5.vn` | `123456` | Xanh lá / Emerald (Directory Tree & File System) |
 
 > 🔑 **Tài khoản Quản trị viên (Admin):**
 > - Email: `admin@nhom5.edu.vn`

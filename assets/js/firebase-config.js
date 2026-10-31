@@ -126,12 +126,11 @@ async function signInUser(usernameOrEmail, password, remember = true) {
         const isDemoAdmin = (lowerIdent === 'admin@edumail.vn' || lowerIdent === 'admin') && password === 'admin123';
         const isDemoStudent = (lowerIdent === 'hocsinh1@student.vn' || lowerIdent === 'hocsinh1') && password === '123456';
         
-        // 5 Tài khoản thành viên Nhóm 5
+        // 4 Tài khoản thành viên Nhóm 5
         const isNgocLan = (lowerIdent === 'ngoclan.dp@eduteam5.vn' || lowerIdent === 'ngoclan') && (password === '123456' || password === 'admin123');
         const isKimHan = (lowerIdent === 'kimhan.nt@eduteam5.vn' || lowerIdent === 'kimhan') && (password === '123456' || password === 'admin123');
         const isQuynh = (lowerIdent === 'quynh.nt@eduteam5.vn' || lowerIdent === 'quynh') && (password === '123456' || password === 'admin123');
         const isKhanhLinh = (lowerIdent === 'khanhlinh.dh@eduteam5.vn' || lowerIdent === 'khanhlinh') && (password === '123456' || password === 'admin123');
-        const isThuyLinh = (lowerIdent === 'thuylinh.dn@eduteam5.vn' || lowerIdent === 'thuylinh') && (password === '123456' || password === 'admin123');
 
         if (isDemoAdmin) {
             profile = {
@@ -192,19 +191,6 @@ async function signInUser(usernameOrEmail, password, remember = true) {
                 member_key: 'khanhlinh',
                 role_title: 'Nội dung Bài 5 & Slide',
                 avatar: 'assets/img/avatars/member4.svg',
-                status: 1
-            };
-        } else if (isThuyLinh) {
-            profile = {
-                uid: 'member_thuylinh_uid',
-                username: 'thuylinh',
-                fullname: 'Đặng Nguyễn Thuỳ Linh',
-                student_id: '21050005',
-                email: 'thuylinh.dn@eduteam5.vn',
-                role: 'admin',
-                member_key: 'thuylinh',
-                role_title: 'Quản lý tài liệu & Đa phương tiện',
-                avatar: 'assets/img/avatars/member5.svg',
                 status: 1
             };
         } else if (isDemoStudent) {
@@ -551,8 +537,7 @@ async function seedInitialFirestoreData() {
             { fullname: 'Đặng Phạm Ngọc Lan', student_id: '21050001', role_name: 'Trưởng nhóm & Quản lý dự án', avatar: 'assets/img/avatars/member1.svg', bio: 'Phụ trách định hướng kiến trúc hệ thống, phân công nhiệm vụ và tổng hợp báo cáo dự án Tin học.', email: 'ngoclan.dp@eduteam5.vn', order_num: 1 },
             { fullname: 'Nguyễn Thị Kim Hân', student_id: '21050002', role_name: 'Thiết kế UI/UX & Lập trình Frontend', avatar: 'assets/img/avatars/member2.svg', bio: 'Thiết kế giao diện hiện đại, tối ưu trải nghiệm học sinh và hiệu ứng trình chiếu slide tương tác.', email: 'kimhan.nt@eduteam5.vn', order_num: 2 },
             { fullname: 'Nguyễn Thị Quỳnh', student_id: '21050003', role_name: 'Biên tập nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', bio: 'Nghiên cứu và biên soạn nội dung chuyên sâu Bài 4: Tìm kiếm thông tin trên Internet, xây dựng bộ câu hỏi củng cố.', email: 'quynh.nt@eduteam5.vn', order_num: 3 },
-            { fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role_name: 'Biên tập nội dung Bài 5 & Thiết kế Slide', avatar: 'assets/img/avatars/member4.svg', bio: 'Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, thiết kế sơ đồ cây thư mục và ngân hàng trắc nghiệm.', email: 'khanhlinh.dh@eduteam5.vn', order_num: 4 },
-            { fullname: 'Đặng Nguyễn Thuỳ Linh', student_id: '21050005', role_name: 'Quản lý tài liệu & Đa phương tiện', avatar: 'assets/img/avatars/member5.svg', bio: 'Phụ trách biên soạn tài liệu Word (.docx), bài trình chiếu PowerPoint (.pptx) và tài nguyên học liệu số.', email: 'thuylinh.dn@eduteam5.vn', order_num: 5 }
+            { fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role_name: 'Nội dung Bài 5, Slide & Học liệu', avatar: 'assets/img/avatars/member4.svg', bio: 'Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, thiết kế sơ đồ cây thư mục và ngân hàng trắc nghiệm.', email: 'khanhlinh.dh@eduteam5.vn', order_num: 4 }
         ];
 
         for (const m of members) {
@@ -584,8 +569,7 @@ async function seedInitialFirestoreData() {
             { uid: 'member_ngoclan_uid', username: 'ngoclan', fullname: 'Đặng Phạm Ngọc Lan', student_id: '21050001', role: 'admin', member_key: 'ngoclan', role_title: 'Trưởng nhóm & Quản lý dự án', avatar: 'assets/img/avatars/member1.svg', email: 'ngoclan.dp@eduteam5.vn', status: 1 },
             { uid: 'member_kimhan_uid', username: 'kimhan', fullname: 'Nguyễn Thị Kim Hân', student_id: '21050002', role: 'admin', member_key: 'kimhan', role_title: 'Thiết kế UI/UX & Frontend', avatar: 'assets/img/avatars/member2.svg', email: 'kimhan.nt@eduteam5.vn', status: 1 },
             { uid: 'member_quynh_uid', username: 'quynh', fullname: 'Nguyễn Thị Quỳnh', student_id: '21050003', role: 'admin', member_key: 'quynh', role_title: 'Nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', email: 'quynh.nt@eduteam5.vn', status: 1 },
-            { uid: 'member_khanhlinh_uid', username: 'khanhlinh', fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role: 'admin', member_key: 'khanhlinh', role_title: 'Nội dung Bài 5 & Slide', avatar: 'assets/img/avatars/member4.svg', email: 'khanhlinh.dh@eduteam5.vn', status: 1 },
-            { uid: 'member_thuylinh_uid', username: 'thuylinh', fullname: 'Đặng Nguyễn Thuỳ Linh', student_id: '21050005', role: 'admin', member_key: 'thuylinh', role_title: 'Quản lý tài liệu & Đa phương tiện', avatar: 'assets/img/avatars/member5.svg', email: 'thuylinh.dn@eduteam5.vn', status: 1 },
+            { uid: 'member_khanhlinh_uid', username: 'khanhlinh', fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role: 'admin', member_key: 'khanhlinh', role_title: 'Nội dung Bài 5, Slide & Học liệu', avatar: 'assets/img/avatars/member4.svg', email: 'khanhlinh.dh@eduteam5.vn', status: 1 },
             { uid: 'demo_student_uid', username: 'hocsinh1', fullname: 'Nguyễn Văn An (Học sinh)', student_id: '21050006', role: 'student', email: 'hocsinh1@student.vn', status: 1 }
         ];
 

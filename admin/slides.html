@@ -308,8 +308,60 @@ function loadSlides() {
         grid.innerHTML = '';
 
         if (snap.empty) {
-            grid.innerHTML = '<div class="col-span-2 p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">Chưa có slide nào cho bài học này. Nhấn "Thêm Slide Trình Chiếu" để tạo mới!</div>';
-            document.getElementById('slide-count-badge').textContent = '0 slide';
+            const defaultSlides = (lessonId === 'lesson_4') ? [
+                { id: 'def_s1', slide_number: 1, title: 'BÀI 4: TÌM KIẾM THÔNG TIN TRÊN INTERNET', content: 'Chào mừng các nhà thám hiểm nhí! Hôm nay chúng ta sẽ cùng bước vào thế giới Internet để khám phá kho tàng tri thức khổng lồ và học cách tìm kiếm thông tin nhanh chóng, chính xác.', bullet_points: 'Hiểu từ khóa là gì và cách chọn từ khóa thông minh\nNắm vững quy trình các bước tìm kiếm bằng máy tìm kiếm\nBiết mở và chọn lọc kết quả tìm kiếm đáng tin cậy\nThực hành an toàn trên không gian mạng', teacher_note: 'Giáo viên dẫn nhập tạo hứng thú học tập và nêu rõ mục tiêu bài học.' },
+                { id: 'def_s2', slide_number: 2, title: '1. Khởi động: Tình huống tìm hiểu về các Vua Hùng', content: 'Em muốn tìm hiểu thông tin về các vị Vua Hùng – những người đầu tiên có công dựng nên đất nước ta. Trong các cách sau, em sẽ chọn cách nào?', bullet_points: 'Cách 1: Hỏi ông bà, cha mẹ hoặc thầy cô giáo\nCách 2: Tìm đọc trong sách giáo khoa, thư viện trường\nCách 3: Sử dụng máy tính kết nối Internet để tra cứu\n=> Internet giúp em tìm thấy hình ảnh, video và tư liệu lịch sử chỉ sau vài giây!', teacher_note: 'Gợi mở cho học sinh thảo luận ưu điểm nổi bật của Internet.' },
+                { id: 'def_s3', slide_number: 3, title: '2. Từ khóa là gì? Khái niệm then chốt', content: 'Từ khóa (Keyword) là từ hoặc cụm từ ngắn gọn, cô đọng nhất thể hiện nội dung thông tin mà em đang muốn tìm kiếm trên Internet.', bullet_points: 'Từ khóa là "chìa khóa" giúp máy tìm kiếm mở đúng kho dữ liệu\nTừ khóa càng rõ ràng, kết quả trả về càng nhanh và chuẩn xác\nCó thể gõ tiếng Việt có dấu hoặc không dấu\nNên chọn các danh từ chính, tránh gõ câu hỏi dài dòng như văn nói', teacher_note: 'So sánh cho học sinh: Từ khóa giống như mục lục của cuốn sách.' },
+                { id: 'def_s4', slide_number: 4, title: '3. Chọn từ khóa thông minh', content: 'Cùng so sánh hai cách chọn từ khóa khi muốn tìm hiểu về các vị Vua Hùng:', bullet_points: 'Từ khóa quá chung: "Lịch sử" => Trả về hàng triệu trang không liên quan\nTừ khóa quá dài: "Hãy cho tôi biết những thông tin về các đời vua Hùng dựng nước"\nTừ khóa thông minh tối ưu: "Các đời vua Hùng" hoặc "Vua Hùng dựng nước"\n=> Ngắn gọn, súc tích và trúng đích!', teacher_note: 'Cho học sinh thực hành đặt từ khóa với chủ đề yêu thích.' },
+                { id: 'def_s5', slide_number: 5, title: '4. Máy tìm kiếm & Giao diện tra cứu Google', content: 'Máy tìm kiếm (Search Engine) là hệ thống phần mềm thu thập và lập chỉ mục các trang web. Google là công cụ tìm kiếm phổ biến nhất hiện nay.', bullet_points: 'Thanh địa chỉ: Nhập google.com để mở trang tìm kiếm\nÔ tìm kiếm: Nơi em gõ từ khóa cần tra cứu\nBiểu tượng kính lúp / Phím Enter: Bắt đầu lệnh tìm kiếm\nTrang kết quả: Danh sách các bài viết, hình ảnh, tài liệu liên quan', teacher_note: 'Thị phạm các thành phần trên màn hình máy tính của giáo viên.' },
+                { id: 'def_s6', slide_number: 6, title: '5. Quy trình 5 bước tìm kiếm thông tin chuẩn', content: 'Hãy ghi nhớ 5 bước tiêu chuẩn để trở thành chuyên gia tìm kiếm thông tin:', bullet_points: 'Bước 1: Mở trình duyệt web (Google Chrome, Cốc Cốc, Edge)\nBước 2: Truy cập trang công cụ tìm kiếm google.com\nBước 3: Nhập từ khóa ngắn gọn vào ô tìm kiếm\nBước 4: Nhấn phím Enter để máy tính lọc kết quả\nBước 5: Đọc tóm tắt và nhấp chuột vào tiêu đề phù hợp', teacher_note: 'Yêu cầu cả lớp đọc đồng thanh 5 bước để ghi nhớ.' },
+                { id: 'def_s7', slide_number: 7, title: '6. Các toán tử tìm kiếm nâng cao', content: 'Sử dụng các ký hiệu đặc biệt giúp lọc bỏ rác và thu hẹp kết quả cực kỳ hiệu quả:', bullet_points: 'Dấu ngoặc kép "cụm từ": Tìm chính xác nguyên văn theo đúng thứ tự từ\nDấu trừ (-): Loại trừ từ khóa không mong muốn (VD: Vua Hùng -tour)\nToán tử site:domain: Giới hạn tìm trên trang web uy tín (VD: site:moet.gov.vn)\nToán tử filetype:pdf/docx: Chỉ tìm tệp tài liệu sách điện tử hoặc bài giảng', teacher_note: 'Minh họa tìm kiếm tài liệu chuẩn phương pháp mới.' },
+                { id: 'def_s8', slide_number: 8, title: '7. Chọn lọc kết quả đáng tin cậy', content: 'Không phải mọi thông tin trên Internet đều đúng. Học sinh cần rèn luyện kỹ năng kiểm chứng để không bị dẫn dắt bởi tin giả (Fake News):', bullet_points: 'Kiểm tra tên miền uy tín: .gov (Chính phủ), .edu (Giáo dục)\nXem rõ tên tác giả và cơ quan xuất bản bài viết\nKiểm tra ngày đăng tải xem thông tin còn mới không\nĐối chiếu chéo với sách giáo khoa và các báo chính thống', teacher_note: 'Nhấn mạnh nguyên tắc an toàn: Không tin ngay tin tức giật gân trên mạng xã hội.' },
+                { id: 'def_s9', slide_number: 9, title: '8. Thực hành: Tra cứu thông tin "Hồ Gươm"', content: 'Nhiệm vụ thực hành trên máy tính dành cho các nhóm học sinh:', bullet_points: 'Nhập từ khóa: "Hồ Gươm Hà Nội" vào ô tìm kiếm\nQuan sát kết quả: Số lượng bài viết, hình ảnh và bản đồ xuất hiện\nNhấp vào một liên kết bài báo uy tín để đọc nguồn gốc tên gọi Hồ Hoàn Kiếm\nGhi chép 3 thông tin thú vị em tìm được vào phiếu học tập', teacher_note: 'Giáo viên xuống từng bàn hướng dẫn học sinh thao tác chuột và bàn phím.' },
+                { id: 'def_s10', slide_number: 10, title: '9. Tổng kết & Dặn dò bài học', content: 'Chúc mừng các em đã hoàn thành xuất sắc Bài học số 4!', bullet_points: 'Nhớ 5 bước tìm kiếm thông tin cơ bản\nLuôn chọn từ khóa ngắn gọn, đúng trọng tâm\nSử dụng Internet văn minh, an toàn và có sự hướng dẫn của người lớn\nVề nhà hoàn thành bài tập trắc nghiệm và vận dụng trên website', teacher_note: 'Tuyên dương tinh thần học tập tích cực của cả lớp.' }
+            ] : [
+                { id: 'def_s5_1', slide_number: 1, title: '1. Khái niệm Tệp (File)', content: 'Tệp là tập hợp các thông tin ghi trên bộ nhớ ngoài, được đặt tên và tạo thành một đơn vị lưu trữ. Tên tệp gồm 2 phần được ngăn cách nhau bởi dấu chấm (.): [Phần tên].[Phần mở rộng].', bullet_points: 'Phần tên: Do người dùng đặt để dễ nhận biết (tối đa 255 ký tự)\nPhần mở rộng (Đuôi tệp): Thường gồm 3-4 ký tự do phần mềm quy định\n.docx: Văn bản Microsoft Word\n.pptx: Bản trình chiếu PowerPoint\n.xlsx: Bảng tính Excel\n.mp4, .mp3: Tệp âm thanh, video đa phương tiện', teacher_note: 'Lưu ý: Không được sử dụng các ký tự đặc biệt như: / \\ : * ? " < > | trong tên tệp.' },
+                { id: 'def_s5_2', slide_number: 2, title: '2. Thư mục và Cây thư mục', content: 'Thư mục (Folder) giống như một ngăn kéo dùng để chứa các tệp và các thư mục con khác. Việc tổ chức thư mục dạng hình cây giúp quản lý dữ liệu khoa học.', bullet_points: 'Thư mục gốc: Thư mục mức cao nhất của ổ đĩa (VD: C:\\, D:\\)\nThư mục con (Subfolder): Nằm bên trong một thư mục khác\nCây thư mục: Phân cấp theo sơ đồ cành cây từ trên xuống dưới\nĐường dẫn (Path): Chỉ dẫn đến vị trí chính xác của tệp/thư mục', teacher_note: 'Minh họa bằng hình ảnh sơ đồ phân cấp thư mục trường học.' },
+                { id: 'def_s5_3', slide_number: 3, title: '3. Các thao tác cơ bản với Tệp & Thư mục', content: 'Hệ điều hành Windows cung cấp ứng dụng File Explorer (phím tắt Win + E) để thực hiện các thao tác quản lý dữ liệu:', bullet_points: 'Tạo mới (New Folder): Phím tắt Ctrl + Shift + N\nĐổi tên (Rename): Nhấn phím F2 hoặc click chuột phải chọn Rename\nSao chép (Copy): Phím tắt Ctrl + C, sau đó dán Ctrl + V\nDi chuyển (Cut): Phím tắt Ctrl + X, sau đó dán Ctrl + V\nXóa (Delete): Nhấn phím Delete (vào thùng rác) hoặc Shift + Delete (xóa vĩnh viễn)', teacher_note: 'Nhắc nhở học sinh cẩn thận khi sử dụng Shift+Delete vì không khôi phục lại được.' },
+                { id: 'def_s5_4', slide_number: 4, title: '4. Quy tắc tổ chức dữ liệu an toàn', content: 'Để tránh mất mát dữ liệu và giữ máy tính hoạt động ổn định, hãy tuân thủ các nguyên tắc sau:', bullet_points: 'Đặt tên tệp và thư mục ngắn gọn, rõ nghĩa, không dấu hoặc có gạch dưới\nKhông lưu quá nhiều tài liệu nặng ngoài màn hình Desktop\nSao lưu dữ liệu định kỳ lên đám mây (Google Drive, OneDrive)\nKhông tự ý đổi tên hoặc xóa các tệp hệ thống trong ổ đĩa C:\\Windows', teacher_note: 'Tạo thói quen tốt cho học sinh ngay từ những bài học đầu tiên.' }
+            ];
+
+            currentSlideList = defaultSlides;
+            document.getElementById('slide-count-badge').textContent = `${defaultSlides.length} slide`;
+            defaultSlides.forEach(s => {
+                let bulletsHtml = '';
+                if (s.bullet_points) {
+                    bulletsHtml = '<div class="p-3 bg-slate-50 rounded-xl text-xs space-y-1 text-slate-700 mb-3 border border-slate-100">';
+                    s.bullet_points.split('\n').forEach(line => {
+                        if (line.trim()) bulletsHtml += `<div class="flex items-start gap-1.5"><i class="fas fa-check text-indigo-500 mt-0.5 text-[10px]"></i> ${escapeHtml(line)}</div>`;
+                    });
+                    bulletsHtml += '</div>';
+                }
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between card-hover';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                            <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-extrabold text-xs flex items-center justify-center">
+                                #${s.slide_number}
+                            </span>
+                            <div class="flex items-center gap-1">
+                                <button onclick="openEditSlide('${s.id}')" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition" title="Sửa slide">
+                                    <i class="fas fa-edit text-sm"></i>
+                                </button>
+                                <button onclick="deleteSlide('${s.id}')" class="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition" title="Xóa slide">
+                                    <i class="fas fa-trash-alt text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base mb-2">${escapeHtml(s.title)}</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">${escapeHtml(s.content)}</p>
+                        ${bulletsHtml}
+                    </div>
+                    ${s.teacher_note ? `<div class="pt-3 border-t border-slate-100 text-[11px] text-amber-700 font-medium"><i class="fas fa-info-circle text-amber-500 mr-1"></i> ${escapeHtml(s.teacher_note)}</div>` : ''}
+                `;
+                grid.appendChild(card);
+            });
             return;
         }
 
@@ -367,13 +419,56 @@ function loadLessonFiles() {
         currentDocList = [];
 
         if (snap.empty) {
+            const defaultDocx = isL5 ? '../uploads/lessons/Giao_an_Bai_5_Tep_va_thu_muc.docx' : '../uploads/lessons/Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
+            const defaultPptx = isL5 ? '../uploads/lessons/Bài 5_Thám hiểm tệp và thư mục.pptx' : '../uploads/lessons/Bài 4_Tìm kiếm Internet.pptx';
+            const defaultDocxName = isL5 ? 'Giao_an_Bai_5_Tep_va_thu_muc.docx' : 'Giao_an_Bai_4_Tim_kiem_thong_tin.docx';
+            const defaultPptxName = isL5 ? 'Bài 5_Thám hiểm tệp và thư mục.pptx' : 'Bài 4_Tìm kiếm Internet.pptx';
+            const docxTitle = isL5 ? 'Giáo án điện tử Bài 5 - Thao tác với tệp và thư mục' : 'Kế hoạch bài dạy (Giáo án) Bài 4 - Tìm kiếm thông tin';
+            const pptxTitle = isL5 ? 'Bản trình chiếu minh họa Bài 5' : 'Bài giảng điện tử PowerPoint Bài 4';
+
             container.innerHTML = `
-                <div class="col-span-2 p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
-                    <i class="fas fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
-                    Chưa có tệp PowerPoint hay Word nào được gán cho bài học này.<br>
-                    <button onclick="openUploadModal()" class="mt-3 px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition inline-flex items-center gap-1.5">
-                        <i class="fas fa-upload"></i> Tải Lên Ngay
-                    </button>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-2xl bg-orange-50 text-orange-600">
+                        <i class="fas fa-file-powerpoint"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-orange-100 text-orange-800">PPTX</span>
+                            <span class="text-[11px] text-slate-400 truncate">• ${defaultPptxName}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm truncate mb-1">${escapeHtml(pptxTitle)}</h4>
+                        <p class="text-xs text-slate-500 mb-3 truncate">Slide PowerPoint chuẩn chính thức của bài học</p>
+                        <div class="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+                            <button onclick="previewDocument('${escapeHtml(pptxTitle)}', 'pptx', '${defaultPptx}')" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 font-bold transition flex items-center gap-1 text-slate-600">
+                                <i class="fas fa-eye text-slate-400"></i> Xem trước
+                            </button>
+                            <a href="${defaultPptx}" download="${defaultPptxName}" class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold transition flex items-center gap-1">
+                                <i class="fas fa-download"></i> Tải về
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-2xl bg-blue-50 text-blue-600">
+                        <i class="fas fa-file-word"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-blue-100 text-blue-800">DOCX</span>
+                            <span class="text-[11px] text-slate-400 truncate">• ${defaultDocxName}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm truncate mb-1">${escapeHtml(docxTitle)}</h4>
+                        <p class="text-xs text-slate-500 mb-3 truncate">Kế hoạch bài dạy chuẩn Word</p>
+                        <div class="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+                            <button onclick="previewDocument('${escapeHtml(docxTitle)}', 'docx', '${defaultDocx}')" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 font-bold transition flex items-center gap-1 text-slate-600">
+                                <i class="fas fa-eye text-slate-400"></i> Xem trước
+                            </button>
+                            <a href="${defaultDocx}" download="${defaultDocxName}" class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold transition flex items-center gap-1">
+                                <i class="fas fa-download"></i> Tải về
+                            </a>
+                        </div>
+                    </div>
                 </div>
             `;
             return;

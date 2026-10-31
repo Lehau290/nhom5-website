@@ -138,13 +138,12 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = '';
 
         if (snap.empty) {
-            // Danh sách mặc định 5 thành viên
+            // Danh sách mặc định 4 thành viên
             const defaultMembers = [
                 { id: 'm1', fullname: 'Đặng Phạm Ngọc Lan', student_id: '21050001', role_name: 'Trưởng nhóm & Quản lý dự án', avatar: 'assets/img/avatars/member1.svg', bio: 'Phụ trách định hướng kiến trúc hệ thống, phân công nhiệm vụ và tổng hợp báo cáo dự án Tin học.', email: 'ngoclan.dp@eduteam5.vn', order_num: 1 },
                 { id: 'm2', fullname: 'Nguyễn Thị Kim Hân', student_id: '21050002', role_name: 'Thiết kế UI/UX & Frontend', avatar: 'assets/img/avatars/member2.svg', bio: 'Thiết kế giao diện hiện đại, tối ưu trải nghiệm học sinh và hiệu ứng trình chiếu slide tương tác.', email: 'kimhan.nt@eduteam5.vn', order_num: 2 },
                 { id: 'm3', fullname: 'Nguyễn Thị Quỳnh', student_id: '21050003', role_name: 'Nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', bio: 'Nghiên cứu và biên soạn nội dung chuyên sâu Bài 4: Tìm kiếm thông tin trên Internet, xây dựng bộ câu hỏi củng cố.', email: 'quynh.nt@eduteam5.vn', order_num: 3 },
-                { id: 'm4', fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role_name: 'Nội dung Bài 5 & Thiết kế Slide', avatar: 'assets/img/avatars/member4.svg', bio: 'Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, thiết kế sơ đồ cây thư mục và ngân hàng trắc nghiệm.', email: 'khanhlinh.dh@eduteam5.vn', order_num: 4 },
-                { id: 'm5', fullname: 'Đặng Nguyễn Thuỳ Linh', student_id: '21050005', role_name: 'Quản lý tài liệu & Đa phương tiện', avatar: 'assets/img/avatars/member5.svg', bio: 'Phụ trách biên soạn tài liệu Word (.docx), bài trình chiếu PowerPoint (.pptx) và tài nguyên học liệu số.', email: 'thuylinh.dn@eduteam5.vn', order_num: 5 }
+                { id: 'm4', fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role_name: 'Nội dung Bài 5, Slide & Học liệu', avatar: 'assets/img/avatars/member4.svg', bio: 'Thiết kế giáo án điện tử Bài 5: Thao tác tệp và thư mục, thiết kế sơ đồ cây thư mục và ngân hàng trắc nghiệm.', email: 'khanhlinh.dh@eduteam5.vn', order_num: 4 }
             ];
             currentMemberList = defaultMembers;
             defaultMembers.forEach(m => renderMemberCard(m, grid));

@@ -217,14 +217,8 @@ const memberProfiles = {
                                 </tr>
                                 <tr>
                                     <td class="py-3.5 px-4 font-bold text-emerald-700">Dương Huỳnh Khánh Linh</td>
-                                    <td class="py-3.5 px-4">Biên soạn Bài 5 & thiết kế Slide</td>
-                                    <td class="py-3.5 px-4">Nội dung Bài 5, bộ slide PowerPoint</td>
-                                    <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Hoàn tất</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="py-3.5 px-4 font-bold text-amber-700">Đặng Nguyễn Thuỳ Linh</td>
-                                    <td class="py-3.5 px-4">Quản lý học liệu & tài liệu số</td>
-                                    <td class="py-3.5 px-4">Kho tài liệu Word, PPTX 40MB</td>
+                                    <td class="py-3.5 px-4">Biên soạn Bài 5, Slide & Học liệu số</td>
+                                    <td class="py-3.5 px-4">Nội dung Bài 5, bộ slide PowerPoint & Word</td>
                                     <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Hoàn tất</span></td>
                                 </tr>
                             </tbody>
@@ -549,119 +543,6 @@ const memberProfiles = {
                             Quản lý slide
                         </a>
                     </div>
-                </div>
-            </div>
-        `
-    },
-
-    thuylinh: {
-        fullname: 'Đặng Nguyễn Thuỳ Linh',
-        studentId: '21050005',
-        roleTitle: 'Quản Lý Học Liệu & Đa Phương Tiện (Digital Asset Lead)',
-        email: 'thuylinh.dn@eduteam5.vn',
-        avatar: 'assets/img/avatars/member5.svg',
-        quote: '“Một bài học đổi mới phải được đồng hành bởi những tài liệu số trực quan, chuẩn xác và sẵn sàng trên mọi thiết bị.”',
-        theme: {
-            bannerGrad: 'from-amber-900 via-orange-950 to-slate-900',
-            badgeBg: 'bg-amber-50 text-amber-700 border-amber-200',
-            accentColor: 'amber',
-            buttonBg: 'bg-amber-600 hover:bg-amber-700',
-            cardBorder: 'border-amber-100'
-        },
-        renderCustomWidgets: () => `
-            <!-- 1. KHO HỌC LIỆU SỐ & QUẢN LÝ DUNG LƯỢNG 40MB -->
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
-                            <i class="fas fa-archive"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-slate-900">Kho Học Liệu & Tài Liệu Bài Dạy</h3>
-                            <p class="text-xs text-slate-500">Giám sát các tệp giáo án Word (.docx) và bài giảng PowerPoint (.pptx)</p>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-extrabold text-xs border border-amber-200">
-                        <i class="fas fa-cloud-upload-alt mr-1"></i> Giới hạn 40MB
-                    </span>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl flex-shrink-0">
-                            <i class="fas fa-file-powerpoint"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-orange-100 text-orange-800">PPTX</span>
-                                <span class="text-xs text-slate-400">34.5 MB</span>
-                            </div>
-                            <div class="font-bold text-slate-800 text-sm truncate">Bài 4_Tìm kiếm Internet.pptx</div>
-                            <p class="text-xs text-slate-500 mt-0.5">Bản trình chiếu chính thức Bài 4</p>
-                        </div>
-                    </div>
-
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl flex-shrink-0">
-                            <i class="fas fa-file-powerpoint"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-orange-100 text-orange-800">PPTX</span>
-                                <span class="text-xs text-slate-400">21.6 MB</span>
-                            </div>
-                            <div class="font-bold text-slate-800 text-sm truncate">Bài 5_Thám hiểm tệp và thư mục.pptx</div>
-                            <p class="text-xs text-slate-500 mt-0.5">Bản trình chiếu chính thức Bài 5</p>
-                        </div>
-                    </div>
-
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
-                            <i class="fas fa-file-word"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-blue-100 text-blue-800">DOCX</span>
-                                <span class="text-xs text-slate-400">1.2 MB</span>
-                            </div>
-                            <div class="font-bold text-slate-800 text-sm truncate">Giao_an_Bai_4_Tim_kiem_thong_tin.docx</div>
-                            <p class="text-xs text-slate-500 mt-0.5">Kế hoạch bài dạy chuẩn Bài 4</p>
-                        </div>
-                    </div>
-
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
-                            <i class="fas fa-file-word"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-blue-100 text-blue-800">DOCX</span>
-                                <span class="text-xs text-slate-400">0.9 MB</span>
-                            </div>
-                            <div class="font-bold text-slate-800 text-sm truncate">Giao_an_Bai_5_Tep_va_thu_muc.docx</div>
-                            <p class="text-xs text-slate-500 mt-0.5">Kế hoạch bài dạy chuẩn Bài 5</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. BỘ ĐẾM LƯỢT TẢI VỀ THỜI GIAN THỰC -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
-                    <div class="text-3xl font-black text-amber-600">92</div>
-                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Slide Bài 4</div>
-                </div>
-                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
-                    <div class="text-3xl font-black text-amber-600">75</div>
-                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Slide Bài 5</div>
-                </div>
-                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
-                    <div class="text-3xl font-black text-blue-600">48</div>
-                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Word Bài 4</div>
-                </div>
-                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm text-center">
-                    <div class="text-3xl font-black text-blue-600">41</div>
-                    <div class="text-xs text-slate-500 font-medium mt-1">Lượt tải Word Bài 5</div>
                 </div>
             </div>
         `
