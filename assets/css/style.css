@@ -156,3 +156,115 @@ h1, h2, h3, .font-heading {
     background: #94a3b8;
 }
 
+/* ============================================================
+   LIGHT / DARK THEME SYSTEM
+   ============================================================ */
+html.dark {
+    color-scheme: dark;
+}
+
+html.dark body {
+    background-color: #0b0f19 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Glass nav in dark mode */
+html.dark .glass-nav {
+    background: rgba(11, 15, 25, 0.92) !important;
+    border-bottom: 1px solid rgba(36, 48, 73, 0.8) !important;
+}
+
+/* Cards & containers in dark mode */
+html.dark .bg-white {
+    background-color: #131b2e !important;
+    color: #f1f5f9 !important;
+}
+
+html.dark .bg-slate-50 {
+    background-color: #0e1424 !important;
+}
+
+html.dark .bg-slate-100 {
+    background-color: #1a233a !important;
+}
+
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-300 {
+    border-color: #243049 !important;
+}
+
+/* Headings & Text in dark mode */
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-gray-900,
+html.dark .text-gray-800 {
+    color: #f8fafc !important;
+}
+
+html.dark .text-slate-700,
+html.dark .text-slate-600,
+html.dark .text-gray-700,
+html.dark .text-gray-600 {
+    color: #cbd5e1 !important;
+}
+
+html.dark .text-slate-500,
+html.dark .text-gray-500 {
+    color: #94a3b8 !important;
+}
+
+/* Inputs & Form elements */
+html.dark input,
+html.dark textarea,
+html.dark select {
+    background-color: #1a233a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: #64748b !important;
+}
+
+/* Dropdowns & Menus */
+html.dark #mobile-menu {
+    background-color: #0e1424 !important;
+    border-color: #243049 !important;
+}
+
+html.dark #mobile-menu a {
+    color: #cbd5e1 !important;
+}
+
+html.dark #mobile-menu a:hover {
+    background-color: #1a233a !important;
+}
+
+/* Modals & Popups */
+html.dark .modal-content {
+    background-color: #131b2e !important;
+    border-color: #243049 !important;
+}
+
+/* Toast */
+html.dark .toast {
+    background-color: #1a233a !important;
+    color: #f8fafc !important;
+    border-color: #243049 !important;
+}
+
+/* Quiz options in dark mode */
+html.dark .quiz-option {
+    background-color: #131b2e !important;
+    border-color: #243049 !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark .quiz-option:hover {
+    border-color: #6366f1 !important;
+    background-color: #1a233a !important;
+}
+
+

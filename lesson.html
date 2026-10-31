@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -17,6 +18,9 @@
                     }
                 }
             }
+        };
+        if (localStorage.getItem('edu_theme') === 'dark' || (!localStorage.getItem('edu_theme') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
         }
     </script>
     <!-- Font Awesome 6 -->

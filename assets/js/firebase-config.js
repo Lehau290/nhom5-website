@@ -198,8 +198,12 @@ async function signInUser(usernameOrEmail, password, remember = true) {
                 uid: 'demo_student_uid',
                 username: 'hocsinh1',
                 fullname: 'Nguyễn Văn An (Học sinh)',
+                student_id: 'HS-2026-001',
                 email: 'hocsinh1@student.vn',
                 role: 'student',
+                member_key: 'student',
+                role_title: 'Học sinh lớp 6A1',
+                avatar: 'assets/img/avatars/student.svg',
                 status: 1
             };
         } else {
@@ -570,7 +574,7 @@ async function seedInitialFirestoreData() {
             { uid: 'member_kimhan_uid', username: 'kimhan', fullname: 'Nguyễn Thị Kim Hân', student_id: '21050002', role: 'admin', member_key: 'kimhan', role_title: 'Thiết kế UI/UX & Frontend', avatar: 'assets/img/avatars/member2.svg', email: 'kimhan.nt@eduteam5.vn', status: 1 },
             { uid: 'member_quynh_uid', username: 'quynh', fullname: 'Nguyễn Thị Quỳnh', student_id: '21050003', role: 'admin', member_key: 'quynh', role_title: 'Nội dung Bài 4 & Kiểm thử', avatar: 'assets/img/avatars/member3.svg', email: 'quynh.nt@eduteam5.vn', status: 1 },
             { uid: 'member_khanhlinh_uid', username: 'khanhlinh', fullname: 'Dương Huỳnh Khánh Linh', student_id: '21050004', role: 'admin', member_key: 'khanhlinh', role_title: 'Nội dung Bài 5, Slide & Học liệu', avatar: 'assets/img/avatars/member4.svg', email: 'khanhlinh.dh@eduteam5.vn', status: 1 },
-            { uid: 'demo_student_uid', username: 'hocsinh1', fullname: 'Nguyễn Văn An (Học sinh)', student_id: '21050006', role: 'student', email: 'hocsinh1@student.vn', status: 1 }
+            { uid: 'demo_student_uid', username: 'hocsinh1', fullname: 'Nguyễn Văn An (Học sinh)', student_id: 'HS-2026-001', role: 'student', member_key: 'student', role_title: 'Học sinh lớp 6A1', avatar: 'assets/img/avatars/student.svg', email: 'hocsinh1@student.vn', status: 1 }
         ];
 
         for (const u of initialUsers) {

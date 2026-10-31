@@ -7,14 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         primary: '#4f46e5',
+                        'primary-dark': '#4338ca',
                         secondary: '#0ea5e9'
                     }
                 }
             }
+        };
+        if (localStorage.getItem('edu_theme') === 'dark' || (!localStorage.getItem('edu_theme') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -546,12 +551,174 @@ const memberProfiles = {
                 </div>
             </div>
         `
+    },
+
+    student: {
+        fullname: 'Nguyễn Văn An (Học sinh)',
+        studentId: 'HS-2026-001',
+        roleTitle: 'Học Sinh Lớp 6A1 • Trường THCS Sư Phạm',
+        email: 'hocsinh1@student.vn',
+        avatar: 'assets/img/avatars/student.svg',
+        quote: '“Học hỏi không ngừng, tự tin làm chủ công nghệ và rèn luyện kỹ năng an toàn trên không gian mạng.”',
+        theme: {
+            bannerGrad: 'from-blue-900 via-sky-950 to-slate-900',
+            badgeBg: 'bg-blue-50 text-blue-700 border-blue-200',
+            accentColor: 'blue',
+            buttonBg: 'bg-blue-600 hover:bg-blue-700',
+            cardBorder: 'border-blue-100'
+        },
+        renderCustomWidgets: () => `
+            <!-- 1. THỐNG KÊ TIẾN ĐỘ HỌC TẬP TỪNG BÀI -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Bài 4 Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between card-hover">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-indigo-100 text-indigo-700">Bài Học Số 4</span>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                                <i class="fas fa-check-circle"></i> Đã hoàn thành 100%
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Tìm kiếm thông tin trên Internet</h3>
+                        <p class="text-xs text-slate-500 mb-5 leading-relaxed">Nắm vững cách dùng từ khóa thông minh, các toán tử nâng cao và đánh giá thông tin uy tín.</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-xs font-bold">
+                                <span class="text-slate-600">Điểm trắc nghiệm củng cố:</span>
+                                <span class="text-emerald-600 font-black">10 / 10 Điểm (Xuất sắc)</span>
+                            </div>
+                            <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-500 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400"><i class="far fa-clock mr-1"></i>Đã học: 45 phút</span>
+                        <a href="lesson.html?id=4" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fas fa-redo"></i> Ôn Tập Lại Bài 4
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bài 5 Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between card-hover">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-cyan-100 text-cyan-700">Bài Học Số 5</span>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 flex items-center gap-1">
+                                <i class="fas fa-spinner fa-spin"></i> Đang học (85%)
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Thao tác với tệp và thư mục</h3>
+                        <p class="text-xs text-slate-500 mb-5 leading-relaxed">Hiểu cấu trúc cây thư mục, quy tắc đặt tên tệp an toàn và thao tác quản lý dữ liệu trên máy tính.</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-xs font-bold">
+                                <span class="text-slate-600">Điểm trắc nghiệm củng cố:</span>
+                                <span class="text-indigo-600 font-black">9 / 10 Điểm (Giỏi)</span>
+                            </div>
+                            <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-500 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400"><i class="far fa-clock mr-1"></i>Đã học: 40 phút</span>
+                        <a href="lesson.html?id=5" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fas fa-play"></i> Tiếp Tục Học Bài 5
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. BỘ SƯU TẬP HUY HIỆU DANH DỰ -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Huy Hiệu & Thành Tích Học Tập</h3>
+                            <p class="text-xs text-slate-500">Các thành tích học sinh đã đạt được trong khóa học Tin học</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-xs border border-emerald-200">
+                        3/4 Huy hiệu đã mở khóa
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-center">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mb-2 shadow-inner">
+                            🔍
+                        </div>
+                        <div class="font-bold text-slate-800 text-xs">Thám Hiểm Internet</div>
+                        <div class="text-[10px] text-slate-500 mt-1">Đạt điểm 10 Bài 4</div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 text-center">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-2 shadow-inner">
+                            📂
+                        </div>
+                        <div class="font-bold text-slate-800 text-xs">Bậc Thầy Cây Thư Mục</div>
+                        <div class="text-[10px] text-slate-500 mt-1">Đạt điểm 9 Bài 5</div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-center">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-2 shadow-inner">
+                            ⚡
+                        </div>
+                        <div class="font-bold text-slate-800 text-xs">Chiến Binh Chăm Chỉ</div>
+                        <div class="text-[10px] text-slate-500 mt-1">Học đủ 85 phút</div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-dashed border-slate-300 text-center opacity-60">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-2xl mb-2">
+                            🔒
+                        </div>
+                        <div class="font-bold text-slate-600 text-xs">Chuyên Gia Toàn Diện</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Chưa mở khóa (Bài CK)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. NHIỆM VỤ TIẾP THEO -->
+            <div class="bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-transparent p-6 sm:p-8 rounded-3xl border border-indigo-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-md">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-base">Mục tiêu học tập hôm nay:</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">Tải tệp Giáo án Word & bản trình chiếu PowerPoint Bài 4 để ôn tập cho tiết kiểm tra tới.</p>
+                    </div>
+                </div>
+                <a href="lesson.html?id=4#section-documents" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition whitespace-nowrap shadow-sm">
+                    Tải Tài Liệu Ngay
+                </a>
+            </div>
+        `
     }
 };
 
 // Render giao diện theo thành viên
 function renderMemberProfile(memberKey) {
     const data = memberProfiles[memberKey] || memberProfiles.ngoclan;
+
+    // Kiểm tra xem có ảnh đại diện tải lên riêng không
+    const savedCustomAvatar = localStorage.getItem(`custom_avatar_${memberKey}`);
+    let currentAvatar = savedCustomAvatar || data.avatar;
+
+    const localUser = localStorage.getItem('edu_current_user');
+    if (localUser) {
+        try {
+            const user = JSON.parse(localUser);
+            if ((user.member_key === memberKey || (memberKey === 'student' && user.role === 'student')) && user.avatar) {
+                currentAvatar = user.avatar;
+            }
+        } catch(e) {}
+    }
 
     const container = document.getElementById('dynamic-profile-content');
     container.innerHTML = `
@@ -560,8 +727,20 @@ function renderMemberProfile(memberKey) {
             <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
 
             <div class="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
-                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 bg-white/10 flex-shrink-0">
-                    <img src="${data.avatar}" alt="${data.fullname}" class="w-full h-full object-cover">
+                <!-- KHUNG ẢNH ĐẠI DIỆN VỚI TÍNH NĂNG TẢI ẢNH LÊN -->
+                <div class="relative group cursor-pointer" onclick="document.getElementById('avatar-file-input').click()" title="Nhấn để tải ảnh mới lên">
+                    <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 bg-white/10 flex-shrink-0 relative">
+                        <img id="profile-avatar-img" src="${currentAvatar}" alt="${data.fullname}" class="w-full h-full object-cover">
+                        <!-- Lớp phủ khi rê chuột -->
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-bold gap-1">
+                            <i class="fas fa-camera text-xl"></i>
+                            <span>Đổi ảnh</span>
+                        </div>
+                    </div>
+                    <button type="button" class="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-lg transition border-2 border-white" title="Tải ảnh đại diện mới">
+                        <i class="fas fa-camera text-xs"></i>
+                    </button>
+                    <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(this, '${memberKey}')">
                 </div>
 
                 <div class="flex-1 text-center md:text-left space-y-3">
@@ -570,7 +749,7 @@ function renderMemberProfile(memberKey) {
                             ${data.roleTitle}
                         </span>
                         <span class="px-3 py-1 rounded-full bg-black/20 text-slate-300 text-xs font-mono">
-                            MSSV: ${data.studentId}
+                            Mã số: ${data.studentId}
                         </span>
                     </div>
 
@@ -587,21 +766,110 @@ function renderMemberProfile(memberKey) {
                             <i class="far fa-envelope text-indigo-300"></i> ${data.email}
                         </span>
                         <span class="flex items-center gap-1.5">
-                            <i class="fas fa-users text-indigo-300"></i> Nhóm 5 • Môn Tin Học
+                            <i class="fas fa-users text-indigo-300"></i> ${memberKey === 'student' ? 'Học Sinh • Môn Tin Học' : 'Nhóm 5 • Môn Tin Học'}
                         </span>
                         <span class="flex items-center gap-1.5">
-                            <i class="fas fa-shield-alt text-emerald-400"></i> Quản Trị Hệ Thống
+                            <i class="fas fa-shield-alt text-emerald-400"></i> ${memberKey === 'student' ? 'Tài Khoản Học Tập' : 'Quản Trị Hệ Thống'}
                         </span>
+                    </div>
+
+                    <!-- NÚT THAO TÁC TẢI ẢNH ĐẠI DIỆN -->
+                    <div class="pt-3 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                        <button onclick="document.getElementById('avatar-file-input').click()" class="px-3.5 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs font-bold transition flex items-center gap-1.5 backdrop-blur-md border border-white/20 shadow-sm">
+                            <i class="fas fa-upload"></i> Tải ảnh đại diện lên
+                        </button>
+                        <button onclick="resetAvatar('${memberKey}')" class="px-3 py-1.5 rounded-xl bg-black/20 hover:bg-black/30 text-slate-300 hover:text-white text-xs font-medium transition flex items-center gap-1 backdrop-blur-md">
+                            <i class="fas fa-undo"></i> Đặt lại ảnh gốc
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CÁC WIDGET & CÔNG CỤ CHUYÊN BIỆT TÙY BIẾN CHO THÀNH VIÊN -->
+        <!-- CÁC WIDGET & CÔNG CỤ CHUYÊN BIỆT TÙY BIẾN CHO THÀNH VIÊN HOẶC HỌC SINH -->
         <div class="space-y-8 animate-fade-in">
             ${data.renderCustomWidgets()}
         </div>
     `;
+}
+
+// XỬ LÝ TẢI ẢNH ĐẠI DIỆN LÊN
+function handleAvatarUpload(input, memberKey) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+
+    // Kiểm tra loại tệp hình ảnh
+    if (!file.type.startsWith('image/')) {
+        alert('Lỗi: Vui lòng chọn tệp tin hình ảnh (PNG, JPG, JPEG, WEBP, SVG)!');
+        return;
+    }
+
+    // Giới hạn dung lượng tối đa 5MB
+    if (file.size > 5 * 1024 * 1024) {
+        alert('Lỗi: Dung lượng ảnh tối đa cho phép là 5MB!');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64Data = e.target.result;
+        
+        // 1. Cập nhật ảnh đại diện trên trang hồ sơ tức thì
+        const avatarImg = document.getElementById('profile-avatar-img');
+        if (avatarImg) {
+            avatarImg.src = base64Data;
+        }
+
+        // 2. Lưu ảnh vào localStorage cho tài khoản hiện tại
+        const localUser = localStorage.getItem('edu_current_user');
+        if (localUser) {
+            try {
+                const user = JSON.parse(localUser);
+                user.avatar = base64Data;
+                localStorage.setItem('edu_current_user', JSON.stringify(user));
+            } catch(e) {}
+        }
+        localStorage.setItem(`custom_avatar_${memberKey}`, base64Data);
+
+        // 3. Cập nhật ảnh trên thanh điều hướng navbar ngay lập tức
+        document.querySelectorAll('#nav-user-area img').forEach(img => img.src = base64Data);
+
+        // 4. Nếu đăng nhập Firebase, cập nhật lên Cloud Firestore
+        if (typeof db !== 'undefined' && typeof auth !== 'undefined' && auth.currentUser) {
+            db.collection('users').doc(auth.currentUser.uid).update({
+                avatar: base64Data
+            }).catch(() => {});
+        }
+
+        if (window.showToast) {
+            showToast('Đã tải lên và cập nhật ảnh đại diện thành công!', 'success');
+        } else {
+            alert('Đã cập nhật ảnh đại diện thành công!');
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+// KHÔI PHỤC ẢNH ĐẠI DIỆN MẶC ĐỊNH
+function resetAvatar(memberKey) {
+    localStorage.removeItem(`custom_avatar_${memberKey}`);
+    const localUser = localStorage.getItem('edu_current_user');
+    if (localUser) {
+        try {
+            const user = JSON.parse(localUser);
+            delete user.avatar;
+            localStorage.setItem('edu_current_user', JSON.stringify(user));
+        } catch(e) {}
+    }
+    renderMemberProfile(memberKey);
+    // Cập nhật lại ảnh trên navbar
+    if (window.renderUserNav && typeof currentUserProfile !== 'undefined') {
+        delete currentUserProfile.avatar;
+        renderUserNav(currentUserProfile);
+    }
+    if (window.showToast) {
+        showToast('Đã khôi phục ảnh đại diện mặc định.', 'info');
+    }
 }
 
 // Tự động nhận diện tài khoản đang đăng nhập
@@ -613,10 +881,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localUser) {
         try {
             const user = JSON.parse(localUser);
-            if (user.member_key && memberProfiles[user.member_key]) {
+            // Nếu là tài khoản học sinh (hocsinh1 hoặc role student)
+            if (user.role === 'student' || user.username === 'hocsinh1' || user.member_key === 'student') {
+                targetMember = 'student';
+                if (user.fullname && memberProfiles.student) {
+                    memberProfiles.student.fullname = user.fullname;
+                }
+                if (user.email && memberProfiles.student) {
+                    memberProfiles.student.email = user.email;
+                }
+                if (user.student_id && memberProfiles.student) {
+                    memberProfiles.student.studentId = user.student_id;
+                }
+            } else if (user.member_key && memberProfiles[user.member_key]) {
                 targetMember = user.member_key;
-                const badge = document.getElementById('current-logged-badge');
-                if (badge) badge.textContent = `Hồ sơ đăng nhập: ${user.fullname}`;
             }
         } catch(e) {}
     }

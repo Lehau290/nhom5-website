@@ -76,4 +76,41 @@ document.addEventListener('DOMContentLoaded', () => {
             mobileMenu.classList.toggle('hidden');
         });
     }
+
+    initTheme();
 });
+
+// QUẢN LÝ CHẾ ĐỘ GIAO DIỆN SÁNG / TỐI (LIGHT / DARK MODE)
+function initTheme() {
+    const savedTheme = localStorage.getItem('edu_theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    updateThemeToggleIcons(isDark);
+}
+
+function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('edu_theme', isDark ? 'dark' : 'light');
+    updateThemeToggleIcons(isDark);
+    if (window.showToast) {
+        showToast(isDark ? 'Đã bật chế độ giao diện Tối' : 'Đã bật chế độ giao diện Sáng', 'info');
+    }
+}
+
+function updateThemeToggleIcons(isDark) {
+    document.querySelectorAll('.theme-toggle-icon').forEach(icon => {
+        icon.className = isDark ? 'fas fa-sun text-amber-400 text-base theme-toggle-icon' : 'fas fa-moon text-slate-600 text-base theme-toggle-icon';
+    });
+    document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+        btn.setAttribute('title', isDark ? 'Chuyển sang giao diện Sáng' : 'Chuyển sang giao diện Tối');
+    });
+}
+
+// Khởi chạy tức thì để tránh nhấp nháy màn hình
+initTheme();

@@ -103,7 +103,11 @@ function updateNavUserUI(profile) {
 
         // Desktop
         userContainer.innerHTML = `
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5">
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" class="theme-toggle-btn p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition" title="Chuyển chế độ sáng/tối">
+                    <i class="fas fa-moon text-base theme-toggle-icon"></i>
+                </button>
                 <a href="${profileUrl}" class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition flex items-center gap-1.5" title="Xem trang hồ sơ cá nhân">
                     <i class="fas fa-id-card"></i> Hồ Sơ
                 </a>
@@ -112,7 +116,7 @@ function updateNavUserUI(profile) {
                         <i class="fas fa-shield-alt"></i> Trang Admin
                     </a>
                 ` : ''}
-                <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+                <div class="flex items-center gap-3 pl-2.5 border-l border-slate-200">
                     <div class="w-9 h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center font-bold text-indigo-700 text-sm overflow-hidden">
                         ${profile.avatar ? `<img src="${profile.avatar}" class="w-full h-full object-cover">` : initial}
                     </div>
@@ -130,6 +134,12 @@ function updateNavUserUI(profile) {
         // Mobile
         if (mobileUserContainer) {
             mobileUserContainer.innerHTML = `
+                <div class="flex items-center justify-between py-2 border-b border-slate-100 mb-2">
+                    <span class="text-xs font-semibold text-slate-500">Chế độ giao diện:</span>
+                    <button onclick="toggleTheme()" class="theme-toggle-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-1.5">
+                        <i class="fas fa-moon theme-toggle-icon"></i> <span>Sáng / Tối</span>
+                    </button>
+                </div>
                 <div class="py-2 border-t border-slate-100 flex items-center justify-between">
                     <div>
                         <div class="text-xs font-bold text-slate-800">${escapeHtml(profile.fullname)}</div>
@@ -148,22 +158,37 @@ function updateNavUserUI(profile) {
     } else {
         // Chưa đăng nhập
         userContainer.innerHTML = `
-            <a href="login.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:border-indigo-600 hover:text-indigo-600 font-bold text-sm transition">
-                Đăng Nhập
-            </a>
-            <a href="register.html" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-sm shadow-indigo-200 transition">
-                Đăng Ký
-            </a>
+            <div class="flex items-center gap-2.5">
+                <button onclick="toggleTheme()" class="theme-toggle-btn p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition" title="Chuyển chế độ sáng/tối">
+                    <i class="fas fa-moon text-base theme-toggle-icon"></i>
+                </button>
+                <a href="login.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:border-indigo-600 hover:text-indigo-600 font-bold text-sm transition">
+                    Đăng Nhập
+                </a>
+                <a href="register.html" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-sm shadow-indigo-200 transition">
+                    Đăng Ký
+                </a>
+            </div>
         `;
 
         if (mobileUserContainer) {
             mobileUserContainer.innerHTML = `
+                <div class="flex items-center justify-between py-2 border-b border-slate-100 mb-2">
+                    <span class="text-xs font-semibold text-slate-500">Chế độ giao diện:</span>
+                    <button onclick="toggleTheme()" class="theme-toggle-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-1.5">
+                        <i class="fas fa-moon theme-toggle-icon"></i> <span>Sáng / Tối</span>
+                    </button>
+                </div>
                 <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-100">
                     <a href="login.html" class="text-center py-2 border border-slate-300 rounded-xl font-bold text-xs text-slate-700">Đăng Nhập</a>
                     <a href="register.html" class="text-center py-2 bg-indigo-600 text-white rounded-xl font-bold text-xs">Đăng Ký</a>
                 </div>
             `;
         }
+    }
+
+    if (window.initTheme) {
+        window.initTheme();
     }
 }
 
