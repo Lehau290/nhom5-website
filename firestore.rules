@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Hàm kiểm tra người dùng đã đăng nhập
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Hàm kiểm tra người dùng có quyền Admin
+    function isAdmin() {
+      return isSignedIn() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Quy tắc cho collection users
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      // Người dùng chỉ có thể tạo hồ sơ cho chính mình và không được tự đặt role là admin
+      allow create: if isSignedIn() && request.auth.uid == userId && request.resource.data.role != 'admin';
+      // Chỉ Admin mới được cập nhật role hoặc khóa tài khoản; người dùng chỉ được sửa thông tin cá nhân cơ bản
+      allow update: if isAdmin() || (isSignedIn() && request.auth.uid == userId && request.resource.data.role == resource.data.role);
+      allow delete: if isAdmin();
+    }
+    
+    // Quy tắc cho bài học, slides, câu hỏi, các phần bài học
+    match /lessons/{lessonId} {
+      allow read: if true; // Công khai cho mọi người học
+      allow write: if isAdmin();
+    }
+    
+    match /lesson_sections/{sectionId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /slides/{slideId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /questions/{questionId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /team_members/{memberId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /documents/{docId} {
+      allow read: if resource.data.is_public == true || isAdmin();
+      allow write: if isAdmin();
+    }
+    
+    // Quy tắc cho kết quả học tập results
+    match /results/{resultId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.user_id == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+    
+    // Lịch sử hoạt động
+    match /activities/{activityId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+  }
+}
+

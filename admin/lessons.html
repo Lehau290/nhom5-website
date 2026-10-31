@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full bg-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Bài Học - Admin Nhóm 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+
+    <!-- Firebase SDK (v10 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="h-full flex flex-col antialiased text-slate-800">
+
+<div class="flex-1 flex overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar hidden md:flex flex-col justify-between py-6 px-4 border-r border-slate-800">
+        <div>
+            <a href="index.html" class="flex items-center gap-3 px-3 mb-8">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-500/30">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <span class="text-base font-extrabold text-white font-heading tracking-tight block">ADMIN PANEL</span>
+                    <span class="text-[11px] text-indigo-400 font-medium">Tin Học Nhóm 5</span>
+                </div>
+            </a>
+
+            <nav class="space-y-1">
+                <a href="index.html" class="admin-nav-item"><i class="fas fa-tachometer-alt w-5"></i> Tổng quan Dashboard</a>
+                <a href="lessons.html" class="admin-nav-item active"><i class="fas fa-book w-5"></i> Quản lý bài học</a>
+                <a href="slides.html" class="admin-nav-item"><i class="fas fa-chalkboard w-5"></i> Quản lý slide</a>
+                <a href="questions.html" class="admin-nav-item"><i class="fas fa-tasks w-5"></i> Câu hỏi trắc nghiệm</a>
+                <a href="documents.html" class="admin-nav-item"><i class="fas fa-file-word w-5"></i> Quản lý tài liệu Word/PPT</a>
+                <a href="team.html" class="admin-nav-item"><i class="fas fa-users w-5"></i> Quản lý nhóm 5</a>
+                <a href="users.html" class="admin-nav-item"><i class="fas fa-user-cog w-5"></i> Quản lý tài khoản</a>
+                <a href="results.html" class="admin-nav-item"><i class="fas fa-chart-line w-5"></i> Kết quả học tập</a>
+            </nav>
+        </div>
+
+        <div class="pt-6 border-t border-slate-800/80 px-2 space-y-2">
+            <a href="../index.html" class="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition py-2 px-3 rounded-lg hover:bg-slate-800">
+                <i class="fas fa-globe text-indigo-400"></i> Xem Website Học Sinh
+            </a>
+            <button onclick="handleSignOut()" class="w-full text-left flex items-center gap-2 text-xs font-semibold text-red-400 hover:text-red-300 transition py-2 px-3 rounded-lg hover:bg-slate-800">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất Admin
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+        <header class="admin-header px-6 flex items-center justify-between sticky top-0 z-30">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Quản Lý Nội Dung Bài Học</span>
+            <div class="text-xs font-bold text-slate-600">Cloud Firestore Data</div>
+        </header>
+
+        <main class="p-6 sm:p-8 flex-1">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">Quản Lý Bài Học</h1>
+                    <p class="text-sm text-slate-500 mt-1">Cập nhật tên bài học, thời lượng, trạng thái hiển thị và 4 hoạt động dạy học</p>
+                </div>
+                <button onclick="document.getElementById('modalAddLesson').classList.add('open')" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-sm transition flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Thêm Bài Học Mới
+                </button>
+            </div>
+
+            <!-- EDIT FORM CONTAINER (Ẩn mặc định, hiển thị khi click sửa) -->
+            <div id="editLessonCard" class="hidden bg-white rounded-3xl p-6 sm:p-8 border border-indigo-200 shadow-md mb-8">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                    <h3 class="font-bold text-slate-900 text-lg" id="editFormHeader">Chỉnh sửa bài học</h3>
+                    <button onclick="document.getElementById('editLessonCard').classList.add('hidden')" class="text-xs font-bold text-slate-500 hover:text-slate-800">
+                        Hủy bỏ
+                    </button>
+                </div>
+
+                <form id="formEditLesson" class="space-y-6">
+                    <input type="hidden" id="edit_lesson_id">
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Tên bài học</label>
+                            <input type="text" id="edit_title" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Thời lượng</label>
+                            <input type="text" id="edit_duration" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mô tả bài học</label>
+                        <textarea id="edit_description" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+                    </div>
+
+                    <!-- 4 Hoạt động -->
+                    <div class="pt-4 border-t border-slate-100 space-y-4">
+                        <h4 class="font-bold text-slate-800 text-sm">Nội dung 4 hoạt động bài học:</h4>
+                        
+                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200">
+                            <label class="block font-bold text-amber-900 text-xs mb-1">1. Hoạt động Khởi động</label>
+                            <textarea id="edit_sec_warmup" rows="3" class="w-full px-3 py-2 rounded-xl border border-amber-300 text-xs font-mono"></textarea>
+                        </div>
+
+                        <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200">
+                            <label class="block font-bold text-purple-900 text-xs mb-1">4. Hoạt động Vận dụng</label>
+                            <textarea id="edit_sec_application" rows="3" class="w-full px-3 py-2 rounded-xl border border-purple-300 text-xs font-mono"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                        <button type="button" onclick="document.getElementById('editLessonCard').classList.add('hidden')" class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Hủy</button>
+                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md">Lưu Thay Đổi</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- DANH SÁCH BÀI HỌC -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 text-base">Danh Sách Bài Học Hiện Có</h3>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-100">
+                            <tr>
+                                <th class="py-3.5 px-6">Bài</th>
+                                <th class="py-3.5 px-6">Tên bài học</th>
+                                <th class="py-3.5 px-6">Thời lượng</th>
+                                <th class="py-3.5 px-6">Lượt xem</th>
+                                <th class="py-3.5 px-6">Trạng thái</th>
+                                <th class="py-3.5 px-6 text-right">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lessons-tbody" class="divide-y divide-slate-100 font-medium">
+                            <tr><td colspan="6" class="py-6 text-center text-slate-400">Đang đồng bộ dữ liệu...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- MODAL THÊM BÀI HỌC -->
+<div id="modalAddLesson" class="custom-modal">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 animate-fade-in">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <h3 class="font-bold text-slate-900 text-lg">Thêm Bài Học Mới</h3>
+            <button onclick="document.getElementById('modalAddLesson').classList.remove('open')" class="text-slate-400 hover:text-slate-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="formAddLesson" class="space-y-4">
+            <div class="grid grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Số bài</label>
+                    <input type="number" id="new_lesson_num" required placeholder="VD: 6" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm">
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Thời lượng</label>
+                    <input type="text" id="new_lesson_duration" value="45 phút" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Tên bài học</label>
+                <input type="text" id="new_lesson_title" required placeholder="Nhập tên bài học" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mô tả bài học</label>
+                <textarea id="new_lesson_desc" rows="3" placeholder="Tóm tắt mục tiêu bài học..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="document.getElementById('modalAddLesson').classList.remove('open')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold">Hủy</button>
+                <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs">Thêm Bài Học</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/auth-guard.js"></script>
+<script>
+let currentLessons = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Lắng nghe danh sách bài học thời gian thực
+    db.collection('lessons').orderBy('lesson_number', 'asc').onSnapshot(snap => {
+        currentLessons = [];
+        const tbody = document.getElementById('lessons-tbody');
+        tbody.innerHTML = '';
+
+        if (snap.empty) {
+            tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-400">Chưa có bài học nào.</td></tr>';
+            return;
+        }
+
+        snap.forEach(doc => {
+            const l = { id: doc.id, ...doc.data() };
+            currentLessons.push(l);
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50 transition';
+            tr.innerHTML = `
+                <td class="py-4 px-6 font-bold text-indigo-600">Bài ${l.lesson_number}</td>
+                <td class="py-4 px-6 font-bold text-slate-900">
+                    ${escapeHtml(l.title)}
+                    <div class="text-xs text-slate-400 font-normal max-w-md truncate">${escapeHtml(l.description || '')}</div>
+                </td>
+                <td class="py-4 px-6 text-slate-600 text-xs">${escapeHtml(l.duration || '45 phút')}</td>
+                <td class="py-4 px-6 text-slate-600 text-xs">${l.views || 0} lượt</td>
+                <td class="py-4 px-6">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold ${l.is_active == 1 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'}">
+                        ${l.is_active == 1 ? 'Đang hiển thị' : 'Đang ẩn'}
+                    </span>
+                </td>
+                <td class="py-4 px-6 text-right space-x-2">
+                    <button onclick="toggleActive('${l.id}', ${l.is_active})" class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:text-indigo-600 transition" title="Ẩn / Hiện bài học">
+                        <i class="fas ${l.is_active == 1 ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                    </button>
+                    <button onclick="openEditLesson('${l.id}')" class="p-2 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition" title="Chỉnh sửa nội dung">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <a href="../lesson.html?id=${l.lesson_number}" target="_blank" class="inline-block p-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition" title="Xem trước giao diện">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    });
+});
+
+async function toggleActive(id, currentStatus) {
+    const newStatus = (currentStatus == 1 ? 0 : 1);
+    await db.collection('lessons').doc(id).update({ is_active: newStatus });
+    showToast('Đã cập nhật trạng thái hiển thị bài học.', 'info');
+}
+
+async function openEditLesson(id) {
+    const lesson = currentLessons.find(x => x.id === id);
+    if (!lesson) return;
+
+    document.getElementById('edit_lesson_id').value = id;
+    document.getElementById('edit_title').value = lesson.title;
+    document.getElementById('edit_duration').value = lesson.duration || '45 phút';
+    document.getElementById('edit_description').value = lesson.description || '';
+    document.getElementById('editFormHeader').textContent = `Chỉnh sửa Bài ${lesson.lesson_number}: ${lesson.title}`;
+
+    // Lấy nội dung sections tương ứng
+    const warmupDoc = await db.collection('lesson_sections').doc(`sec_${lesson.lesson_number}_warmup`).get();
+    if (warmupDoc.exists) {
+        document.getElementById('edit_sec_warmup').value = warmupDoc.data().content || '';
+    }
+
+    const appDoc = await db.collection('lesson_sections').doc(`sec_${lesson.lesson_number}_application`).get();
+    if (appDoc.exists) {
+        document.getElementById('edit_sec_application').value = appDoc.data().content || '';
+    }
+
+    document.getElementById('editLessonCard').classList.remove('hidden');
+    window.scrollTo({ top: 100, behavior: 'smooth' });
+}
+
+// Lưu chỉnh sửa bài học
+document.getElementById('formEditLesson').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('edit_lesson_id').value;
+    const lesson = currentLessons.find(x => x.id === id);
+
+    await db.collection('lessons').doc(id).update({
+        title: document.getElementById('edit_title').value.trim(),
+        duration: document.getElementById('edit_duration').value.trim(),
+        description: document.getElementById('edit_description').value.trim()
+    });
+
+    if (lesson) {
+        const warmupContent = document.getElementById('edit_sec_warmup').value.trim();
+        const appContent = document.getElementById('edit_sec_application').value.trim();
+
+        await db.collection('lesson_sections').doc(`sec_${lesson.lesson_number}_warmup`).set({
+            lesson_id: id,
+            section_type: 'warmup',
+            title: 'Hoạt động Khởi động',
+            content: warmupContent
+        }, { merge: true });
+
+        await db.collection('lesson_sections').doc(`sec_${lesson.lesson_number}_application`).set({
+            lesson_id: id,
+            section_type: 'application',
+            title: 'Hoạt động Vận dụng',
+            content: appContent
+        }, { merge: true });
+    }
+
+    showToast('Đã lưu các thay đổi của bài học lên Cloud Firestore!', 'success');
+    document.getElementById('editLessonCard').classList.add('hidden');
+});
+
+// Thêm bài học mới
+document.getElementById('formAddLesson').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const num = parseInt(document.getElementById('new_lesson_num').value);
+    const title = document.getElementById('new_lesson_title').value.trim();
+    const duration = document.getElementById('new_lesson_duration').value.trim();
+    const desc = document.getElementById('new_lesson_desc').value.trim();
+
+    const docId = `lesson_${num}`;
+    await db.collection('lessons').doc(docId).set({
+        lesson_number: num,
+        title: title,
+        duration: duration,
+        description: desc,
+        is_active: 1,
+        views: 0,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // Thêm các phần mặc định
+    await db.collection('lesson_sections').doc(`sec_${num}_warmup`).set({
+        lesson_id: docId,
+        section_type: 'warmup',
+        title: 'Khởi động',
+        content: '<p>Nội dung khởi động bài học.</p>'
+    });
+    await db.collection('lesson_sections').doc(`sec_${num}_application`).set({
+        lesson_id: docId,
+        section_type: 'application',
+        title: 'Vận dụng',
+        content: '<p>Nhiệm vụ thực hành vận dụng.</p>'
+    });
+
+    showToast('Đã tạo bài học mới thành công!', 'success');
+    document.getElementById('modalAddLesson').classList.remove('open');
+});
+</script>
+</body>
+</html>
+

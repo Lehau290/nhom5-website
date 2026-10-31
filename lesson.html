@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Học Tin Học - Nhóm 5</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        'primary-dark': '#4338ca',
+                        secondary: '#0ea5e9'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Mammoth.js CDN (Chuyển đổi file DOCX thành HTML xem trước trực tiếp) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+    <!-- Firebase SDK (v10 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-slate-50 text-slate-800 antialiased">
+
+<!-- Header / Navigation -->
+<header class="glass-nav sticky top-0 z-40 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition-transform">
+                    <i class="fas fa-laptop-code text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold font-heading text-slate-900 group-hover:text-indigo-600 transition tracking-tight">
+                        TIN HỌC <span class="gradient-text">NHÓM 5</span>
+                    </span>
+                    <span class="block text-xs text-slate-500 font-medium tracking-wide">Nền Tảng Dạy Học Trực Tuyến</span>
+                </div>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-1 font-medium text-sm">
+                <a href="index.html" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-home mr-1.5 opacity-70"></i>Trang Chủ
+                </a>
+                <a href="lesson.html?id=4" id="nav-l4" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-search mr-1.5 opacity-70"></i>Bài 4: Tìm Kiếm Internet
+                </a>
+                <a href="lesson.html?id=5" id="nav-l5" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-folder-tree mr-1.5 opacity-70"></i>Bài 5: Tệp & Thư Mục
+                </a>
+                <a href="team.html" class="px-4 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition">
+                    <i class="fas fa-users mr-1.5 opacity-70"></i>Nhóm 5
+                </a>
+            </nav>
+
+            <div id="nav-user-area" class="hidden md:flex items-center gap-3"></div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-5 space-y-2">
+        <a href="index.html" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Trang Chủ</a>
+        <a href="lesson.html?id=4" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Bài 4: Tìm Kiếm Internet</a>
+        <a href="lesson.html?id=5" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Bài 5: Tệp & Thư Mục</a>
+        <a href="team.html" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700">Nhóm 5</a>
+        <div id="mobile-nav-user-area" class="pt-2"></div>
+    </div>
+</header>
+
+<main class="flex-grow">
+    <!-- LESSON HERO -->
+    <div class="bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-indigo-950">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="px-3.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold uppercase tracking-wider">
+                            Chủ Đề Dạy Học • Môn Tin Học
+                        </span>
+                        <span class="text-xs text-slate-400">
+                            <i class="far fa-clock mr-1"></i> <span id="lesson-duration">45 phút</span>
+                        </span>
+                        <span class="text-xs text-slate-400">
+                            <i class="far fa-eye mr-1"></i> <span id="lesson-views">120</span> lượt xem
+                        </span>
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold font-heading text-white" id="lesson-title">
+                        Đang tải thông tin bài học...
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed" id="lesson-desc">
+                        Vui lòng chờ giây lát trong khi hệ thống đồng bộ dữ liệu từ Cloud Firestore...
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <a id="switch-lesson-btn" href="lesson.html?id=5" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-xs transition flex items-center gap-2 border border-slate-700">
+                        Chuyển Bài Học <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STICKY SUB-NAV FOR 4 ACTIVITIES -->
+    <div class="sticky top-20 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-2 sm:gap-4 overflow-x-auto py-3 no-scrollbar text-xs sm:text-sm font-bold">
+                <a href="#section-warmup" class="px-3.5 py-2 rounded-xl text-amber-700 bg-amber-50 hover:bg-amber-100 transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fas fa-fire text-amber-500"></i> 1. Khởi Động
+                </a>
+                <a href="#section-knowledge" class="px-3.5 py-2 rounded-xl text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fas fa-chalkboard text-indigo-500"></i> 2. Hình Thành Kiến Thức (Slide)
+                </a>
+                <a href="#section-practice" class="px-3.5 py-2 rounded-xl text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fas fa-check-circle text-emerald-500"></i> 3. Luyện Tập (Trắc Nghiệm)
+                </a>
+                <a href="#section-application" class="px-3.5 py-2 rounded-xl text-purple-700 bg-purple-50 hover:bg-purple-100 transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fas fa-rocket text-purple-500"></i> 4. Vận Dụng
+                </a>
+                <a href="#section-documents" class="px-3.5 py-2 rounded-xl text-blue-700 bg-blue-50 hover:bg-blue-100 transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fas fa-file-download text-blue-500"></i> Tài Liệu (Word & PPT)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- 1. KHỞI ĐỘNG -->
+        <section id="section-warmup" class="scroll-mt-36">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-amber-300">
+                    1
+                </span>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-800 font-heading">
+                        Hoạt Động Khởi Động
+                    </h2>
+                    <p class="text-xs text-slate-500 font-medium">Khơi gợi tư duy và tạo hứng thú trước khi bước vào kiến thức mới</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200" id="warmup-container">
+                <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải hoạt động khởi động...
+            </div>
+        </section>
+
+        <!-- 2. HÌNH THÀNH KIẾN THỨC (SLIDE TRÌNH CHIẾU) -->
+        <section id="section-knowledge" class="scroll-mt-36">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-indigo-300">
+                    2
+                </span>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-800 font-heading">
+                        Hoạt Động Hình Thành Kiến Thức
+                    </h2>
+                    <p class="text-xs text-slate-500 font-medium">Trình chiếu slide tương tác trực quan (hỗ trợ toàn màn hình, phím mũi tên và ghi chú giáo viên)</p>
+                </div>
+            </div>
+
+            <div id="slide-viewer-container" class="rounded-3xl shadow-lg overflow-hidden">
+                <!-- Rendered by SlideViewer JS -->
+            </div>
+        </section>
+
+        <!-- 3. LUYỆN TẬP (TRẮC NGHIỆM TƯƠNG TÁC) -->
+        <section id="section-practice" class="scroll-mt-36">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-emerald-300">
+                    3
+                </span>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-800 font-heading">
+                        Hoạt Động Luyện Tập (Trắc Nghiệm)
+                    </h2>
+                    <p class="text-xs text-slate-500 font-medium">Làm bài trắc nghiệm củng cố kiến thức, nhận kết quả và lời giải thích chi tiết</p>
+                </div>
+            </div>
+
+            <div id="quiz-viewer-container">
+                <!-- Rendered by QuizEngine JS -->
+            </div>
+        </section>
+
+        <!-- 4. VẬN DỤNG -->
+        <section id="section-application" class="scroll-mt-36">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-purple-300">
+                    4
+                </span>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-800 font-heading">
+                        Hoạt Động Vận Dụng
+                    </h2>
+                    <p class="text-xs text-slate-500 font-medium">Áp dụng kiến thức đã học vào các tình huống thực tiễn và nhiệm vụ tự học</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200" id="application-container">
+                <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải bài tập vận dụng...
+            </div>
+        </section>
+
+        <!-- 5. TÀI LIỆU HỌC TẬP (WORD & POWERPOINT) -->
+        <section id="section-documents" class="scroll-mt-36">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-blue-300">
+                        <i class="fas fa-folder"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800 font-heading">
+                            Tài Liệu Bài Học (Word & PowerPoint)
+                        </h2>
+                        <p class="text-xs text-slate-500 font-medium">Xem trước trực tuyến (Mammoth.js) và tải về tài liệu giáo án, bài thuyết trình chuẩn</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="documents-container">
+                <div class="col-span-2 p-8 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải tài liệu học tập...
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<!-- PREVIEW MODAL CHO WORD (MAMMOTH.JS) VÀ POWERPOINT -->
+<div id="previewModal" class="custom-modal">
+    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 animate-fade-in max-h-[90vh] flex flex-col justify-between">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <div class="flex items-center gap-3">
+                <span id="preview-file-icon" class="text-2xl text-indigo-600"></span>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-base" id="preview-file-title">Xem trước tài liệu</h4>
+                    <span class="text-xs text-slate-400" id="preview-file-badge">Định dạng</span>
+                </div>
+            </div>
+            <button onclick="closePreviewModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <div id="preview-body-content" class="my-2 flex-1 overflow-y-auto">
+            <!-- Dynamic DOCX / PPTX content -->
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button onclick="closePreviewModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-100 transition">
+                Đóng
+            </button>
+            <a id="preview-download-link" href="#" download class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-2">
+                <i class="fas fa-download"></i> Tải Về Máy
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/firebase-config.js"></script>
+<script src="assets/js/auth-guard.js"></script>
+<script src="assets/js/slide.js"></script>
+<script src="assets/js/quiz.js"></script>
+<script src="assets/js/doc-preview.js"></script>
+
+<script>
+// Lấy ID bài học từ URL (mặc định Bài 4)
+const urlParams = new URLSearchParams(window.location.search);
+const lessonNum = parseInt(urlParams.get('id')) || 4;
+const lessonDocId = `lesson_${lessonNum}`;
+
+// Đánh dấu active nav
+if (lessonNum === 4) {
+    document.getElementById('nav-l4').className = 'px-4 py-2 rounded-xl bg-indigo-50 text-indigo-600 font-bold transition';
+    document.getElementById('switch-lesson-btn').href = 'lesson.html?id=5';
+    document.getElementById('switch-lesson-btn').innerHTML = 'Học Bài 5: Tệp & Thư mục <i class="fas fa-chevron-right ml-1"></i>';
+} else {
+    document.getElementById('nav-l5').className = 'px-4 py-2 rounded-xl bg-indigo-50 text-indigo-600 font-bold transition';
+    document.getElementById('switch-lesson-btn').href = 'lesson.html?id=4';
+    document.getElementById('switch-lesson-btn').innerHTML = 'Học Bài 4: Tìm kiếm Internet <i class="fas fa-chevron-right ml-1"></i>';
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // 1. Tải thông tin Bài học & Tăng lượt xem
+        const lessonRef = db.collection('lessons').doc(lessonDocId);
+        const lessonSnap = await lessonRef.get();
+        if (lessonSnap.exists) {
+            const data = lessonSnap.data();
+            document.title = `Bài ${data.lesson_number}: ${data.title} - Tin Học Nhóm 5`;
+            document.getElementById('lesson-title').textContent = `Bài ${data.lesson_number}: ${data.title}`;
+            document.getElementById('lesson-desc').textContent = data.description || '';
+            document.getElementById('lesson-duration').textContent = data.duration || '45 phút';
+            document.getElementById('lesson-views').textContent = (data.views || 0) + 1;
+
+            lessonRef.update({ views: firebase.firestore.FieldValue.increment(1) }).catch(() => {});
+        }
+
+        // 2. Tải 4 Hoạt động (Sections)
+        db.collection('lesson_sections').where('lesson_id', '==', lessonDocId).onSnapshot(snap => {
+            snap.forEach(doc => {
+                const sec = doc.data();
+                if (sec.section_type === 'warmup') {
+                    document.getElementById('warmup-container').innerHTML = sec.content;
+                } else if (sec.section_type === 'application') {
+                    document.getElementById('application-container').innerHTML = sec.content;
+                }
+            });
+        });
+
+        // 3. Tải Slides
+        db.collection('slides').where('lesson_id', '==', lessonDocId).orderBy('slide_number', 'asc').onSnapshot(snap => {
+            const slidesData = [];
+            snap.forEach(doc => slidesData.push({ id: doc.id, ...doc.data() }));
+            new SlideViewer('slide-viewer-container', slidesData);
+        });
+
+        // 4. Tải Câu hỏi luyện tập (Questions)
+        db.collection('questions').where('lesson_id', '==', lessonDocId).orderBy('order_num', 'asc').onSnapshot(snap => {
+            const questionsData = [];
+            snap.forEach(doc => questionsData.push({ id: doc.id, ...doc.data() }));
+            new QuizEngine('quiz-viewer-container', lessonDocId, questionsData);
+        });
+
+        // 5. Tải Tài liệu Word & PowerPoint
+        db.collection('documents').where('lesson_id', '==', lessonDocId).where('is_public', '==', true).onSnapshot(snap => {
+            const docContainer = document.getElementById('documents-container');
+            if (snap.empty) {
+                docContainer.innerHTML = '<div class="col-span-2 p-8 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">Chưa có tài liệu nào được công khai cho bài học này.</div>';
+                return;
+            }
+
+            let html = '';
+            snap.forEach(doc => {
+                const d = doc.data();
+                const isDocx = (d.file_type === 'docx');
+                const fileUrl = d.file_url || (isDocx ? `uploads/lessons/Giao_an_Bai_${lessonNum}_Tim_kiem_thong_tin.docx` : `uploads/lessons/Bai_giang_dien_tu_Bai_${lessonNum}.pptx`);
+
+                html += `
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-start gap-4 card-hover">
+                        <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl ${isDocx ? 'bg-blue-50 text-blue-600' : 'bg-orange-50 text-orange-600'}">
+                            <i class="fas ${isDocx ? 'fa-file-word' : 'fa-file-powerpoint'}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${isDocx ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'}">
+                                    ${(d.file_type || 'file').toUpperCase()}
+                                </span>
+                                <span class="text-xs text-slate-400">• ${d.downloads || 0} lượt tải</span>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-base mb-1 leading-snug">
+                                ${escapeHtml(d.title)}
+                            </h3>
+                            ${d.description ? `<p class="text-xs text-slate-500 mb-3">${escapeHtml(d.description)}</p>` : ''}
+
+                            <div class="flex items-center gap-3 mt-3">
+                                <button onclick="previewDocument('${escapeHtml(d.title)}', '${d.file_type}', '${fileUrl}')" class="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 text-xs font-bold text-slate-600 transition flex items-center gap-1.5">
+                                    <i class="fas fa-eye text-slate-400"></i> Xem trước
+                                </button>
+                                <a href="${fileUrl}" download="${escapeHtml(d.file_name)}" onclick="incrementDocDownload('${doc.id}')" class="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fas fa-download"></i> Tải về máy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            docContainer.innerHTML = html;
+        });
+
+    } catch (e) {
+        console.error('Lỗi khởi tạo bài học:', e);
+    }
+});
+
+function incrementDocDownload(docId) {
+    db.collection('documents').doc(docId).update({
+        downloads: firebase.firestore.FieldValue.increment(1)
+    }).catch(() => {});
+}
+</script>
+</body>
+</html>
+

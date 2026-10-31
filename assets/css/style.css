@@ -1,0 +1,158 @@
+/* STYLE.CSS - NỀN TẢNG THIẾT KẾ GIÁO DỤC HIỆN ĐẠI */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap');
+
+:root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #e0e7ff;
+    --secondary: #0ea5e9;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --dark: #0f172a;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, .font-heading {
+    font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Glassmorphism & Modern Shadows */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.15);
+}
+
+/* Gradient accents */
+.gradient-text {
+    background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, #4f46e5 0%, #2563eb 50%, #06b6d4 100%);
+}
+
+.gradient-card-1 {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.gradient-card-2 {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+/* Slide Viewer Styles */
+.slide-container {
+    background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 100%);
+    border-radius: 1.25rem;
+    color: #ffffff;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.slide-content-area {
+    min-height: 380px;
+}
+
+/* Quiz Option Interactive Styles */
+.quiz-option {
+    transition: all 0.2s ease-in-out;
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+}
+.quiz-option:hover {
+    border-color: #818cf8;
+    background-color: #f5f3ff;
+    transform: translateX(4px);
+}
+.quiz-option.selected {
+    border-color: #4f46e5;
+    background-color: #e0e7ff;
+    font-weight: 600;
+}
+.quiz-option.correct {
+    border-color: #10b981 !important;
+    background-color: #d1fae5 !important;
+    color: #065f46 !important;
+}
+.quiz-option.incorrect {
+    border-color: #ef4444 !important;
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Toast Notification */
+#toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    border-left: 5px solid #4f46e5;
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 280px;
+    max-width: 420px;
+}
+.toast.toast-success { border-left-color: #10b981; }
+.toast.toast-danger { border-left-color: #ef4444; }
+.toast.toast-warning { border-left-color: #f59e0b; }
+.toast.toast-info { border-left-color: #0ea5e9; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+

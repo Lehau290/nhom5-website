@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Nền Tảng Dạy Học Tin Học Nhóm 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Firebase SDK (v10 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-slate-900 relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
+
+<!-- Background decorative ambient circles -->
+<div class="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+<div class="max-w-md w-full space-y-8 relative z-10">
+    <!-- Back to Home -->
+    <div>
+        <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-white transition">
+            <i class="fas fa-arrow-left"></i> Quay lại Trang Chủ
+        </a>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-white/95 backdrop-blur-xl p-8 sm:p-10 rounded-3xl shadow-2xl border border-slate-200/50">
+        <div class="text-center mb-8">
+            <div class="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 items-center justify-center text-white text-2xl shadow-lg shadow-indigo-500/30 mb-4">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">
+                Chào Mừng Bạn!
+            </h2>
+            <p class="text-sm text-slate-500 mt-2">
+                Đăng nhập tài khoản Firebase để học tập và quản lý bài giảng
+            </p>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="error-alert" class="hidden mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3 animate-fade-in">
+            <i class="fas fa-exclamation-circle text-red-500 text-lg mt-0.5"></i>
+            <div class="text-sm font-medium text-red-700" id="error-msg"></div>
+        </div>
+
+        <!-- Success Alert -->
+        <div id="success-alert" class="hidden mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-3 animate-fade-in">
+            <i class="fas fa-check-circle text-emerald-500 text-lg mt-0.5"></i>
+            <div class="text-sm font-medium text-emerald-700" id="success-msg"></div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-5">
+            <!-- Username or Email -->
+            <div>
+                <label for="username_or_email" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                    Tên tài khoản hoặc Email
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <input type="text" id="username_or_email" required 
+                           placeholder="admin@edumail.vn hoặc hocsinh1@student.vn"
+                           class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 text-sm transition">
+                </div>
+            </div>
+
+            <!-- Password with Show/Hide -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                        Mật khẩu
+                    </label>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" id="password" required 
+                           placeholder="Nhập mật khẩu của bạn"
+                           class="w-full pl-10 pr-12 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 text-sm transition">
+                    <button type="button" class="toggle-password absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600" data-target="password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Remember me & Helper info -->
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="remember_me" checked class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-slate-600 text-xs sm:text-sm font-medium">Ghi nhớ đăng nhập</span>
+                </label>
+                <a href="#" onclick="alert('Vui lòng liên hệ Quản trị viên để đặt lại mật khẩu hoặc sử dụng các tài khoản mẫu bên dưới.'); return false;" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold">
+                    Quên mật khẩu?
+                </a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submitBtn" class="w-full py-3.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2">
+                <i class="fas fa-sign-in-alt"></i> <span>Đăng Nhập</span>
+            </button>
+        </form>
+
+        <!-- Quick Demo Accounts Box -->
+        <div class="mt-8 pt-6 border-t border-slate-100">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 text-center mb-3">
+                Tài Khoản Mẫu Thử Nghiệm
+            </h4>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <button type="button" onclick="fillDemo('admin@edumail.vn', 'admin123')" class="p-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 font-medium text-left transition">
+                    <div class="font-bold flex items-center gap-1"><i class="fas fa-shield-alt text-purple-600"></i> Admin</div>
+                    <div class="text-[11px] text-purple-700">admin@edumail.vn</div>
+                </button>
+                <button type="button" onclick="fillDemo('hocsinh1@student.vn', '123456')" class="p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-900 font-medium text-left transition">
+                    <div class="font-bold flex items-center gap-1"><i class="fas fa-user-graduate text-blue-600"></i> Học sinh</div>
+                    <div class="text-[11px] text-blue-700">hocsinh1@student.vn</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Register Link -->
+        <p class="text-center text-xs text-slate-500 mt-6">
+            Chưa có tài khoản học sinh? 
+            <a href="register.html" class="text-indigo-600 font-bold hover:underline">Đăng ký ngay tại đây</a>
+        </p>
+    </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/firebase-config.js"></script>
+<script>
+function fillDemo(username, password) {
+    document.getElementById('username_or_email').value = username;
+    document.getElementById('password').value = password;
+    showToast(`Đã tự động điền tài khoản: ${username}`, 'info');
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const identifier = document.getElementById('username_or_email').value.trim();
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('remember_me').checked;
+
+    const errorAlert = document.getElementById('error-alert');
+    const errorMsg = document.getElementById('error-msg');
+    const successAlert = document.getElementById('success-alert');
+    const successMsg = document.getElementById('success-msg');
+    const submitBtn = document.getElementById('submitBtn');
+
+    errorAlert.classList.add('hidden');
+    successAlert.classList.add('hidden');
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Đang xác thực...';
+
+    try {
+        const profile = await signInUser(identifier, password, remember);
+
+        successMsg.textContent = `Đăng nhập thành công! Chào mừng ${profile.fullname}.`;
+        successAlert.classList.remove('hidden');
+
+        setTimeout(() => {
+            if (profile.role === 'admin') {
+                window.location.href = 'admin/index.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        }, 800);
+
+    } catch (err) {
+        console.error('Lỗi đăng nhập:', err);
+        let msg = err.message;
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+            msg = 'Tên tài khoản/email hoặc mật khẩu không chính xác.';
+        } else if (err.code === 'auth/too-many-requests') {
+            msg = 'Quá nhiều lần thử thất bại. Vui lòng thử lại sau vài phút.';
+        }
+
+        errorMsg.textContent = msg;
+        errorAlert.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span>Đăng Nhập</span>';
+    }
+});
+</script>
+</body>
+</html>
+

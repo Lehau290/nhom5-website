@@ -1,0 +1,96 @@
+/* ADMIN.CSS - GIAO DIỆN QUẢN TRỊ VIÊN HIỆN ĐẠI */
+
+.admin-sidebar {
+    width: 280px;
+    background: #0f172a;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #94a3b8;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    margin-bottom: 4px;
+}
+
+.admin-nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.admin-nav-item.active {
+    background: #4f46e5;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+}
+
+.admin-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    height: 70px;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Upload dropzone */
+.upload-dropzone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 36px 20px;
+    text-align: center;
+    background: #f8fafc;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.upload-dropzone:hover, .upload-dropzone.dragover {
+    border-color: #4f46e5;
+    background: #eef2ff;
+}
+
+/* Modal */
+.custom-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.custom-modal.open {
+    display: flex;
+}
+
